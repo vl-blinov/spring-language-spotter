@@ -1,4 +1,4 @@
-package ru.blinov.language.spotter.entity;
+package ru.blinov.language.spotter.city;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -9,6 +9,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import ru.blinov.language.spotter.country.Country;
 
 @Entity
 @Table(name="city")

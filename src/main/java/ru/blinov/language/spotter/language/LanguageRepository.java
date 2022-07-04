@@ -1,8 +1,6 @@
-package ru.blinov.language.spotter.repository;
+package ru.blinov.language.spotter.language;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-
-import ru.blinov.language.spotter.entity.Language;
 
 public interface LanguageRepository extends JpaRepository<Language, Integer> {
 	

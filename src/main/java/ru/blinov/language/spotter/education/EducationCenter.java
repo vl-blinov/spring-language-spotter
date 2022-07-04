@@ -1,4 +1,4 @@
-package ru.blinov.language.spotter.entity;
+package ru.blinov.language.spotter.education;
 
 import java.util.List;
 
@@ -10,6 +10,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import ru.blinov.language.spotter.accommodation.Accommodation;
+import ru.blinov.language.spotter.course.Course;
 
 @Entity
 @Table(name="education_center")

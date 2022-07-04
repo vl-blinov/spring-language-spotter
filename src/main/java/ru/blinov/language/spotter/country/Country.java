@@ -1,4 +1,4 @@
-package ru.blinov.language.spotter.entity;
+package ru.blinov.language.spotter.country;
 
 import java.util.List;
 
@@ -13,6 +13,9 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import ru.blinov.language.spotter.city.City;
+import ru.blinov.language.spotter.language.Language;
 
 @Entity
 @Table(name="country")
