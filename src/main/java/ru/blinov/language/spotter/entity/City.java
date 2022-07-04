@@ -1,7 +1,5 @@
 package ru.blinov.language.spotter.entity;
 
-import java.util.List;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,7 +8,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -29,11 +26,6 @@ public class City {
 						 CascadeType.PERSIST, CascadeType.REFRESH})
 	@JoinColumn(name="city_id")
 	private Country country;
-	
-	@OneToMany(mappedBy="city",
-			   cascade={CascadeType.DETACH, CascadeType.MERGE,
-					    CascadeType.PERSIST, CascadeType.REFRESH})
-	private List<EducationCenter> educationCenters;
 
 	public City() {
 		
@@ -66,13 +58,5 @@ public class City {
 
 	public void setCountry(Country country) {
 		this.country = country;
-	}
-
-	public List<EducationCenter> getEducationCenters() {
-		return educationCenters;
-	}
-
-	public void setEducationCenters(List<EducationCenter> educationCenters) {
-		this.educationCenters = educationCenters;
 	}
 }

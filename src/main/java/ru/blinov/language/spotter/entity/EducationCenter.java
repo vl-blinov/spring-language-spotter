@@ -8,8 +8,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -24,16 +22,6 @@ public class EducationCenter {
 	
 	@Column(name="name")
 	private String name;
-	
-	@ManyToOne(cascade= {CascadeType.DETACH, CascadeType.MERGE,
-			 			 CascadeType.PERSIST, CascadeType.REFRESH})
-	@JoinColumn(name="country_id")
-	private Country country;
-	
-	@ManyToOne(cascade= {CascadeType.DETACH, CascadeType.MERGE,
-			 			 CascadeType.PERSIST, CascadeType.REFRESH})
-	@JoinColumn(name="education_center_id")
-	private City city;
 	
 	@OneToMany(mappedBy="educationCenter",
 			   cascade={CascadeType.DETACH, CascadeType.MERGE,
@@ -55,11 +43,8 @@ public class EducationCenter {
 		
 	}
 
-	public EducationCenter(String name, Country country, City city, String registrationFee, int rating) {
+	public EducationCenter(String name, int rating) {
 		this.name = name;
-		this.country = country;
-		this.city = city;
-		this.registrationFee = registrationFee;
 		this.rating = rating;
 	}
 
@@ -77,22 +62,6 @@ public class EducationCenter {
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	public Country getCountry() {
-		return country;
-	}
-
-	public void setCountry(Country country) {
-		this.country = country;
-	}
-
-	public City getCity() {
-		return city;
-	}
-
-	public void setCity(City city) {
-		this.city = city;
 	}
 
 	public List<Course> getCourses() {

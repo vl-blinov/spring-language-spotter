@@ -24,7 +24,7 @@ public class Course {
 	@JoinColumn(name="course_id")
 	private EducationCenter educationCenter;
 	
-	@Column(name="type")
+	@Column(name="course_type")
 	private String type;
 	
 	@Column(name="students_per_class")

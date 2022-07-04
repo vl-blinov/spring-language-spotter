@@ -24,7 +24,7 @@ public class Accommodation {
 	@JoinColumn(name="accommodation_id")
 	private EducationCenter educationCenter;
 	
-	@Column(name="type")
+	@Column(name="accommodation_type")
 	private String type;
 	
 	@Column(name="food")

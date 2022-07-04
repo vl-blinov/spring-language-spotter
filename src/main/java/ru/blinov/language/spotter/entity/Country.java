@@ -37,11 +37,6 @@ public class Country {
 			   cascade={CascadeType.DETACH, CascadeType.MERGE,
 					    CascadeType.PERSIST, CascadeType.REFRESH})
 	private List<City> cities;
-	
-	@OneToMany(mappedBy="country",
-			   cascade={CascadeType.DETACH, CascadeType.MERGE,
-					    CascadeType.PERSIST, CascadeType.REFRESH})
-	private List<EducationCenter> educationCenters;
 
 	public Country() {
 
@@ -81,13 +76,5 @@ public class Country {
 
 	public void setCities(List<City> cities) {
 		this.cities = cities;
-	}
-
-	public List<EducationCenter> getEducationCenters() {
-		return educationCenters;
-	}
-
-	public void setEducationCenters(List<EducationCenter> educationCenters) {
-		this.educationCenters = educationCenters;
 	}
 }
