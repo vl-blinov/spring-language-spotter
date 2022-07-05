@@ -23,7 +23,7 @@ public class Course {
 	
 	@ManyToOne(cascade= {CascadeType.DETACH, CascadeType.MERGE,
 			 			 CascadeType.PERSIST, CascadeType.REFRESH})
-	@JoinColumn(name="course_id")
+	@JoinColumn(name="education_center_id")
 	private EducationCenter educationCenter;
 	
 	@Column(name="course_type")

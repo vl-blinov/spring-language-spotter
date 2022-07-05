@@ -8,10 +8,13 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import ru.blinov.language.spotter.accommodation.Accommodation;
+import ru.blinov.language.spotter.city.City;
 import ru.blinov.language.spotter.course.Course;
 
 @Entity
@@ -25,6 +28,11 @@ public class EducationCenter {
 	
 	@Column(name="name")
 	private String name;
+	
+	@ManyToOne(cascade= {CascadeType.DETACH, CascadeType.MERGE,
+			 			 CascadeType.PERSIST, CascadeType.REFRESH})
+	@JoinColumn(name="city_id")
+	private City city;
 	
 	@OneToMany(mappedBy="educationCenter",
 			   cascade={CascadeType.DETACH, CascadeType.MERGE,
