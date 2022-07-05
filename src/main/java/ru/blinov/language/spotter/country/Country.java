@@ -14,6 +14,8 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import ru.blinov.language.spotter.city.City;
 import ru.blinov.language.spotter.language.Language;
 
@@ -64,7 +66,8 @@ public class Country {
 	public void setName(String name) {
 		this.name = name;
 	}
-
+	
+	@JsonIgnore
 	public List<Language> getLanguages() {
 		return languages;
 	}
@@ -72,7 +75,8 @@ public class Country {
 	public void setLanguages(List<Language> languages) {
 		this.languages = languages;
 	}
-
+	
+	@JsonIgnore
 	public List<City> getCities() {
 		return cities;
 	}

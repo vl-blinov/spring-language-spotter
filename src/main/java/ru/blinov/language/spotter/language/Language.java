@@ -13,6 +13,8 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import ru.blinov.language.spotter.country.Country;
 
 @Entity
@@ -57,7 +59,8 @@ public class Language {
 	public void setName(String name) {
 		this.name = name;
 	}
-
+	
+	@JsonIgnore
 	public List<Country> getCountries() {
 		return countries;
 	}
