@@ -1,5 +1,6 @@
 package ru.blinov.language.spotter.education;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -12,6 +13,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import ru.blinov.language.spotter.accommodation.Accommodation;
 import ru.blinov.language.spotter.city.City;
@@ -48,13 +51,13 @@ public class EducationCenter {
 	private String registrationFee;
 	
 	@Column(name="rating")
-	private int rating;
+	private double rating;
 
 	public EducationCenter() {
 		
 	}
 
-	public EducationCenter(String name, int rating) {
+	public EducationCenter(String name, double rating) {
 		this.name = name;
 		this.rating = rating;
 	}
@@ -74,7 +77,8 @@ public class EducationCenter {
 	public void setName(String name) {
 		this.name = name;
 	}
-
+	
+	@JsonIgnore
 	public List<Course> getCourses() {
 		return courses;
 	}
@@ -82,7 +86,8 @@ public class EducationCenter {
 	public void setCourses(List<Course> courses) {
 		this.courses = courses;
 	}
-
+	
+	@JsonIgnore
 	public List<Accommodation> getAccommodations() {
 		return accommodations;
 	}
@@ -99,11 +104,11 @@ public class EducationCenter {
 		this.registrationFee = registrationFee;
 	}
 
-	public int getRating() {
-		return rating;
+	public double getRating() {
+		return Double.parseDouble(new DecimalFormat("#.#").format(rating));
 	}
 
-	public void setRating(int rating) {
+	public void setRating(double rating) {
 		this.rating = rating;
 	}
 }
