@@ -10,6 +10,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import ru.blinov.language.spotter.education.EducationCenter;
 
 @Entity
@@ -38,25 +40,25 @@ public class Course {
 	@Column(name="class_time")
 	private String classTime;
 	
-	@Column(name="class_duration")
-	private String classDuration;
+	@Column(name="lesson_duration")
+	private String lessonDuration;
 	
-	@Column(name="price")
-	private String price;
+	@Column(name="price_per_week")
+	private String pricePerWeek;
 
 	public Course() {
 		
 	}
 
 	public Course(EducationCenter educationCenter, String type, int studentsPerClass, String courseDuration,
-			String classTime, String classDuration, String price) {
+			String classTime, String lessonDuration, String pricePerWeek) {
 		this.educationCenter = educationCenter;
 		this.type = type;
 		this.studentsPerClass = studentsPerClass;
 		this.courseDuration = courseDuration;
 		this.classTime = classTime;
-		this.classDuration = classDuration;
-		this.price = price;
+		this.lessonDuration = lessonDuration;
+		this.pricePerWeek = pricePerWeek;
 	}
 
 	public int getId() {
@@ -66,7 +68,8 @@ public class Course {
 	public void setId(int id) {
 		this.id = id;
 	}
-
+	
+	@JsonIgnore
 	public EducationCenter getEducationCenter() {
 		return educationCenter;
 	}
@@ -107,19 +110,19 @@ public class Course {
 		this.classTime = classTime;
 	}
 
-	public String getClassDuration() {
-		return classDuration;
+	public String getLessonDuration() {
+		return lessonDuration;
 	}
 
-	public void setClassDuration(String classDuration) {
-		this.classDuration = classDuration;
+	public void setLessonDuration(String lessonDuration) {
+		this.lessonDuration = lessonDuration;
 	}
 
-	public String getPrice() {
-		return price;
+	public String getPricePerWeek() {
+		return pricePerWeek;
 	}
 
-	public void setPrice(String price) {
-		this.price = price;
+	public void setPricePerWeek(String pricePerWeek) {
+		this.pricePerWeek = pricePerWeek;
 	}
 }
