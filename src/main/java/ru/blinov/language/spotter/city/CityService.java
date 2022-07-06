@@ -21,10 +21,4 @@ public class CityService {
 	public List<City> findAllCitiesByCountryAndLanguageName(String languageName, String countryName) {
 		return cityRepository.findAllByCountryAndLanguageName(StringUtils.capitalize(languageName), StringUtils.capitalize(countryName));
 	}
-	
-	@Transactional(readOnly = true)
-	public List<City> findAllCities() {
-		return cityRepository.findAll();
-	}
-
 }

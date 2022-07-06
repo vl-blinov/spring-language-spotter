@@ -23,10 +23,4 @@ public class CityController {
 	public List<City> getAllCitiesForCountryAndLanguageToLearn(@PathVariable String languageName, @PathVariable String countryName) {
 		return cityService.findAllCitiesByCountryAndLanguageName(languageName, countryName);
 	}
-	
-	@GetMapping("/cities")
-	public List<City> getCities() {
-		return cityService.findAllCities();
-	}
-
 }
