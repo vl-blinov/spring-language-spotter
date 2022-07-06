@@ -34,8 +34,8 @@ CREATE TABLE IF NOT EXISTS course (
 	students_per_class INTEGER,
 	course_duration VARCHAR,
 	class_time VARCHAR,
-	class_duration VARCHAR,
-	price VARCHAR
+	lesson_duration VARCHAR,
+	price_per_week VARCHAR
 );
 
 CREATE TABLE IF NOT EXISTS accomodation (
