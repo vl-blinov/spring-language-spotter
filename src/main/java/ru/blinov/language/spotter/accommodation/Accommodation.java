@@ -29,7 +29,7 @@ public class Accommodation {
 	private EducationCenter educationCenter;
 	
 	@Column(name="accommodation_type")
-	private String type;
+	private String accommodationType;
 	
 	@Column(name="food")
 	private String food;
@@ -44,10 +44,10 @@ public class Accommodation {
 		
 	}
 
-	public Accommodation(EducationCenter educationCenter, String type, String food, String ageRestriction,
+	public Accommodation(EducationCenter educationCenter, String accommodationType, String food, String ageRestriction,
 			String pricePerWeek) {
 		this.educationCenter = educationCenter;
-		this.type = type;
+		this.accommodationType = accommodationType;
 		this.food = food;
 		this.ageRestriction = ageRestriction;
 		this.pricePerWeek = pricePerWeek;
@@ -70,12 +70,12 @@ public class Accommodation {
 		this.educationCenter = educationCenter;
 	}
 
-	public String getType() {
-		return type;
+	public String getAccommodationType() {
+		return accommodationType;
 	}
 
-	public void setType(String type) {
-		this.type = type;
+	public void setAccommodationType(String accommodationType) {
+		this.accommodationType = accommodationType;
 	}
 
 	public String getFood() {
