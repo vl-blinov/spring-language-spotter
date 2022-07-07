@@ -105,7 +105,7 @@ public class EducationCenter {
 	}
 
 	public double getRating() {
-		return Double.parseDouble(new DecimalFormat("#.#").format(rating));
+		return rating;
 	}
 
 	public void setRating(double rating) {
