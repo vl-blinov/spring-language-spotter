@@ -10,6 +10,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import ru.blinov.language.spotter.education.EducationCenter;
 
 @Entity
@@ -23,7 +25,7 @@ public class Accommodation {
 	
 	@ManyToOne(cascade= {CascadeType.DETACH, CascadeType.MERGE,
 			 			 CascadeType.PERSIST, CascadeType.REFRESH})
-	@JoinColumn(name="educationcenter_id")
+	@JoinColumn(name="education_center_id")
 	private EducationCenter educationCenter;
 	
 	@Column(name="accommodation_type")
@@ -58,7 +60,8 @@ public class Accommodation {
 	public void setId(int id) {
 		this.id = id;
 	}
-
+	
+	@JsonIgnore
 	public EducationCenter getEducationCenter() {
 		return educationCenter;
 	}
