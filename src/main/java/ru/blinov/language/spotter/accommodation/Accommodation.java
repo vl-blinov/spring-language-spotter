@@ -37,20 +37,23 @@ public class Accommodation {
 	@Column(name="age_restriction")
 	private String ageRestriction;
 	
-	@Column(name="price_per_week")
-	private String pricePerWeek;
-
+	@Column(name="price_per_week_amount")
+	private double pricePerWeekAmount;
+	
+	@Column(name="price_per_week_currency")
+	private String pricePerWeekCurrency;
+	
 	public Accommodation() {
 		
 	}
 
-	public Accommodation(EducationCenter educationCenter, String accommodationType, String food, String ageRestriction,
-			String pricePerWeek) {
-		this.educationCenter = educationCenter;
+	public Accommodation(String accommodationType, String food, String ageRestriction, double pricePerWeekAmount,
+			String pricePerWeekCurrency) {
 		this.accommodationType = accommodationType;
 		this.food = food;
 		this.ageRestriction = ageRestriction;
-		this.pricePerWeek = pricePerWeek;
+		this.pricePerWeekAmount = pricePerWeekAmount;
+		this.pricePerWeekCurrency = pricePerWeekCurrency;
 	}
 
 	public int getId() {
@@ -94,11 +97,19 @@ public class Accommodation {
 		this.ageRestriction = ageRestriction;
 	}
 
-	public String getPricePerWeek() {
-		return pricePerWeek;
+	public double getPricePerWeekAmount() {
+		return pricePerWeekAmount;
 	}
 
-	public void setPricePerWeek(String pricePerWeek) {
-		this.pricePerWeek = pricePerWeek;
+	public void setPricePerWeekAmount(double pricePerWeekAmount) {
+		this.pricePerWeekAmount = pricePerWeekAmount;
+	}
+
+	public String getPricePerWeekCurrency() {
+		return pricePerWeekCurrency;
+	}
+
+	public void setPricePerWeekCurrency(String pricePerWeekCurrency) {
+		this.pricePerWeekCurrency = pricePerWeekCurrency;
 	}
 }
