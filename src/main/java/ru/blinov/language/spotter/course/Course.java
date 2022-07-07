@@ -43,22 +43,25 @@ public class Course {
 	@Column(name="lesson_duration")
 	private String lessonDuration;
 	
-	@Column(name="price_per_week")
-	private String pricePerWeek;
+	@Column(name="price_per_week_amount")
+	private double pricePerWeekAmount;
+	
+	@Column(name="price_per_week_currency")
+	private String pricePerWeekCurrency;
 
 	public Course() {
 		
 	}
 
-	public Course(EducationCenter educationCenter, String type, int studentsPerClass, String courseDuration,
-			String classTime, String lessonDuration, String pricePerWeek) {
-		this.educationCenter = educationCenter;
+	public Course(String type, int studentsPerClass, String courseDuration, String classTime, String lessonDuration,
+			double pricePerWeekAmount, String pricePerWeekCurrency) {
 		this.type = type;
 		this.studentsPerClass = studentsPerClass;
 		this.courseDuration = courseDuration;
 		this.classTime = classTime;
 		this.lessonDuration = lessonDuration;
-		this.pricePerWeek = pricePerWeek;
+		this.pricePerWeekAmount = pricePerWeekAmount;
+		this.pricePerWeekCurrency = pricePerWeekCurrency;
 	}
 
 	public int getId() {
@@ -118,11 +121,19 @@ public class Course {
 		this.lessonDuration = lessonDuration;
 	}
 
-	public String getPricePerWeek() {
-		return pricePerWeek;
+	public double getPricePerWeekAmount() {
+		return pricePerWeekAmount;
 	}
 
-	public void setPricePerWeek(String pricePerWeek) {
-		this.pricePerWeek = pricePerWeek;
+	public void setPricePerWeekAmount(double pricePerWeekAmount) {
+		this.pricePerWeekAmount = pricePerWeekAmount;
+	}
+
+	public String getPricePerWeekCurrency() {
+		return pricePerWeekCurrency;
+	}
+
+	public void setPricePerWeekCurrency(String pricePerWeekCurrency) {
+		this.pricePerWeekCurrency = pricePerWeekCurrency;
 	}
 }
