@@ -17,6 +17,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import ru.blinov.language.spotter.country.Country;
 import ru.blinov.language.spotter.education.EducationCenter;
+import ru.blinov.language.spotter.util.StringFormatter;
 
 @Entity
 @Table(name="city")
@@ -84,6 +85,6 @@ public class City {
 	}
 	
 	public EducationCenter getEducationCenter(String centerName) {
-		return educationCenters.stream().filter(center -> centerName.equals(center.getName())).findAny().get();
+		return educationCenters.stream().filter(center -> StringFormatter.formatPathVariable(centerName).equals(center.getName())).findAny().get();
 	}
 }
