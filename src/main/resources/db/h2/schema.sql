@@ -38,7 +38,7 @@ CREATE TABLE IF NOT EXISTS course (
 	price_per_week VARCHAR
 );
 
-CREATE TABLE IF NOT EXISTS accomodation (
+CREATE TABLE IF NOT EXISTS accommodation (
 	id SERIAL PRIMARY KEY,
 	education_center_id INTEGER REFERENCES education_center(id),
 	accommodation_type VARCHAR,
