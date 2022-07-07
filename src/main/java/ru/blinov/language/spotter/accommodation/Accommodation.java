@@ -31,6 +31,9 @@ public class Accommodation {
 	@Column(name="accommodation_type")
 	private String accommodationType;
 	
+	@Column(name="room")
+	private String room;
+	
 	@Column(name="food")
 	private String food;
 	
@@ -47,9 +50,10 @@ public class Accommodation {
 		
 	}
 
-	public Accommodation(String accommodationType, String food, String ageRestriction, double pricePerWeekAmount,
-			String pricePerWeekCurrency) {
+	public Accommodation(String accommodationType, String room, String food, String ageRestriction,
+			double pricePerWeekAmount, String pricePerWeekCurrency) {
 		this.accommodationType = accommodationType;
+		this.room = room;
 		this.food = food;
 		this.ageRestriction = ageRestriction;
 		this.pricePerWeekAmount = pricePerWeekAmount;
@@ -79,6 +83,14 @@ public class Accommodation {
 
 	public void setAccommodationType(String accommodationType) {
 		this.accommodationType = accommodationType;
+	}
+
+	public String getRoom() {
+		return room;
+	}
+
+	public void setRoom(String room) {
+		this.room = room;
 	}
 
 	public String getFood() {

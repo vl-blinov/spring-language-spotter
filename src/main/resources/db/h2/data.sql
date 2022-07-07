@@ -12,5 +12,5 @@ VALUES ('erin_school_of_english', 1, 85, '€', 4.9);
 INSERT INTO course (education_center_id, course_type, students_per_class, course_duration, class_time, lesson_duration, price_per_week_amount, price_per_week_currency)
 VALUES (1, 'General English', 15, '1 - 25 weeks', 'Monday - Friday 09:00 - 12:15', '60 minutes', 200, '€');
 
-INSERT INTO accommodation (education_center_id, accommodation_type, food, age_restriction, price_per_week_amount, price_per_week_currency)
-VALUES (1, 'Homestay, single room', 'breakfast', '16+ years old', 260, '€');
+INSERT INTO accommodation (education_center_id, accommodation_type, room, food, age_restriction, price_per_week_amount, price_per_week_currency)
+VALUES (1, 'Homestay', 'Single room', 'Breakfast', '16+ years old', 260, '€');

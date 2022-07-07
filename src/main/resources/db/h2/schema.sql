@@ -44,6 +44,7 @@ CREATE TABLE IF NOT EXISTS accommodation (
 	id SERIAL PRIMARY KEY,
 	education_center_id INTEGER REFERENCES education_center(id),
 	accommodation_type VARCHAR,
+	room VARCHAR,
 	food VARCHAR,
 	age_restriction VARCHAR,
 	price_per_week_amount NUMERIC(6, 2),
