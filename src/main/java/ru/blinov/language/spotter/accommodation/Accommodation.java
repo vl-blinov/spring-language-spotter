@@ -37,20 +37,20 @@ public class Accommodation {
 	@Column(name="age_restriction")
 	private String ageRestriction;
 	
-	@Column(name="price")
-	private String price;
+	@Column(name="price_per_week")
+	private String pricePerWeek;
 
 	public Accommodation() {
 		
 	}
 
 	public Accommodation(EducationCenter educationCenter, String type, String food, String ageRestriction,
-			String price) {
+			String pricePerWeek) {
 		this.educationCenter = educationCenter;
 		this.type = type;
 		this.food = food;
 		this.ageRestriction = ageRestriction;
-		this.price = price;
+		this.pricePerWeek = pricePerWeek;
 	}
 
 	public int getId() {
@@ -94,11 +94,11 @@ public class Accommodation {
 		this.ageRestriction = ageRestriction;
 	}
 
-	public String getPrice() {
-		return price;
+	public String getPricePerWeek() {
+		return pricePerWeek;
 	}
 
-	public void setPrice(String price) {
-		this.price = price;
+	public void setPricePerWeek(String pricePerWeek) {
+		this.pricePerWeek = pricePerWeek;
 	}
 }

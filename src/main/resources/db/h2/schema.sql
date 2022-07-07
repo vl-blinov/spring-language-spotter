@@ -44,5 +44,5 @@ CREATE TABLE IF NOT EXISTS accommodation (
 	accommodation_type VARCHAR,
 	food VARCHAR,
 	age_restriction VARCHAR,
-	price VARCHAR
+	price_per_week VARCHAR
 );
