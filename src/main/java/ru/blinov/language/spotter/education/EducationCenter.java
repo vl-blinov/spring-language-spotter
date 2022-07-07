@@ -1,6 +1,5 @@
 package ru.blinov.language.spotter.education;
 
-import java.text.DecimalFormat;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -47,8 +46,11 @@ public class EducationCenter {
 					    CascadeType.PERSIST, CascadeType.REFRESH})
 	private List<Accommodation> accommodations;
 	
-	@Column(name="registration_fee")
-	private String registrationFee;
+	@Column(name="registration_fee_amount")
+	private double registrationFeeAmount;
+	
+	@Column(name="registration_fee_currency")
+	private String registrationFeeCurrency;
 	
 	@Column(name="rating")
 	private double rating;
@@ -57,11 +59,13 @@ public class EducationCenter {
 		
 	}
 
-	public EducationCenter(String name, double rating) {
+	public EducationCenter(String name, double registrationFeeAmount, String registrationFeeCurrency, double rating) {
 		this.name = name;
+		this.registrationFeeAmount = registrationFeeAmount;
+		this.registrationFeeCurrency = registrationFeeCurrency;
 		this.rating = rating;
 	}
-
+	
 	public int getId() {
 		return id;
 	}
@@ -76,6 +80,15 @@ public class EducationCenter {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+	
+	@JsonIgnore
+	public City getCity() {
+		return city;
+	}
+
+	public void setCity(City city) {
+		this.city = city;
 	}
 	
 	@JsonIgnore
@@ -96,12 +109,20 @@ public class EducationCenter {
 		this.accommodations = accommodations;
 	}
 
-	public String getRegistrationFee() {
-		return registrationFee;
+	public double getRegistrationFeeAmount() {
+		return registrationFeeAmount;
 	}
 
-	public void setRegistrationFee(String registrationFee) {
-		this.registrationFee = registrationFee;
+	public void setRegistrationFeeAmount(double registrationFeeAmount) {
+		this.registrationFeeAmount = registrationFeeAmount;
+	}
+
+	public String getRegistrationFeeCurrency() {
+		return registrationFeeCurrency;
+	}
+
+	public void setRegistrationFeeCurrency(String registrationFeeCurrency) {
+		this.registrationFeeCurrency = registrationFeeCurrency;
 	}
 
 	public double getRating() {
