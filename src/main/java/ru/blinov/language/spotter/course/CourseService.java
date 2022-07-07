@@ -7,24 +7,25 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import ru.blinov.language.spotter.language.Language;
+import ru.blinov.language.spotter.language.LanguageRepository;
+
 @Service
 public class CourseService {
 	
-	private CourseRepository courseRepository;
+	private LanguageRepository languageRepository;
 
 	@Autowired
-	public CourseService(CourseRepository courseRepository) {
-		this.courseRepository = courseRepository;
+	public CourseService(LanguageRepository languageRepository) {
+		this.languageRepository = languageRepository;
 	}
 	
 	@Transactional(readOnly = true)
-	public List<Course> findAllCoursesByCenterAndCityAndCountryAndLanguageName(String languageName,
-																			   String countryName,
-																			   String cityName,
-																			   String centerName) {
-		return courseRepository.findAllByCenterAndCityAndCountryAndLanguageName(StringUtils.capitalize(languageName),
-																				StringUtils.capitalize(countryName),
-																				StringUtils.capitalize(cityName),
-																				centerName);
+	public List<Course> findAllCoursesByCenterByCityByCountryByLanguageName(String languageName, String countryName, String cityName, String centerName) {	
+		return getLanguage(languageName).getCountry(countryName).getCity(cityName).getEducationCenter(centerName).getCourses();
+	}
+	
+	private Language getLanguage(String languageName) {
+		return languageRepository.findByName(StringUtils.capitalize(languageName)).get();
 	}
 }

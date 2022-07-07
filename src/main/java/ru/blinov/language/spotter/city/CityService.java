@@ -7,18 +7,25 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import ru.blinov.language.spotter.language.Language;
+import ru.blinov.language.spotter.language.LanguageRepository;
+
 @Service
 public class CityService {
 	
-	private CityRepository cityRepository;
+	private LanguageRepository languageRepository;
 	
 	@Autowired
-	public CityService(CityRepository cityRepository) {
-		this.cityRepository = cityRepository;
+	public CityService(LanguageRepository languageRepository) {
+		this.languageRepository = languageRepository;
 	}
 	
 	@Transactional(readOnly = true)
-	public List<City> findAllCitiesByCountryAndLanguageName(String languageName, String countryName) {
-		return cityRepository.findAllByCountryAndLanguageName(StringUtils.capitalize(languageName), StringUtils.capitalize(countryName));
+	public List<City> findAllCitiesByCountryByLanguageName(String languageName, String countryName) {
+		return getLanguage(languageName).getCountry(countryName).getCities();
+	}
+
+	private Language getLanguage(String languageName) {
+		return languageRepository.findByName(StringUtils.capitalize(languageName)).get();
 	}
 }

@@ -14,6 +14,8 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.springframework.util.StringUtils;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import ru.blinov.language.spotter.city.City;
@@ -83,5 +85,9 @@ public class Country {
 
 	public void setCities(List<City> cities) {
 		this.cities = cities;
+	}
+	
+	public City getCity(String cityName) {
+		return cities.stream().filter(city -> StringUtils.capitalize(cityName).equals(city.getName())).findAny().get();
 	}
 }

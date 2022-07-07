@@ -82,4 +82,8 @@ public class City {
 	public void setEducationCenters(List<EducationCenter> educationCenters) {
 		this.educationCenters = educationCenters;
 	}
+	
+	public EducationCenter getEducationCenter(String centerName) {
+		return educationCenters.stream().filter(center -> centerName.equals(center.getName())).findAny().get();
+	}
 }

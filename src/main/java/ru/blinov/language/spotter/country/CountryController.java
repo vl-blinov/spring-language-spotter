@@ -20,7 +20,7 @@ public class CountryController {
 	}
 	
 	@GetMapping("/{languageName}/countries")
-	public List<Country> getAllCountriesForLanguageToLearn(@PathVariable String languageName) {	
+	public List<Country> getAllCountriesOfLanguageToLearn(@PathVariable String languageName) {	
 		return countryService.findAllCountriesByLanguageName(languageName);
 	}
 }

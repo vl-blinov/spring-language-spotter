@@ -13,6 +13,8 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
+import org.springframework.util.StringUtils;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import ru.blinov.language.spotter.country.Country;
@@ -67,5 +69,9 @@ public class Language {
 
 	public void setCountries(List<Country> countries) {
 		this.countries = countries;
+	}
+	
+	public Country getCountry(String countryName) {
+		return countries.stream().filter(country -> StringUtils.capitalize(countryName).equals(country.getName())).findAny().get();
 	}
 }
