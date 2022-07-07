@@ -24,7 +24,7 @@ CREATE TABLE IF NOT EXISTS education_center (
 	name VARCHAR,
 	city_id INTEGER REFERENCES city(id),
 	registration_fee VARCHAR,
-	rating REAL
+	rating NUMERIC(2, 1)
 );
 
 CREATE TABLE IF NOT EXISTS course (
