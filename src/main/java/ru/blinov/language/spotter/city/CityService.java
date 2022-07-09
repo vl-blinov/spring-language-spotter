@@ -21,7 +21,7 @@ public class CityService {
 	}
 	
 	@Transactional(readOnly = true)
-	public List<City> findAllCitiesByCountryByLanguageName(String languageName, String countryName) {
+	public List<City> findAllCitiesByCountryAndLanguageName(String languageName, String countryName) {
 		return getLanguage(languageName).getCountry(countryName).getCities();
 	}
 

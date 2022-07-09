@@ -21,7 +21,7 @@ public class EducationCenterService {
 	}
 	
 	@Transactional(readOnly = true)
-	public List<EducationCenter> findAllCentersByCityByCountryByLanguageName(String languageName, String countryName, String cityName) {
+	public List<EducationCenter> findAllCentersByCityAndCountryAndLanguageName(String languageName, String countryName, String cityName) {
 		return getLanguage(languageName).getCountry(countryName).getCity(cityName).getEducationCenters();
 	}
 

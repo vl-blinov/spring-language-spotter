@@ -22,6 +22,6 @@ public class CourseController {
 	@GetMapping("/{languageName}/{countryName}/{cityName}/{centerName}/courses")
 	public List<Course> getAllCoursesOfCenterOfCityOfCountryOfLanguageToLearn(@PathVariable String languageName, @PathVariable String countryName,
 																			  @PathVariable String cityName, @PathVariable String centerName) {
-		return courseService.findAllCoursesByCenterByCityByCountryByLanguageName(languageName, countryName, cityName, centerName);
+		return courseService.findAllCoursesByCenterAndCityAndCountryAndLanguageName(languageName, countryName, cityName, centerName);
 	}
 }

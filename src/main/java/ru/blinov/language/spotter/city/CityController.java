@@ -21,6 +21,6 @@ public class CityController {
 	
 	@GetMapping("/{languageName}/{countryName}/cities")
 	public List<City> getAllCitiesOfCountryOfLanguageToLearn(@PathVariable String languageName, @PathVariable String countryName) {
-		return cityService.findAllCitiesByCountryByLanguageName(languageName, countryName);
+		return cityService.findAllCitiesByCountryAndLanguageName(languageName, countryName);
 	}
 }
