@@ -1,5 +1,6 @@
 package ru.blinov.language.spotter.education;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import ru.blinov.language.spotter.country.Country;
 import ru.blinov.language.spotter.language.Language;
 import ru.blinov.language.spotter.language.LanguageRepository;
 
@@ -28,4 +30,22 @@ public class EducationCenterService {
 	private Language getLanguage(String languageName) {
 		return languageRepository.findByName(StringUtils.capitalize(languageName)).get();
 	}
+	
+	@Transactional(readOnly = true)
+	public List<EducationCenter> findAllCentersByLanguageName(String languageName) {
+		
+		List<Country> countries = getLanguage(languageName).getCountries();
+		
+		List<EducationCenter> centers = new LinkedList<>();
+
+		countries.stream().forEach(country -> {
+			country.getCities().stream().forEach(city -> {
+				city.getEducationCenters().stream().forEach(center -> {
+					centers.add(center);
+				});
+			});
+		});
+		
+		return centers;
+	}	
 }

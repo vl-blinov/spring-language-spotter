@@ -24,4 +24,9 @@ public class EducationCenterController {
 																			   @PathVariable String cityName) {
 		return educationCenterService.findAllCentersByCityAndCountryAndLanguageName(languageName, countryName, cityName);
 	}
+	
+	@GetMapping("/{languageName}/centers")
+	public List<EducationCenter> getAllCentersOfLanguageToLearn(@PathVariable String languageName) {	
+		return educationCenterService.findAllCentersByLanguageName(languageName);
+	}
 }
