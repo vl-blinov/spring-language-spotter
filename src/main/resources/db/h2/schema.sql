@@ -23,6 +23,7 @@ CREATE TABLE IF NOT EXISTS education_center (
 	id SERIAL PRIMARY KEY,
 	name VARCHAR,
 	city_id INTEGER REFERENCES city(id),
+	address VARCHAR,
 	registration_fee_amount NUMERIC(5, 2),
 	registration_fee_currency VARCHAR,
 	rating NUMERIC(2, 1)

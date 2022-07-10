@@ -46,6 +46,9 @@ public class EducationCenter {
 					    CascadeType.PERSIST, CascadeType.REFRESH})
 	private List<Accommodation> accommodations;
 	
+	@Column(name="address")
+	private String address;
+	
 	@Column(name="registration_fee_amount")
 	private double registrationFeeAmount;
 	
@@ -59,13 +62,15 @@ public class EducationCenter {
 		
 	}
 
-	public EducationCenter(String name, double registrationFeeAmount, String registrationFeeCurrency, double rating) {
+	public EducationCenter(String name, String address, double registrationFeeAmount, String registrationFeeCurrency,
+			double rating) {
 		this.name = name;
+		this.address = address;
 		this.registrationFeeAmount = registrationFeeAmount;
 		this.registrationFeeCurrency = registrationFeeCurrency;
 		this.rating = rating;
 	}
-	
+
 	public int getId() {
 		return id;
 	}
@@ -107,6 +112,14 @@ public class EducationCenter {
 
 	public void setAccommodations(List<Accommodation> accommodations) {
 		this.accommodations = accommodations;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
 	}
 
 	public double getRegistrationFeeAmount() {
