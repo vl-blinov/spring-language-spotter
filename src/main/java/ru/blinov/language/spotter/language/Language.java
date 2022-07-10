@@ -18,6 +18,7 @@ import org.springframework.util.StringUtils;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import ru.blinov.language.spotter.country.Country;
+import ru.blinov.language.spotter.util.StringFormatter;
 
 @Entity
 @Table(name="language")
@@ -72,6 +73,6 @@ public class Language {
 	}
 	
 	public Country getCountry(String countryName) {
-		return countries.stream().filter(country -> StringUtils.capitalize(countryName).equals(country.getName())).findAny().get();
+		return countries.stream().filter(country -> StringFormatter.formatPathVariable(countryName).equals(country.getName())).findAny().get();
 	}
 }

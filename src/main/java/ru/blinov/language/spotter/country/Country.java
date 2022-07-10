@@ -20,6 +20,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import ru.blinov.language.spotter.city.City;
 import ru.blinov.language.spotter.language.Language;
+import ru.blinov.language.spotter.util.StringFormatter;
 
 @Entity
 @Table(name="country")
@@ -88,6 +89,6 @@ public class Country {
 	}
 	
 	public City getCity(String cityName) {
-		return cities.stream().filter(city -> StringUtils.capitalize(cityName).equals(city.getName())).findAny().get();
+		return cities.stream().filter(city -> StringFormatter.formatPathVariable(cityName).equals(city.getName())).findAny().get();
 	}
 }
