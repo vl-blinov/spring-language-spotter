@@ -35,9 +35,11 @@ CREATE TABLE IF NOT EXISTS course (
 	course_type VARCHAR,
 	students_per_class INTEGER,
 	course_duration VARCHAR,
+	lessons_per_week INTEGER,
 	class_time VARCHAR,
 	lesson_duration VARCHAR,
 	age_restriction VARCHAR,
+	entry_level VARCHAR,
 	price_per_week_amount NUMERIC(6, 2),
 	price_per_week_currency VARCHAR
 );

@@ -37,6 +37,9 @@ public class Course {
 	@Column(name="course_duration")
 	private String courseDuration;
 	
+	@Column(name="lessons_per_week")
+	private int lessonsPerWeek;
+	
 	@Column(name="class_time")
 	private String classTime;
 	
@@ -45,6 +48,9 @@ public class Course {
 	
 	@Column(name="age_restriction")
 	private String ageRestriction;
+	
+	@Column(name="entry_level")
+	private String entryLevel;
 	
 	@Column(name="price_per_week_amount")
 	private double pricePerWeekAmount;
@@ -56,14 +62,17 @@ public class Course {
 		
 	}
 
-	public Course(String type, int studentsPerClass, String courseDuration, String classTime, String lessonDuration,
-			String ageRestriction, double pricePerWeekAmount, String pricePerWeekCurrency) {
+	public Course(String type, int studentsPerClass, String courseDuration, int lessonsPerWeek, String classTime,
+			String lessonDuration, String ageRestriction, String entryLevel, double pricePerWeekAmount,
+			String pricePerWeekCurrency) {
 		this.type = type;
 		this.studentsPerClass = studentsPerClass;
 		this.courseDuration = courseDuration;
+		this.lessonsPerWeek = lessonsPerWeek;
 		this.classTime = classTime;
 		this.lessonDuration = lessonDuration;
 		this.ageRestriction = ageRestriction;
+		this.entryLevel = entryLevel;
 		this.pricePerWeekAmount = pricePerWeekAmount;
 		this.pricePerWeekCurrency = pricePerWeekCurrency;
 	}
@@ -108,6 +117,14 @@ public class Course {
 	public void setCourseDuration(String courseDuration) {
 		this.courseDuration = courseDuration;
 	}
+	
+	public int getLessonsPerWeek() {
+		return lessonsPerWeek;
+	}
+
+	public void setLessonsPerWeek(int lessonsPerWeek) {
+		this.lessonsPerWeek = lessonsPerWeek;
+	}
 
 	public String getClassTime() {
 		return classTime;
@@ -131,6 +148,14 @@ public class Course {
 
 	public void setAgeRestriction(String ageRestriction) {
 		this.ageRestriction = ageRestriction;
+	}
+	
+	public String getEntryLevel() {
+		return entryLevel;
+	}
+
+	public void setEntryLevel(String entryLevel) {
+		this.entryLevel = entryLevel;
 	}
 
 	public double getPricePerWeekAmount() {
