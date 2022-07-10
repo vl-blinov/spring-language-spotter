@@ -43,6 +43,9 @@ public class Course {
 	@Column(name="lesson_duration")
 	private String lessonDuration;
 	
+	@Column(name="age_restriction")
+	private String ageRestriction;
+	
 	@Column(name="price_per_week_amount")
 	private double pricePerWeekAmount;
 	
@@ -54,12 +57,13 @@ public class Course {
 	}
 
 	public Course(String type, int studentsPerClass, String courseDuration, String classTime, String lessonDuration,
-			double pricePerWeekAmount, String pricePerWeekCurrency) {
+			String ageRestriction, double pricePerWeekAmount, String pricePerWeekCurrency) {
 		this.type = type;
 		this.studentsPerClass = studentsPerClass;
 		this.courseDuration = courseDuration;
 		this.classTime = classTime;
 		this.lessonDuration = lessonDuration;
+		this.ageRestriction = ageRestriction;
 		this.pricePerWeekAmount = pricePerWeekAmount;
 		this.pricePerWeekCurrency = pricePerWeekCurrency;
 	}
@@ -119,6 +123,14 @@ public class Course {
 
 	public void setLessonDuration(String lessonDuration) {
 		this.lessonDuration = lessonDuration;
+	}
+	
+	public String getAgeRestriction() {
+		return ageRestriction;
+	}
+
+	public void setAgeRestriction(String ageRestriction) {
+		this.ageRestriction = ageRestriction;
 	}
 
 	public double getPricePerWeekAmount() {
