@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import ru.blinov.language.spotter.city.City;
 import ru.blinov.language.spotter.country.Country;
 import ru.blinov.language.spotter.language.Language;
 import ru.blinov.language.spotter.language.LanguageRepository;
@@ -29,6 +30,22 @@ public class EducationCenterService {
 
 	private Language getLanguage(String languageName) {
 		return languageRepository.findByName(StringUtils.capitalize(languageName)).get();
+	}
+	
+	@Transactional(readOnly = true)
+	public List<EducationCenter> findAllCentersByCountryAndLanguageName(String languageName, String countryName) {
+		
+		List<City> cities = getLanguage(languageName).getCountry(countryName).getCities();
+		
+		List<EducationCenter> centers = new LinkedList<>();
+
+		cities.stream().forEach(city -> {
+			city.getEducationCenters().stream().forEach(center -> {
+				centers.add(center);
+			});
+		});
+		
+		return centers;
 	}
 	
 	@Transactional(readOnly = true)
