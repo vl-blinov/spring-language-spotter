@@ -24,12 +24,21 @@ public class EducationCenterService {
 	}
 	
 	@Transactional(readOnly = true)
-	public List<EducationCenter> findAllCentersByLanguageAndCountryAndCity(String languageName, String countryName, String cityName) {
-		return getLanguage(languageName).getCountry(countryName).getCity(cityName).getEducationCenters();
-	}
+	public List<EducationCenter> findAllCentersByLanguage(String languageName) {
+		
+		List<Country> countries = getLanguage(languageName).getCountries();
+		
+		List<EducationCenter> centers = new LinkedList<>();
 
-	private Language getLanguage(String languageName) {
-		return languageRepository.findByName(StringUtils.capitalize(languageName)).get();
+		countries.stream().forEach(country -> {
+			country.getCities().stream().forEach(city -> {
+				city.getEducationCenters().stream().forEach(center -> {
+					centers.add(center);
+				});
+			});
+		});
+		
+		return centers;
 	}
 	
 	@Transactional(readOnly = true)
@@ -49,20 +58,16 @@ public class EducationCenterService {
 	}
 	
 	@Transactional(readOnly = true)
-	public List<EducationCenter> findAllCentersByLanguage(String languageName) {
-		
-		List<Country> countries = getLanguage(languageName).getCountries();
-		
-		List<EducationCenter> centers = new LinkedList<>();
+	public List<EducationCenter> findAllCentersByLanguageAndCountryAndCity(String languageName, String countryName, String cityName) {
+		return getLanguage(languageName).getCountry(countryName).getCity(cityName).getEducationCenters();
+	}
 
-		countries.stream().forEach(country -> {
-			country.getCities().stream().forEach(city -> {
-				city.getEducationCenters().stream().forEach(center -> {
-					centers.add(center);
-				});
-			});
-		});
-		
-		return centers;
-	}	
+	private Language getLanguage(String languageName) {
+		return languageRepository.findByName(StringUtils.capitalize(languageName)).get();
+	}
+	
+	@Transactional(readOnly = true)
+	public EducationCenter findCenterByLanguageAndCountryAndCityAndName(String languageName, String countryName, String cityName, String centerName) {
+		return getLanguage(languageName).getCountry(countryName).getCity(cityName).getEducationCenter(centerName);
+	}
 }

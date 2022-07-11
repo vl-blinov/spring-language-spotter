@@ -18,11 +18,10 @@ public class EducationCenterController {
 	public EducationCenterController(EducationCenterService educationCenterService) {
 		this.educationCenterService = educationCenterService;
 	}
-	
-	@GetMapping("/{languageName}/{countryName}/{cityName}/centers")
-	public List<EducationCenter> getAllCentersOfCityOfCountryOfLanguageToLearn(@PathVariable String languageName, @PathVariable String countryName,
-																			   @PathVariable String cityName) {
-		return educationCenterService.findAllCentersByLanguageAndCountryAndCity(languageName, countryName, cityName);
+
+	@GetMapping("/{languageName}/centers")
+	public List<EducationCenter> getAllCentersOfLanguageToLearn(@PathVariable String languageName) {	
+		return educationCenterService.findAllCentersByLanguage(languageName);
 	}
 	
 	@GetMapping("/{languageName}/{countryName}/centers")
@@ -30,8 +29,15 @@ public class EducationCenterController {
 		return educationCenterService.findAllCentersByLanguageAndCountry(languageName, countryName);
 	}
 	
-	@GetMapping("/{languageName}/centers")
-	public List<EducationCenter> getAllCentersOfLanguageToLearn(@PathVariable String languageName) {	
-		return educationCenterService.findAllCentersByLanguage(languageName);
+	@GetMapping("/{languageName}/{countryName}/{cityName}/centers")
+	public List<EducationCenter> getAllCentersOfCityOfCountryOfLanguageToLearn(@PathVariable String languageName, @PathVariable String countryName,
+																			   @PathVariable String cityName) {
+		return educationCenterService.findAllCentersByLanguageAndCountryAndCity(languageName, countryName, cityName);
+	}
+	
+	@GetMapping("/{languageName}/{countryName}/{cityName}/{centerName}")
+	public EducationCenter getCenterOfCityOfCountryOfLanguageToLearn(@PathVariable String languageName, @PathVariable String countryName,
+			   														 @PathVariable String cityName, @PathVariable String centerName) {
+		return educationCenterService.findCenterByLanguageAndCountryAndCityAndName(languageName, countryName, cityName, centerName);
 	}
 }
