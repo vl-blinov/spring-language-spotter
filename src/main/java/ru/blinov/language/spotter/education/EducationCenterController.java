@@ -22,16 +22,16 @@ public class EducationCenterController {
 	@GetMapping("/{languageName}/{countryName}/{cityName}/centers")
 	public List<EducationCenter> getAllCentersOfCityOfCountryOfLanguageToLearn(@PathVariable String languageName, @PathVariable String countryName,
 																			   @PathVariable String cityName) {
-		return educationCenterService.findAllCentersByCityAndCountryAndLanguageName(languageName, countryName, cityName);
+		return educationCenterService.findAllCentersByLanguageAndCountryAndCity(languageName, countryName, cityName);
 	}
 	
 	@GetMapping("/{languageName}/{countryName}/centers")
 	public List<EducationCenter> getAllCentersOfCountryOfLanguageToLearn(@PathVariable String languageName, @PathVariable String countryName) {
-		return educationCenterService.findAllCentersByCountryAndLanguageName(languageName, countryName);
+		return educationCenterService.findAllCentersByLanguageAndCountry(languageName, countryName);
 	}
 	
 	@GetMapping("/{languageName}/centers")
 	public List<EducationCenter> getAllCentersOfLanguageToLearn(@PathVariable String languageName) {	
-		return educationCenterService.findAllCentersByLanguageName(languageName);
+		return educationCenterService.findAllCentersByLanguage(languageName);
 	}
 }

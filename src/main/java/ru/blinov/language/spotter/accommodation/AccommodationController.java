@@ -22,6 +22,6 @@ public class AccommodationController {
 	@GetMapping("/{languageName}/{countryName}/{cityName}/{centerName}/accommodations")
 	public List<Accommodation> getAllAccommodationsOfCenterOfCityOfCountryOfLanguageToLearn(@PathVariable String languageName, @PathVariable String countryName,
 																			  		 		@PathVariable String cityName, @PathVariable String centerName) {
-		return accommodationService.findAllAccommodationsByCenterAndCityAndCountryAndLanguageName(languageName, countryName, cityName, centerName);
+		return accommodationService.findAllAccommodationsByLanguageAndCountryAndCityAndCenter(languageName, countryName, cityName, centerName);
 	}
 }

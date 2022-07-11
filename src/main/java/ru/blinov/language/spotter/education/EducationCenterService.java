@@ -24,7 +24,7 @@ public class EducationCenterService {
 	}
 	
 	@Transactional(readOnly = true)
-	public List<EducationCenter> findAllCentersByCityAndCountryAndLanguageName(String languageName, String countryName, String cityName) {
+	public List<EducationCenter> findAllCentersByLanguageAndCountryAndCity(String languageName, String countryName, String cityName) {
 		return getLanguage(languageName).getCountry(countryName).getCity(cityName).getEducationCenters();
 	}
 
@@ -33,7 +33,7 @@ public class EducationCenterService {
 	}
 	
 	@Transactional(readOnly = true)
-	public List<EducationCenter> findAllCentersByCountryAndLanguageName(String languageName, String countryName) {
+	public List<EducationCenter> findAllCentersByLanguageAndCountry(String languageName, String countryName) {
 		
 		List<City> cities = getLanguage(languageName).getCountry(countryName).getCities();
 		
@@ -49,7 +49,7 @@ public class EducationCenterService {
 	}
 	
 	@Transactional(readOnly = true)
-	public List<EducationCenter> findAllCentersByLanguageName(String languageName) {
+	public List<EducationCenter> findAllCentersByLanguage(String languageName) {
 		
 		List<Country> countries = getLanguage(languageName).getCountries();
 		
