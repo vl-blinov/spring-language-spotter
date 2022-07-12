@@ -2,6 +2,7 @@ package ru.blinov.language.spotter.education;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -59,7 +60,8 @@ public class EducationCenterService {
 	
 	@Transactional(readOnly = true)
 	public List<EducationCenter> findAllCentersByLanguageAndCountryAndCity(String languageName, String countryName, String cityName) {
-		return getLanguage(languageName).getCountry(countryName).getCity(cityName).getEducationCenters();
+		return getLanguage(languageName).getCountry(countryName).getCity(cityName).getEducationCenters()
+				.stream().filter(center -> center.hasLanguage(languageName)).collect(Collectors.toList());
 	}
 
 	private Language getLanguage(String languageName) {

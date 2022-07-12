@@ -13,11 +13,11 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
-import org.springframework.util.StringUtils;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import ru.blinov.language.spotter.city.City;
 import ru.blinov.language.spotter.country.Country;
+import ru.blinov.language.spotter.education.EducationCenter;
 import ru.blinov.language.spotter.util.StringFormatter;
 
 @Entity
@@ -38,6 +38,20 @@ public class Language {
 			   joinColumns=@JoinColumn(name="language_id"),
 			   inverseJoinColumns=@JoinColumn(name="country_id"))
 	private List<Country> countries;
+	
+	@ManyToMany(cascade={CascadeType.DETACH, CascadeType.MERGE,
+				 		 CascadeType.PERSIST, CascadeType.REFRESH})
+	@JoinTable(name="language_city",
+	  		   joinColumns=@JoinColumn(name="language_id"),
+	  		   inverseJoinColumns=@JoinColumn(name="city_id"))
+	private List<City> cities;
+	
+	@ManyToMany(cascade={CascadeType.DETACH, CascadeType.MERGE,
+			 			 CascadeType.PERSIST, CascadeType.REFRESH})
+	@JoinTable(name="language_education_center",
+			   joinColumns=@JoinColumn(name="language_id"),
+			   inverseJoinColumns=@JoinColumn(name="education_center_id"))
+	private List<EducationCenter> educationCenters;
 
 	public Language() {
 		
@@ -74,5 +88,23 @@ public class Language {
 	
 	public Country getCountry(String countryName) {
 		return countries.stream().filter(country -> StringFormatter.formatPathVariable(countryName).equals(country.getName())).findAny().get();
+	}
+	
+	@JsonIgnore
+	public List<City> getCities() {
+		return cities;
+	}
+
+	public void setCities(List<City> cities) {
+		this.cities = cities;
+	}
+	
+	@JsonIgnore
+	public List<EducationCenter> getEducationCenters() {
+		return educationCenters;
+	}
+
+	public void setEducationCenters(List<EducationCenter> educationCenters) {
+		this.educationCenters = educationCenters;
 	}
 }

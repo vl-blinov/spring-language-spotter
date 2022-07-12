@@ -1,6 +1,7 @@
 package ru.blinov.language.spotter.city;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -9,6 +10,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -17,6 +20,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import ru.blinov.language.spotter.country.Country;
 import ru.blinov.language.spotter.education.EducationCenter;
+import ru.blinov.language.spotter.language.Language;
 import ru.blinov.language.spotter.util.StringFormatter;
 
 @Entity
@@ -30,6 +34,13 @@ public class City {
 	
 	@Column(name="name")
 	private String name;
+	
+	@ManyToMany(cascade={CascadeType.DETACH, CascadeType.MERGE,
+		 		 		 CascadeType.PERSIST, CascadeType.REFRESH})
+	@JoinTable(name="language_city",
+		   	   joinColumns=@JoinColumn(name="city_id"),
+		   	   inverseJoinColumns=@JoinColumn(name="language_id"))
+	private List<Language> languages;
 	
 	@ManyToOne(cascade= {CascadeType.DETACH, CascadeType.MERGE,
 						 CascadeType.PERSIST, CascadeType.REFRESH})
@@ -67,6 +78,15 @@ public class City {
 	}
 	
 	@JsonIgnore
+	public List<Language> getLanguages() {
+		return languages;
+	}
+
+	public void setLanguages(List<Language> languages) {
+		this.languages = languages;
+	}
+
+	@JsonIgnore
 	public Country getCountry() {
 		return country;
 	}
@@ -82,6 +102,10 @@ public class City {
 
 	public void setEducationCenters(List<EducationCenter> educationCenters) {
 		this.educationCenters = educationCenters;
+	}
+	
+	public boolean hasLanguage(String languageName) {
+		return languages.stream().filter(language -> StringFormatter.formatPathVariable(languageName).equals(language.getName())).findAny().isPresent();
 	}
 	
 	public EducationCenter getEducationCenter(String centerName) {
