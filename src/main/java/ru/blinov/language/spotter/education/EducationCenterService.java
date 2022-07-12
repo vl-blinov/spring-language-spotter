@@ -1,75 +1,53 @@
 package ru.blinov.language.spotter.education;
 
-import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 
-import ru.blinov.language.spotter.city.City;
-import ru.blinov.language.spotter.country.Country;
-import ru.blinov.language.spotter.language.Language;
-import ru.blinov.language.spotter.language.LanguageRepository;
+import ru.blinov.language.spotter.util.StringFormatter;
 
 @Service
 public class EducationCenterService {
 	
-	private LanguageRepository languageRepository;
+	private EducationCenterRepository educationCenterRepository;
 	
 	@Autowired
-	public EducationCenterService(LanguageRepository languageRepository) {
-		this.languageRepository = languageRepository;
+	public EducationCenterService(EducationCenterRepository educationCenterRepository) {
+		this.educationCenterRepository = educationCenterRepository;
 	}
 	
 	@Transactional(readOnly = true)
 	public List<EducationCenter> findAllCentersByLanguage(String languageName) {
-		
-		List<Country> countries = getLanguage(languageName).getCountries();
-		
-		List<EducationCenter> centers = new LinkedList<>();
-
-		countries.stream().forEach(country -> {
-			country.getCities().stream().forEach(city -> {
-				city.getEducationCenters().stream().forEach(center -> {
-					centers.add(center);
-				});
-			});
-		});
-		
-		return centers;
+		return educationCenterRepository.findAll().stream()
+				.filter(center -> center.hasLanguage(languageName)).collect(Collectors.toList());
 	}
-	
+
 	@Transactional(readOnly = true)
 	public List<EducationCenter> findAllCentersByLanguageAndCountry(String languageName, String countryName) {
-		
-		List<City> cities = getLanguage(languageName).getCountry(countryName).getCities();
-		
-		List<EducationCenter> centers = new LinkedList<>();
-
-		cities.stream().forEach(city -> {
-			city.getEducationCenters().stream().forEach(center -> {
-				centers.add(center);
-			});
-		});
-		
-		return centers;
+		return educationCenterRepository.findAll().stream()
+				.filter(center -> center.hasLanguage(languageName))
+				.filter(center -> center.getCity().getCountry().getName().equals(StringFormatter.formatPathVariable(countryName)))
+				.collect(Collectors.toList());
 	}
 	
 	@Transactional(readOnly = true)
 	public List<EducationCenter> findAllCentersByLanguageAndCountryAndCity(String languageName, String countryName, String cityName) {
-		return getLanguage(languageName).getCountry(countryName).getCity(cityName).getEducationCenters()
-				.stream().filter(center -> center.hasLanguage(languageName)).collect(Collectors.toList());
-	}
-
-	private Language getLanguage(String languageName) {
-		return languageRepository.findByName(StringUtils.capitalize(languageName)).get();
+		return educationCenterRepository.findAll().stream()
+				.filter(center -> center.hasLanguage(languageName))
+				.filter(center -> center.getCity().getCountry().getName().equals(StringFormatter.formatPathVariable(countryName)))
+				.filter(center -> center.getCity().getName().equals(StringFormatter.formatPathVariable(cityName)))
+				.collect(Collectors.toList());
 	}
 	
 	@Transactional(readOnly = true)
 	public EducationCenter findCenterByLanguageAndCountryAndCityAndName(String languageName, String countryName, String cityName, String centerName) {
-		return getLanguage(languageName).getCountry(countryName).getCity(cityName).getEducationCenter(centerName);
+		return educationCenterRepository.findAll().stream()
+				.filter(center -> center.hasLanguage(languageName))
+				.filter(center -> center.getCity().getCountry().getName().equals(StringFormatter.formatPathVariable(countryName)))
+				.filter(center -> center.getCity().getName().equals(StringFormatter.formatPathVariable(cityName)))
+				.filter(center -> center.getName().equals(StringFormatter.formatPathVariable(centerName))).findAny().get();
 	}
 }
