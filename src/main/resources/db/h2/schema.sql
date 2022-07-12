@@ -19,6 +19,11 @@ CREATE TABLE IF NOT EXISTS city (
 	country_id INTEGER REFERENCES country(id)
 );
 
+CREATE TABLE IF NOT EXISTS language_city (
+	language_id INTEGER REFERENCES language(id),
+	city_id INTEGER REFERENCES city(id)
+);
+
 CREATE TABLE IF NOT EXISTS education_center (
 	id SERIAL PRIMARY KEY,
 	name VARCHAR,
@@ -27,6 +32,11 @@ CREATE TABLE IF NOT EXISTS education_center (
 	registration_fee_amount NUMERIC(5, 2),
 	registration_fee_currency VARCHAR,
 	rating NUMERIC(2, 1)
+);
+
+CREATE TABLE IF NOT EXISTS language_education_center (
+	language_id INTEGER REFERENCES language(id),
+	education_center_id INTEGER REFERENCES education_center(id)
 );
 
 CREATE TABLE IF NOT EXISTS course (

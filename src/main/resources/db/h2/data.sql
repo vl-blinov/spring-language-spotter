@@ -13,6 +13,12 @@ INSERT INTO city (name, country_id) VALUES ('Cork', 1);
 INSERT INTO city (name, country_id) VALUES ('New York', 2);
 INSERT INTO city (name, country_id) VALUES ('Los Angeles', 2);
 
+INSERT INTO language_city (language_id, city_id) VALUES (1, 1);
+INSERT INTO language_city (language_id, city_id) VALUES (1, 2);
+INSERT INTO language_city (language_id, city_id) VALUES (1, 3);
+INSERT INTO language_city (language_id, city_id) VALUES (1, 4);
+INSERT INTO language_city (language_id, city_id) VALUES (2, 1);
+
 INSERT INTO education_center (name, city_id, address, registration_fee_amount, registration_fee_currency, rating)
 VALUES ('Erin School Of English', 1, '43 N Great George''s St, Rotunda, Dublin, D01 N6P2, Ireland', 85, '€', 4.9);
 INSERT INTO education_center (name, city_id, address, registration_fee_amount, registration_fee_currency, rating)
@@ -27,6 +33,14 @@ INSERT INTO education_center (name, city_id, address, registration_fee_amount, r
 VALUES ('Mentor Language Institute', 4, '10880 Wilshire Blvd #122, Los Angeles, CA 90024, United States', 570, '$', 4.9);
 INSERT INTO education_center (name, city_id, address, registration_fee_amount, registration_fee_currency, rating)
 VALUES ('Gael Linn', 1, '35 Dame St, Dublin 2, D02 H797, Ireland', 60, '$', 4.7);
+
+INSERT INTO language_education_center (language_id, education_center_id) VALUES (1, 1);
+INSERT INTO language_education_center (language_id, education_center_id) VALUES (1, 2);
+INSERT INTO language_education_center (language_id, education_center_id) VALUES (1, 3);
+INSERT INTO language_education_center (language_id, education_center_id) VALUES (1, 4);
+INSERT INTO language_education_center (language_id, education_center_id) VALUES (1, 5);
+INSERT INTO language_education_center (language_id, education_center_id) VALUES (1, 6);
+INSERT INTO language_education_center (language_id, education_center_id) VALUES (2, 7);
 
 INSERT INTO course (education_center_id, course_type, students_per_class, course_duration, lessons_per_week, class_time, lesson_duration, age_restriction, entry_level, price_per_week_amount, price_per_week_currency)
 VALUES (1, 'General English (Morning classes)', 15, '1 - 12 weeks', 15, 'Monday - Friday 09:00 - 12:15', '60 minutes', '16+ years old', 'Elementary (A1)', 200, '€');
