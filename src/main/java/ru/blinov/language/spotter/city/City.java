@@ -1,7 +1,6 @@
 package ru.blinov.language.spotter.city;
 
 import java.util.List;
-import java.util.Optional;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -106,9 +105,5 @@ public class City {
 	
 	public boolean hasLanguage(String languageName) {
 		return languages.stream().filter(language -> StringFormatter.formatPathVariable(languageName).equals(language.getName())).findAny().isPresent();
-	}
-	
-	public EducationCenter getEducationCenter(String centerName) {
-		return educationCenters.stream().filter(center -> StringFormatter.formatPathVariable(centerName).equals(center.getName())).findAny().get();
 	}
 }

@@ -6,29 +6,24 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 
-import ru.blinov.language.spotter.language.Language;
-import ru.blinov.language.spotter.language.LanguageRepository;
 import ru.blinov.language.spotter.util.StringFormatter;
 
 @Service
 public class CityService {
 	
-	private LanguageRepository languageRepository;
+	private CityRepository cityRepository;
 	
 	@Autowired
-	public CityService(LanguageRepository languageRepository) {
-		this.languageRepository = languageRepository;
+	public CityService(CityRepository cityRepository) {
+		this.cityRepository = cityRepository;
 	}
 	
 	@Transactional(readOnly = true)
 	public List<City> findAllCitiesByLanguageAndCountry(String languageName, String countryName) {
-		return getLanguage(languageName).getCountry(countryName).getCities()
-				.stream().filter(city -> city.hasLanguage(languageName)).collect(Collectors.toList());
-	}
-
-	private Language getLanguage(String languageName) {
-		return languageRepository.findByName(StringUtils.capitalize(languageName)).get();
+		return cityRepository.findAll().stream()
+				.filter(city -> city.hasLanguage(languageName))
+				.filter(city -> city.getCountry().getName().equals(StringFormatter.formatPathVariable(countryName)))
+				.collect(Collectors.toList());
 	}
 }
