@@ -14,8 +14,6 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import org.springframework.util.StringUtils;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import ru.blinov.language.spotter.city.City;
@@ -88,7 +86,7 @@ public class Country {
 		this.cities = cities;
 	}
 	
-	public City getCity(String cityName) {
-		return cities.stream().filter(city -> StringFormatter.formatPathVariable(cityName).equals(city.getName())).findAny().get();
+	public boolean hasLanguage(String languageName) {
+		return languages.stream().filter(language -> StringFormatter.formatPathVariable(languageName).equals(language.getName())).findAny().isPresent();
 	}
 }
