@@ -20,6 +20,13 @@ public class CityService {
 	}
 	
 	@Transactional(readOnly = true)
+	public List<City> findAllCitiesByCountry(String countryName) {
+		return cityRepository.findAll().stream()
+				.filter(city -> city.getCountry().getName().equals(StringFormatter.formatPathVariable(countryName)))
+				.collect(Collectors.toList());
+	}
+	
+	@Transactional(readOnly = true)
 	public List<City> findAllCitiesByLanguageAndCountry(String languageName, String countryName) {
 		return cityRepository.findAll().stream()
 				.filter(city -> city.hasLanguage(languageName))
