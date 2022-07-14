@@ -5,6 +5,10 @@ import org.springframework.util.StringUtils;
 public class StringFormatter {
 	
 	public static String formatPathVariable(String string) {
+
+		if(!string.contains("_")) {
+			return StringUtils.capitalize(string);
+		}
 		
 		String[] array = StringUtils.delimitedListToStringArray(string, "_");
 
