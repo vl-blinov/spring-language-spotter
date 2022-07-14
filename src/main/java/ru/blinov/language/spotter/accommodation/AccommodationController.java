@@ -19,9 +19,9 @@ public class AccommodationController {
 		this.accommodationService = accommodationService;
 	}
 	
-	@GetMapping("/{languageName}/{countryName}/{cityName}/{centerName}/accommodations")
-	public List<Accommodation> getAllAccommodationsOfCenterOfCityOfCountryOfLanguageToLearn(@PathVariable String languageName, @PathVariable String countryName,
-																			  		 		@PathVariable String cityName, @PathVariable String centerName) {
-		return accommodationService.findAllAccommodationsByLanguageAndCountryAndCityAndCenter(languageName, countryName, cityName, centerName);
+	@GetMapping("/{countryName}/{cityName}/{centerName}/accommodations")
+	public List<Accommodation> getAllAccommodationsOfCenterOfCityOfCountry(@PathVariable String countryName, @PathVariable String cityName,
+																		   @PathVariable String centerName) {
+		return accommodationService.findAllAccommodationsByCountryAndCityAndCenter(countryName, cityName, centerName);
 	}
 }
