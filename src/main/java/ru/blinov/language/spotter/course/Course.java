@@ -1,5 +1,7 @@
 package ru.blinov.language.spotter.course;
 
+import java.util.List;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -7,12 +9,16 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import ru.blinov.language.spotter.education.EducationCenter;
+import ru.blinov.language.spotter.language.Language;
+import ru.blinov.language.spotter.util.StringFormatter;
 
 @Entity
 @Table(name="course")
@@ -27,6 +33,13 @@ public class Course {
 			 			 CascadeType.PERSIST, CascadeType.REFRESH})
 	@JoinColumn(name="education_center_id")
 	private EducationCenter educationCenter;
+	
+	@ManyToMany(cascade={CascadeType.DETACH, CascadeType.MERGE,
+		 		 		 CascadeType.PERSIST, CascadeType.REFRESH})
+	@JoinTable(name="language_course",
+		   	   joinColumns=@JoinColumn(name="course_id"),
+		   	   inverseJoinColumns=@JoinColumn(name="language_id"))
+	private List<Language> languages;
 	
 	@Column(name="course_type")
 	private String type;
@@ -172,5 +185,18 @@ public class Course {
 
 	public void setPricePerWeekCurrency(String pricePerWeekCurrency) {
 		this.pricePerWeekCurrency = pricePerWeekCurrency;
+	}
+
+	@JsonIgnore
+	public List<Language> getLanguages() {
+		return languages;
+	}
+
+	public void setLanguages(List<Language> languages) {
+		this.languages = languages;
+	}
+	
+	public boolean hasLanguage(String languageName) {
+		return languages.stream().filter(language -> StringFormatter.formatPathVariable(languageName).equals(language.getName())).findAny().isPresent();
 	}
 }

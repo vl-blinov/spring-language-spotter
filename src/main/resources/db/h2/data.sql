@@ -61,6 +61,16 @@ VALUES (6, 'ESL program', 15, '1 - 52 weeks', 20, 'Monday - Friday 09:00 - 13:20
 INSERT INTO course (education_center_id, course_type, students_per_class, course_duration, lessons_per_week, class_time, lesson_duration, age_restriction, entry_level, price_per_week_amount, price_per_week_currency)
 VALUES (7, 'Irish Courses in Dublin', 14, '10 weeks', 2, 'Monday 18:00 - 20:00', '55 minutes', '18+ years old', 'Elementary (A1)', 120, '€');
 
+INSERT INTO language_course (language_id, course_id) VALUES (1, 1);
+INSERT INTO language_course (language_id, course_id) VALUES (1, 2);
+INSERT INTO language_course (language_id, course_id) VALUES (1, 3);
+INSERT INTO language_course (language_id, course_id) VALUES (1, 4);
+INSERT INTO language_course (language_id, course_id) VALUES (1, 5);
+INSERT INTO language_course (language_id, course_id) VALUES (1, 6);
+INSERT INTO language_course (language_id, course_id) VALUES (1, 7);
+INSERT INTO language_course (language_id, course_id) VALUES (1, 8);
+INSERT INTO language_course (language_id, course_id) VALUES (2, 8);
+
 INSERT INTO accommodation (education_center_id, accommodation_type, room, food, age_restriction, price_per_week_amount, price_per_week_currency)
 VALUES (1, 'Homestay', 'Single room', 'Half board', '16+ years old', 260, '€');
 INSERT INTO accommodation (education_center_id, accommodation_type, room, food, age_restriction, price_per_week_amount, price_per_week_currency)

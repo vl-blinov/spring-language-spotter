@@ -17,6 +17,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import ru.blinov.language.spotter.city.City;
 import ru.blinov.language.spotter.country.Country;
+import ru.blinov.language.spotter.course.Course;
 import ru.blinov.language.spotter.education.EducationCenter;
 import ru.blinov.language.spotter.util.StringFormatter;
 
@@ -52,6 +53,13 @@ public class Language {
 			   joinColumns=@JoinColumn(name="language_id"),
 			   inverseJoinColumns=@JoinColumn(name="education_center_id"))
 	private List<EducationCenter> educationCenters;
+	
+	@ManyToMany(cascade={CascadeType.DETACH, CascadeType.MERGE,
+				 		 CascadeType.PERSIST, CascadeType.REFRESH})
+	@JoinTable(name="language_course",
+	  		   joinColumns=@JoinColumn(name="language_id"),
+	  		   inverseJoinColumns=@JoinColumn(name="course_id"))
+	private List<Course> courses;
 
 	public Language() {
 		
@@ -106,5 +114,13 @@ public class Language {
 
 	public void setEducationCenters(List<EducationCenter> educationCenters) {
 		this.educationCenters = educationCenters;
+	}
+
+	public List<Course> getCourses() {
+		return courses;
+	}
+
+	public void setCourses(List<Course> courses) {
+		this.courses = courses;
 	}
 }
