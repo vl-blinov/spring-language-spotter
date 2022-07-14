@@ -42,6 +42,7 @@ CREATE TABLE IF NOT EXISTS language_education_center (
 CREATE TABLE IF NOT EXISTS course (
 	id SERIAL PRIMARY KEY,
 	education_center_id INTEGER REFERENCES education_center(id),
+	language_id INTEGER REFERENCES language(id),
 	course_type VARCHAR,
 	students_per_class INTEGER,
 	course_duration VARCHAR,
@@ -52,11 +53,6 @@ CREATE TABLE IF NOT EXISTS course (
 	entry_level VARCHAR,
 	price_per_week_amount NUMERIC(6, 2),
 	price_per_week_currency VARCHAR
-);
-
-CREATE TABLE IF NOT EXISTS language_course (
-	language_id INTEGER REFERENCES language(id),
-	course_id INTEGER REFERENCES course(id)
 );
 
 CREATE TABLE IF NOT EXISTS accommodation (

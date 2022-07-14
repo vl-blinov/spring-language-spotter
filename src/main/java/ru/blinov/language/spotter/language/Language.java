@@ -11,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -53,11 +54,9 @@ public class Language {
 			   inverseJoinColumns=@JoinColumn(name="education_center_id"))
 	private List<EducationCenter> educationCenters;
 	
-	@ManyToMany(cascade={CascadeType.DETACH, CascadeType.MERGE,
-				 		 CascadeType.PERSIST, CascadeType.REFRESH})
-	@JoinTable(name="language_course",
-	  		   joinColumns=@JoinColumn(name="language_id"),
-	  		   inverseJoinColumns=@JoinColumn(name="course_id"))
+	@OneToMany(mappedBy="language",
+			   cascade={CascadeType.DETACH, CascadeType.MERGE,
+					    CascadeType.PERSIST, CascadeType.REFRESH})
 	private List<Course> courses;
 
 	public Language() {

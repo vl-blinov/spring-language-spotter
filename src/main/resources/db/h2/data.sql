@@ -42,34 +42,24 @@ INSERT INTO language_education_center (language_id, education_center_id) VALUES 
 INSERT INTO language_education_center (language_id, education_center_id) VALUES (1, 6);
 INSERT INTO language_education_center (language_id, education_center_id) VALUES (2, 7);
 
-INSERT INTO course (education_center_id, course_type, students_per_class, course_duration, lessons_per_week, class_time, lesson_duration, age_restriction, entry_level, price_per_week_amount, price_per_week_currency)
-VALUES (1, 'General English (Morning classes)', 15, '1 - 12 weeks', 15, 'Monday - Friday 09:00 - 12:15', '60 minutes', '16+ years old', 'Elementary (A1)', 200, '€');
-INSERT INTO course (education_center_id, course_type, students_per_class, course_duration, lessons_per_week, class_time, lesson_duration, age_restriction, entry_level, price_per_week_amount, price_per_week_currency)
-VALUES (1, 'Work and Study (Morning classes)', 15, '25 weeks', 15, 'Monday - Friday 09:00 - 12:15', '60 minutes', '18+ years old', 'Elementary (A1)', 115, '€');
-INSERT INTO course (education_center_id, course_type, students_per_class, course_duration, lessons_per_week, class_time, lesson_duration, age_restriction, entry_level, price_per_week_amount, price_per_week_currency)
-VALUES (2, 'General English (Afternoon classes)', 15, '1 - 12 weeks', 15, 'Monday - Friday 13:45 - 17:00', '60 minutes', '16+ years old', 'Elementary (A1)', 140, '€');
-INSERT INTO course (education_center_id, course_type, students_per_class, course_duration, lessons_per_week, class_time, lesson_duration, age_restriction, entry_level, price_per_week_amount, price_per_week_currency)
-VALUES (2, 'Intensive English', 15, '1 - 24 weeks', 15, 'Monday - Friday 09:00 - 12:20 & 13:45 - 17:00', '60 minutes', '16+ years old', 'Elementary (A1)', 140, '€');
-INSERT INTO course (education_center_id, course_type, students_per_class, course_duration, lessons_per_week, class_time, lesson_duration, age_restriction, entry_level, price_per_week_amount, price_per_week_currency)
-VALUES (3, 'Business English', 8, '1 - 52 weeks', 20, 'Monday - Friday 09:00 - 13:20', '60 minutes', '17+ years old', 'Upper-Intermediate (B2)', 240, '€');
-INSERT INTO course (education_center_id, course_type, students_per_class, course_duration, lessons_per_week, class_time, lesson_duration, age_restriction, entry_level, price_per_week_amount, price_per_week_currency)
-VALUES (3, 'Work and Study (Afternoon classes)', 12, '25 weeks', 15, 'Monday - Friday 13:00 - 16:15', '60 minutes', '18+ years old', 'Elementary (A1)', 90, '€');
-INSERT INTO course (education_center_id, course_type, students_per_class, course_duration, lessons_per_week, class_time, lesson_duration, age_restriction, entry_level, price_per_week_amount, price_per_week_currency)
-VALUES (5, 'Academic Semester', 12, '24 weeks', 30, 'Monday - Friday 09:00 - 15:00', '45 minutes', '16+ years old', 'Elementary (A1)', 350, '$');
-INSERT INTO course (education_center_id, course_type, students_per_class, course_duration, lessons_per_week, class_time, lesson_duration, age_restriction, entry_level, price_per_week_amount, price_per_week_currency)
-VALUES (6, 'ESL program', 15, '1 - 52 weeks', 20, 'Monday - Friday 09:00 - 13:20', '55 minutes', '18+ years old', 'Elementary (A1)', 290, '$');
-INSERT INTO course (education_center_id, course_type, students_per_class, course_duration, lessons_per_week, class_time, lesson_duration, age_restriction, entry_level, price_per_week_amount, price_per_week_currency)
-VALUES (7, 'Irish Courses in Dublin', 14, '10 weeks', 2, 'Monday 18:00 - 20:00', '55 minutes', '18+ years old', 'Elementary (A1)', 120, '€');
-
-INSERT INTO language_course (language_id, course_id) VALUES (1, 1);
-INSERT INTO language_course (language_id, course_id) VALUES (1, 2);
-INSERT INTO language_course (language_id, course_id) VALUES (1, 3);
-INSERT INTO language_course (language_id, course_id) VALUES (1, 4);
-INSERT INTO language_course (language_id, course_id) VALUES (1, 5);
-INSERT INTO language_course (language_id, course_id) VALUES (1, 6);
-INSERT INTO language_course (language_id, course_id) VALUES (1, 7);
-INSERT INTO language_course (language_id, course_id) VALUES (1, 8);
-INSERT INTO language_course (language_id, course_id) VALUES (2, 8);
+INSERT INTO course (education_center_id, language_id, course_type, students_per_class, course_duration, lessons_per_week, class_time, lesson_duration, age_restriction, entry_level, price_per_week_amount, price_per_week_currency)
+VALUES (1, 1, 'General English (Morning classes)', 15, '1 - 12 weeks', 15, 'Monday - Friday 09:00 - 12:15', '60 minutes', '16+ years old', 'Elementary (A1)', 200, '€');
+INSERT INTO course (education_center_id, language_id, course_type, students_per_class, course_duration, lessons_per_week, class_time, lesson_duration, age_restriction, entry_level, price_per_week_amount, price_per_week_currency)
+VALUES (1, 1, 'Work and Study (Morning classes)', 15, '25 weeks', 15, 'Monday - Friday 09:00 - 12:15', '60 minutes', '18+ years old', 'Elementary (A1)', 115, '€');
+INSERT INTO course (education_center_id, language_id, course_type, students_per_class, course_duration, lessons_per_week, class_time, lesson_duration, age_restriction, entry_level, price_per_week_amount, price_per_week_currency)
+VALUES (2, 1, 'General English (Afternoon classes)', 15, '1 - 12 weeks', 15, 'Monday - Friday 13:45 - 17:00', '60 minutes', '16+ years old', 'Elementary (A1)', 140, '€');
+INSERT INTO course (education_center_id, language_id, course_type, students_per_class, course_duration, lessons_per_week, class_time, lesson_duration, age_restriction, entry_level, price_per_week_amount, price_per_week_currency)
+VALUES (2, 1, 'Intensive English', 15, '1 - 24 weeks', 15, 'Monday - Friday 09:00 - 12:20 & 13:45 - 17:00', '60 minutes', '16+ years old', 'Elementary (A1)', 140, '€');
+INSERT INTO course (education_center_id, language_id, course_type, students_per_class, course_duration, lessons_per_week, class_time, lesson_duration, age_restriction, entry_level, price_per_week_amount, price_per_week_currency)
+VALUES (3, 1, 'Business English', 8, '1 - 52 weeks', 20, 'Monday - Friday 09:00 - 13:20', '60 minutes', '17+ years old', 'Upper-Intermediate (B2)', 240, '€');
+INSERT INTO course (education_center_id, language_id, course_type, students_per_class, course_duration, lessons_per_week, class_time, lesson_duration, age_restriction, entry_level, price_per_week_amount, price_per_week_currency)
+VALUES (3, 1, 'Work and Study (Afternoon classes)', 12, '25 weeks', 15, 'Monday - Friday 13:00 - 16:15', '60 minutes', '18+ years old', 'Elementary (A1)', 90, '€');
+INSERT INTO course (education_center_id, language_id, course_type, students_per_class, course_duration, lessons_per_week, class_time, lesson_duration, age_restriction, entry_level, price_per_week_amount, price_per_week_currency)
+VALUES (5, 1, 'Academic Semester', 12, '24 weeks', 30, 'Monday - Friday 09:00 - 15:00', '45 minutes', '16+ years old', 'Elementary (A1)', 350, '$');
+INSERT INTO course (education_center_id, language_id, course_type, students_per_class, course_duration, lessons_per_week, class_time, lesson_duration, age_restriction, entry_level, price_per_week_amount, price_per_week_currency)
+VALUES (6, 1, 'ESL program', 15, '1 - 52 weeks', 20, 'Monday - Friday 09:00 - 13:20', '55 minutes', '18+ years old', 'Elementary (A1)', 290, '$');
+INSERT INTO course (education_center_id, language_id, course_type, students_per_class, course_duration, lessons_per_week, class_time, lesson_duration, age_restriction, entry_level, price_per_week_amount, price_per_week_currency)
+VALUES (7, 2, 'Irish Courses in Dublin', 14, '10 weeks', 2, 'Monday 18:00 - 20:00', '55 minutes', '18+ years old', 'Elementary (A1)', 120, '€');
 
 INSERT INTO accommodation (education_center_id, accommodation_type, room, food, age_restriction, price_per_week_amount, price_per_week_currency)
 VALUES (1, 'Homestay', 'Single room', 'Half board', '16+ years old', 260, '€');
