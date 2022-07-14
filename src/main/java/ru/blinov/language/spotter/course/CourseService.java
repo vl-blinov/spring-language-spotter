@@ -20,6 +20,15 @@ public class CourseService {
 	}
 	
 	@Transactional(readOnly = true)
+	public List<Course> findAllCoursesByCountryAndCityAndCenter(String countryName, String cityName, String centerName) {
+		return courseRepository.findAll().stream()
+				.filter(course -> course.getEducationCenter().getCity().getCountry().getName().equals(StringFormatter.formatPathVariable(countryName)))
+				.filter(course -> course.getEducationCenter().getCity().getName().equals(StringFormatter.formatPathVariable(cityName)))
+				.filter(course -> course.getEducationCenter().getName().equals(StringFormatter.formatPathVariable(centerName)))
+				.collect(Collectors.toList());
+	}
+	
+	@Transactional(readOnly = true)
 	public List<Course> findAllCoursesByLanguageAndCountryAndCityAndCenter(String languageName, String countryName, String cityName, String centerName) {	
 		return courseRepository.findAll().stream()
 				.filter(course -> course.getLanguage().getName().equals(StringFormatter.formatPathVariable(languageName)))
@@ -28,5 +37,4 @@ public class CourseService {
 				.filter(course -> course.getEducationCenter().getName().equals(StringFormatter.formatPathVariable(centerName)))
 				.collect(Collectors.toList());
 	}
-	
 }
