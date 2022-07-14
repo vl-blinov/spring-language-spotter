@@ -20,6 +20,11 @@ public class EducationCenterService {
 	}
 	
 	@Transactional(readOnly = true)
+	public List<EducationCenter> findAllCenters() {
+		return educationCenterRepository.findAll();
+	}
+	
+	@Transactional(readOnly = true)
 	public List<EducationCenter> findAllCentersByLanguage(String languageName) {
 		return educationCenterRepository.findAll().stream()
 				.filter(center -> center.hasLanguage(languageName))

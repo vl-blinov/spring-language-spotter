@@ -18,6 +18,11 @@ public class EducationCenterController {
 	public EducationCenterController(EducationCenterService educationCenterService) {
 		this.educationCenterService = educationCenterService;
 	}
+	
+	@GetMapping("/centers")
+	public List<EducationCenter> getAllCenters() {	
+		return educationCenterService.findAllCenters();
+	}
 
 	@GetMapping("/{languageName}/centers")
 	public List<EducationCenter> getAllCentersOfLanguageToLearn(@PathVariable String languageName) {	
