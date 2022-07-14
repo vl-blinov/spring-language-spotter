@@ -18,6 +18,11 @@ public class CountryService {
 	}
 	
 	@Transactional(readOnly = true)
+	public List<Country> findAllCountries() {
+		return countryRepository.findAll();
+	}
+	
+	@Transactional(readOnly = true)
 	public List<Country> findAllCountriesByLanguageName(String languageName) {
 		return countryRepository.findAll().stream()
 				.filter(country -> country.hasLanguage(languageName))
