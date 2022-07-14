@@ -1,6 +1,7 @@
 package ru.blinov.language.spotter.education;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,10 +51,19 @@ public class EducationCenterService {
 	
 	@Transactional(readOnly = true)
 	public EducationCenter findCenterByCountryAndCityAndName(String countryName, String cityName, String centerName) {
-		return educationCenterRepository.findAll().stream()
+		
+		Optional<EducationCenter> educationCenter = educationCenterRepository.findAll().stream()
 				.filter(center -> center.getCity().getCountry().getName().equals(StringFormatter.formatPathVariable(countryName)))
 				.filter(center -> center.getCity().getName().equals(StringFormatter.formatPathVariable(cityName)))
 				.filter(center -> center.getName().equals(StringFormatter.formatPathVariable(centerName)))
-				.findAny().get();
+				.findAny();
+		
+		if(educationCenter.isEmpty()) {
+			throw new RuntimeException("Education center with name '" + StringFormatter.formatPathVariable(centerName) 
+									   + "' in " + StringFormatter.formatPathVariable(cityName) + ", " 
+									   + StringFormatter.formatPathVariable(countryName) + " does not exist");
+		}
+		
+		return educationCenter.get();
 	}
 }
