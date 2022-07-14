@@ -35,9 +35,9 @@ public class EducationCenterController {
 		return educationCenterService.findAllCentersByLanguageAndCountryAndCity(languageName, countryName, cityName);
 	}
 	
-	@GetMapping("/{languageName}/{countryName}/{cityName}/{centerName}")
-	public EducationCenter getCenterOfCityOfCountryOfLanguageToLearn(@PathVariable String languageName, @PathVariable String countryName,
-			   														 @PathVariable String cityName, @PathVariable String centerName) {
-		return educationCenterService.findCenterByLanguageAndCountryAndCityAndName(languageName, countryName, cityName, centerName);
+	@GetMapping("/{countryName}/{cityName}/{centerName}")
+	public EducationCenter getCenterOfCityOfCountry(@PathVariable String countryName, @PathVariable String cityName,
+													@PathVariable String centerName) {
+		return educationCenterService.findCenterByCountryAndCityAndName(countryName, cityName, centerName);
 	}
 }
