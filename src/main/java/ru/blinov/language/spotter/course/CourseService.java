@@ -1,31 +1,32 @@
 package ru.blinov.language.spotter.course;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 
-import ru.blinov.language.spotter.language.Language;
-import ru.blinov.language.spotter.language.LanguageRepository;
+import ru.blinov.language.spotter.util.StringFormatter;
 
 @Service
 public class CourseService {
 	
-	private LanguageRepository languageRepository;
+	private CourseRepository courseRepository;
 
 	@Autowired
-	public CourseService(LanguageRepository languageRepository) {
-		this.languageRepository = languageRepository;
+	public CourseService(CourseRepository courseRepository) {
+		this.courseRepository = courseRepository;
 	}
 	
 	@Transactional(readOnly = true)
 	public List<Course> findAllCoursesByLanguageAndCountryAndCityAndCenter(String languageName, String countryName, String cityName, String centerName) {	
-		return getLanguage(languageName).getCountry(countryName).getCity(cityName).getEducationCenter(centerName).getCourses();
+		return courseRepository.findAll().stream()
+				.filter(course -> course.hasLanguage(languageName))
+				.filter(course -> course.getEducationCenter().getCity().getCountry().getName().equals(StringFormatter.formatPathVariable(countryName)))
+				.filter(course -> course.getEducationCenter().getCity().getName().equals(StringFormatter.formatPathVariable(cityName)))
+				.filter(course -> course.getEducationCenter().getName().equals(StringFormatter.formatPathVariable(centerName)))
+				.collect(Collectors.toList());
 	}
 	
-	private Language getLanguage(String languageName) {
-		return languageRepository.findByName(StringUtils.capitalize(languageName)).get();
-	}
 }
