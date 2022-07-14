@@ -19,7 +19,6 @@ import ru.blinov.language.spotter.city.City;
 import ru.blinov.language.spotter.country.Country;
 import ru.blinov.language.spotter.course.Course;
 import ru.blinov.language.spotter.education.EducationCenter;
-import ru.blinov.language.spotter.util.StringFormatter;
 
 @Entity
 @Table(name="language")
@@ -94,10 +93,6 @@ public class Language {
 		this.countries = countries;
 	}
 	
-	public Country getCountry(String countryName) {
-		return countries.stream().filter(country -> StringFormatter.formatPathVariable(countryName).equals(country.getName())).findAny().get();
-	}
-	
 	@JsonIgnore
 	public List<City> getCities() {
 		return cities;
@@ -115,7 +110,8 @@ public class Language {
 	public void setEducationCenters(List<EducationCenter> educationCenters) {
 		this.educationCenters = educationCenters;
 	}
-
+	
+	@JsonIgnore
 	public List<Course> getCourses() {
 		return courses;
 	}

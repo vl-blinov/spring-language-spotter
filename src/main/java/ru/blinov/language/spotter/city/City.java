@@ -55,9 +55,8 @@ public class City {
 		
 	}
 
-	public City(String name, Country country) {
+	public City(String name) {
 		this.name = name;
-		this.country = country;
 	}
 
 	public int getId() {
