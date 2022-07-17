@@ -2,7 +2,6 @@ package ru.blinov.language.spotter.accommodation;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,54 +20,31 @@ public class AccommodationService {
 	}
 	
 	@Transactional(readOnly = true)
-	public List<Accommodation> findAllAccommodationsByCountryAndCityAndCenter(String countryName, String cityName, String centerName) {	
-		return accommodationRepository.findAll().stream()
-				.filter(accommodation -> accommodation.getEducationCenter().getCity().getCountry().getName().equals(StringFormatter.formatPathVariable(countryName)))
-				.filter(accommodation -> accommodation.getEducationCenter().getCity().getName().equals(StringFormatter.formatPathVariable(cityName)))
-				.filter(accommodation -> accommodation.getEducationCenter().getName().equals(StringFormatter.formatPathVariable(centerName)))
-				.collect(Collectors.toList());
+	public List<Accommodation> findAllAccommodationsByCenterName(String centerName) {
+		return accommodationRepository.findAllByCenterName(StringFormatter.formatPathVariable(centerName));
 	}
 	
 	@Transactional
-	public void saveAccommodationOfCenterOfCityOfCountry(String countryName, String cityName, String centerName, Accommodation accommodation) {
+	public void saveAccommodationToCenter(String centerName, Accommodation accommodation) {
 
-		Optional<Accommodation> filteredAccommodation = accommodationRepository.findAll().stream()
-				.filter(a -> a.getEducationCenter().getName().equals(StringFormatter.formatPathVariable(centerName)))
-				.filter(a -> a.getEducationCenter().getCity().getName().equals(StringFormatter.formatPathVariable(cityName)))
-				.filter(a -> a.getEducationCenter().getCity().getCountry().getName().equals(StringFormatter.formatPathVariable(countryName)))
-				.findAny();
+		Optional<Accommodation> accommodationOfCenter = accommodationRepository.findOneByCenterName(StringFormatter.formatPathVariable(centerName));
 		
-		if(filteredAccommodation.isEmpty()) {
-			throw new RuntimeException("There are no such country/city/center");
+		if(accommodationOfCenter.isEmpty()) {
+			throw new RuntimeException("Education center with name '" + StringFormatter.formatPathVariable(centerName) + "' is not found");
 		}
 		
-		accommodation.setEducationCenter(filteredAccommodation.get().getEducationCenter());
+		accommodation.setEducationCenter(accommodationOfCenter.get().getEducationCenter());
 		
 		accommodationRepository.save(accommodation);
 	}
-
-	public void deleteAccommodationOfCenterOfCityOfCountryById(String countryName, String cityName, String centerName, int accommodationId) {
+	
+	@Transactional
+	public void deleteAccommodationById(int accommodationId) {
 		
-		List<Accommodation> filteredAccommodations = accommodationRepository.findAll().stream()
-				.filter(a -> a.getEducationCenter().getName().equals(StringFormatter.formatPathVariable(centerName)))
-				.filter(a -> a.getEducationCenter().getCity().getName().equals(StringFormatter.formatPathVariable(cityName)))
-				.filter(a -> a.getEducationCenter().getCity().getCountry().getName().equals(StringFormatter.formatPathVariable(countryName)))
-				.collect(Collectors.toList());
-		
-		if(filteredAccommodations.isEmpty()) {
-			throw new RuntimeException("There are no such country/city/center");
-		}
-		
-		Optional<Accommodation> accommodation = filteredAccommodations.stream()
-				.filter(a -> a.getId() == accommodationId)
-				.findAny();
+		Optional<Accommodation> accommodation = accommodationRepository.findById(accommodationId);
 		
 		if(accommodation.isEmpty()) {
-			throw new RuntimeException("Accommodation with id " + accommodationId 
-									   + " in education center: " + StringFormatter.formatPathVariable(centerName) 
-									   + ", city: " + StringFormatter.formatPathVariable(cityName) 
-									   + ", country: " + StringFormatter.formatPathVariable(countryName) 
-									   + " does not exist");
+			throw new RuntimeException("Accommodation with id " + accommodationId + "is not found");
 		}
 		
 		accommodationRepository.deleteById(accommodationId);

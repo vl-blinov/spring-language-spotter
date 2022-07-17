@@ -12,8 +12,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import ru.blinov.language.spotter.util.StringFormatter;
-
 @RestController
 @RequestMapping("/api")
 public class AccommodationController {
@@ -25,40 +23,32 @@ public class AccommodationController {
 		this.accommodationService = accommodationService;
 	}
 	
-	@GetMapping("/{countryName}/{cityName}/{centerName}/accommodations")
-	public List<Accommodation> getAllAccommodationsOfCenterOfCityOfCountry(@PathVariable String countryName, @PathVariable String cityName,
-																		   @PathVariable String centerName) {
-		return accommodationService.findAllAccommodationsByCountryAndCityAndCenter(countryName, cityName, centerName);
+	@GetMapping("/{centerName}/accommodations")
+	public List<Accommodation> getAllAccommodationsFromCenter(@PathVariable String centerName) {
+		return accommodationService.findAllAccommodationsByCenterName(centerName);
 	}
 	
-	@PostMapping("/{countryName}/{cityName}/{centerName}/accommodations")
-	public Accommodation addAccommodationToCenterOfCityOfCountry(@PathVariable String countryName, @PathVariable String cityName,
-			   													 @PathVariable String centerName, @RequestBody Accommodation accommodation) {
+	@PostMapping("/{centerName}/accommodations")
+	public Accommodation addAccommodationToCenter(@PathVariable String centerName, @RequestBody Accommodation accommodation) {
 		
-		accommodationService.saveAccommodationOfCenterOfCityOfCountry(countryName, cityName, centerName, accommodation);
+		accommodationService.saveAccommodationToCenter(centerName, accommodation);
 		
 		return accommodation;	
 	}
 	
-	@PutMapping("/{countryName}/{cityName}/{centerName}/accommodations")
-	public Accommodation updateAccommodationOfCenterOfCityOfCountry(@PathVariable String countryName, @PathVariable String cityName,
-			   													 	@PathVariable String centerName, @RequestBody Accommodation accommodation) {
+	@PutMapping("/{centerName}/accommodations")
+	public Accommodation updateAccommodationOfCenter(@PathVariable String centerName, @RequestBody Accommodation accommodation) {
 		
-		accommodationService.saveAccommodationOfCenterOfCityOfCountry(countryName, cityName, centerName, accommodation);
+		accommodationService.saveAccommodationToCenter(centerName, accommodation);
 		
 		return accommodation;	
 	}
 	
-	@DeleteMapping("/{countryName}/{cityName}/{centerName}/accommodations/{accommodationId}")
-	public String deleteAccommodationOfCenterOfCityOfCountry(@PathVariable String countryName, @PathVariable String cityName,
-			 												 @PathVariable String centerName, @PathVariable int accommodationId) {
+	@DeleteMapping("/accommodations/{accommodationId}")
+	public String deleteAccommodation(@PathVariable int accommodationId) {
 		
-		accommodationService.deleteAccommodationOfCenterOfCityOfCountryById(countryName, cityName, centerName, accommodationId);
+		accommodationService.deleteAccommodationById( accommodationId);
 		
-		return "Accommodation with id " + accommodationId 
-			   + " in education center: " + StringFormatter.formatPathVariable(centerName) 
-			   + ", city: " + StringFormatter.formatPathVariable(cityName) 
-			   + ", country: " + StringFormatter.formatPathVariable(countryName) 
-			   + " was deleted";
+		return "Accommodation with id " + accommodationId + " was deleted";
 	}
 }
