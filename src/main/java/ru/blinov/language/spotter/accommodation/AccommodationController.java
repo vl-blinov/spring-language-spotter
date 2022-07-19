@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import ru.blinov.language.spotter.util.StringFormatter;
+
 @RestController
 @RequestMapping("/api")
 public class AccommodationController {
@@ -23,31 +25,31 @@ public class AccommodationController {
 		this.accommodationService = accommodationService;
 	}
 	
-	@GetMapping("/{centerName}/accommodations")
-	public List<Accommodation> getAllAccommodationsFromCenter(@PathVariable String centerName) {
-		return accommodationService.findAllAccommodationsByCenterName(centerName);
+	@GetMapping("/{languageName}/{countryName}/{cityName}/{centerName}/accommodations")
+	public List<Accommodation> findAllAccommodations(@PathVariable String centerName) {
+		return accommodationService.findAllAccommodations(StringFormatter.formatPathVariable(centerName));
 	}
 	
-	@PostMapping("/{centerName}/accommodations")
-	public Accommodation addAccommodationToCenter(@PathVariable String centerName, @RequestBody Accommodation accommodation) {
+	@PostMapping("/{languageName}/{countryName}/{cityName}/{centerName}/accommodations")
+	public Accommodation addAccommodation(@RequestBody Accommodation accommodation) {
 		
-		accommodationService.saveAccommodationToCenter(centerName, accommodation);
+		accommodationService.saveAccommodation(accommodation);
 		
 		return accommodation;	
 	}
 	
-	@PutMapping("/{centerName}/accommodations")
-	public Accommodation updateAccommodationOfCenter(@PathVariable String centerName, @RequestBody Accommodation accommodation) {
+	@PutMapping("/{languageName}/{countryName}/{cityName}/{centerName}/accommodations")
+	public Accommodation updateAccommodation(@RequestBody Accommodation accommodation) {
 		
-		accommodationService.saveAccommodationToCenter(centerName, accommodation);
+		accommodationService.saveAccommodation(accommodation);
 		
-		return accommodation;	
+		return accommodation;
 	}
 	
-	@DeleteMapping("/accommodations/{accommodationId}")
+	@DeleteMapping("/{languageName}/{countryName}/{cityName}/{centerName}/accommodations/{accommodationId}")
 	public String deleteAccommodation(@PathVariable int accommodationId) {
 		
-		accommodationService.deleteAccommodationById( accommodationId);
+		accommodationService.deleteAccommodation(accommodationId);
 		
 		return "Accommodation with id " + accommodationId + " was deleted";
 	}

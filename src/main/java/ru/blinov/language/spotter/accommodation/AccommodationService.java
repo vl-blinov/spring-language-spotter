@@ -7,8 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import ru.blinov.language.spotter.util.StringFormatter;
-
 @Service
 public class AccommodationService {
 	
@@ -20,26 +18,40 @@ public class AccommodationService {
 	}
 	
 	@Transactional(readOnly = true)
-	public List<Accommodation> findAllAccommodationsByCenterName(String centerName) {
-		return accommodationRepository.findAllByCenterName(StringFormatter.formatPathVariable(centerName));
+	public List<Accommodation> findAllAccommodations(String centerName) {
+		
+		List<Accommodation> accommodations = accommodationRepository.findAllByCenterName(centerName);
+		
+		if(accommodations.isEmpty()) {
+			throw new RuntimeException("Education center with name '" + centerName + "' does not exist");
+		}
+		
+		if(accommodations.contains(null)) {
+			accommodations.clear();
+		}
+		
+		return accommodations;
 	}
 	
 	@Transactional
-	public void saveAccommodationToCenter(String centerName, Accommodation accommodation) {
-
-		Optional<Accommodation> accommodationOfCenter = accommodationRepository.findOneByCenterName(StringFormatter.formatPathVariable(centerName));
+	public void saveAccommodation(Accommodation accommodation) {
 		
-		if(accommodationOfCenter.isEmpty()) {
-			throw new RuntimeException("Education center with name '" + StringFormatter.formatPathVariable(centerName) + "' is not found");
+		if(accommodation.getId() == 0) {
+			
+			String centerName = accommodation.getEducationCenter().getName();
+			
+			Optional<Accommodation> accommodationOfCenter = accommodationRepository.findOneByCenterName(centerName);
+			
+			if(accommodationOfCenter.isEmpty()) {
+				throw new RuntimeException("Education center with name '" + centerName + "' does not exist");
+			}
 		}
-		
-		accommodation.setEducationCenter(accommodationOfCenter.get().getEducationCenter());
 		
 		accommodationRepository.save(accommodation);
 	}
 	
 	@Transactional
-	public void deleteAccommodationById(int accommodationId) {
+	public void deleteAccommodation(int accommodationId) {
 		
 		Optional<Accommodation> accommodation = accommodationRepository.findById(accommodationId);
 		
