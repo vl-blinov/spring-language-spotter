@@ -1,13 +1,11 @@
 package ru.blinov.language.spotter.city;
 
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import ru.blinov.language.spotter.util.StringFormatter;
 
 @Service
 public class CityService {
@@ -20,17 +18,24 @@ public class CityService {
 	}
 	
 	@Transactional(readOnly = true)
-	public List<City> findAllCitiesByCountry(String countryName) {
-		return cityRepository.findAll().stream()
-				.filter(city -> city.getCountry().getName().equals(StringFormatter.formatPathVariable(countryName)))
-				.collect(Collectors.toList());
+	public List<City> findAllCities(String countryName, String languageName) {
+		return cityRepository.findAllByCountryNameAndLanguageName(countryName, languageName);
 	}
 	
-	@Transactional(readOnly = true)
-	public List<City> findAllCitiesByLanguageAndCountry(String languageName, String countryName) {
-		return cityRepository.findAll().stream()
-				.filter(city -> city.hasLanguage(languageName))
-				.filter(city -> city.getCountry().getName().equals(StringFormatter.formatPathVariable(countryName)))
-				.collect(Collectors.toList());
+	@Transactional
+	public void saveCity(City city) {
+		cityRepository.save(city);
+	}
+	
+	@Transactional
+	public void deleteCity(String cityName) {
+		
+		Optional<City> city = cityRepository.findByName(cityName);
+		
+		if(city.isEmpty()) {
+			throw new RuntimeException("City with name '" + cityName + "' is not found");
+		}
+		
+		cityRepository.deleteByName(cityName);
 	}
 }

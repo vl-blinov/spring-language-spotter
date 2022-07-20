@@ -20,7 +20,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import ru.blinov.language.spotter.country.Country;
 import ru.blinov.language.spotter.education.EducationCenter;
 import ru.blinov.language.spotter.language.Language;
-import ru.blinov.language.spotter.util.StringFormatter;
 
 @Entity
 @Table(name="city")
@@ -41,14 +40,13 @@ public class City {
 		   	   inverseJoinColumns=@JoinColumn(name="language_id"))
 	private List<Language> languages;
 	
-	@ManyToOne(cascade= {CascadeType.DETACH, CascadeType.MERGE,
-						 CascadeType.PERSIST, CascadeType.REFRESH})
+	@ManyToOne(cascade={CascadeType.DETACH, CascadeType.MERGE,
+						CascadeType.PERSIST, CascadeType.REFRESH})
 	@JoinColumn(name="country_id")
 	private Country country;
 	
 	@OneToMany(mappedBy="city",
-			   cascade= {CascadeType.DETACH, CascadeType.MERGE,
-			 			 CascadeType.PERSIST, CascadeType.REFRESH})
+			   cascade=CascadeType.ALL)
 	private List<EducationCenter> educationCenters;
 
 	public City() {
@@ -100,9 +98,5 @@ public class City {
 
 	public void setEducationCenters(List<EducationCenter> educationCenters) {
 		this.educationCenters = educationCenters;
-	}
-	
-	public boolean hasLanguage(String languageName) {
-		return languages.stream().filter(language -> StringFormatter.formatPathVariable(languageName).equals(language.getName())).findAny().isPresent();
 	}
 }
