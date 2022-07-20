@@ -21,7 +21,6 @@ import ru.blinov.language.spotter.accommodation.Accommodation;
 import ru.blinov.language.spotter.city.City;
 import ru.blinov.language.spotter.course.Course;
 import ru.blinov.language.spotter.language.Language;
-import ru.blinov.language.spotter.util.StringFormatter;
 
 @Entity
 @Table(name="education_center")
@@ -48,13 +47,11 @@ public class EducationCenter {
 	private List<Language> languages;
 	
 	@OneToMany(mappedBy="educationCenter",
-			   cascade={CascadeType.DETACH, CascadeType.MERGE,
-					    CascadeType.PERSIST, CascadeType.REFRESH})
+			   cascade=CascadeType.ALL)
 	private List<Course> courses;
 	
 	@OneToMany(mappedBy="educationCenter",
-			   cascade={CascadeType.DETACH, CascadeType.MERGE,
-					    CascadeType.PERSIST, CascadeType.REFRESH})
+			   cascade=CascadeType.ALL)
 	private List<Accommodation> accommodations;
 	
 	@Column(name="address")
@@ -73,8 +70,7 @@ public class EducationCenter {
 		
 	}
 
-	public EducationCenter(String name, String address, double registrationFeeAmount, String registrationFeeCurrency,
-			double rating) {
+	public EducationCenter(String name, String address, double registrationFeeAmount, String registrationFeeCurrency, double rating) {
 		this.name = name;
 		this.address = address;
 		this.registrationFeeAmount = registrationFeeAmount;
@@ -164,9 +160,5 @@ public class EducationCenter {
 
 	public void setRating(double rating) {
 		this.rating = rating;
-	}
-	
-	public boolean hasLanguage(String languageName) {
-		return languages.stream().filter(language -> StringFormatter.formatPathVariable(languageName).equals(language.getName())).findAny().isPresent();
 	}
 }
