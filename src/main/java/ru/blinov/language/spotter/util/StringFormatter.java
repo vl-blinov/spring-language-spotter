@@ -11,8 +11,10 @@ public class StringFormatter {
 		}
 		
 		String[] array = StringUtils.delimitedListToStringArray(string, "_");
+		
+		array = capitalizeArrayElements(array);
 
-		return StringUtils.arrayToDelimitedString(capitalizeArrayElements(array), " ");
+		return StringUtils.arrayToDelimitedString(array, " ");
 	}
 	
 	private static String[] capitalizeArrayElements(String[] array) {
