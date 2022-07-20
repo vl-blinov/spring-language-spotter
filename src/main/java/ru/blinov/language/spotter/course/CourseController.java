@@ -25,47 +25,32 @@ public class CourseController {
 		this.courseService = courseService;
 	}
 	
-	@GetMapping("/{countryName}/{cityName}/{centerName}/courses")
-	public List<Course> getAllCoursesOfCenterOfCityOfCountry(@PathVariable String countryName, @PathVariable String cityName,
-															 @PathVariable String centerName) {
-		return courseService.findAllCoursesByCountryAndCityAndCenter(countryName, cityName, centerName);
-	}
-	
 	@GetMapping("/{languageName}/{countryName}/{cityName}/{centerName}/courses")
-	public List<Course> getAllCoursesOfCenterOfCityOfCountryOfLanguageToLearn(@PathVariable String languageName, @PathVariable String countryName,
-																			  @PathVariable String cityName, @PathVariable String centerName) {
-		return courseService.findAllCoursesByLanguageAndCountryAndCityAndCenter(languageName, countryName, cityName, centerName);
+	public List<Course> findAllCourses(@PathVariable String centerName, @PathVariable String languageName) {
+		return courseService.findAllCourses(StringFormatter.formatPathVariable(centerName), StringFormatter.formatPathVariable(languageName));
 	}
 	
 	@PostMapping("/{languageName}/{countryName}/{cityName}/{centerName}/courses")
-	public Course addCourseToCenterOfCityOfCountryOfLanguageToLearn(@PathVariable String languageName, @PathVariable String countryName,
-			  														@PathVariable String cityName, @PathVariable String centerName, @RequestBody Course course) {
+	public Course addCourse(@RequestBody Course course) {
 		
-		courseService.saveCourseOfCenterOfCityOfCountryOfLanguageToLearn(languageName, countryName, cityName, centerName, course);
+		courseService.saveCourse(course);
 		
 		return course;
 	}
 	
 	@PutMapping("/{languageName}/{countryName}/{cityName}/{centerName}/courses")
-	public Course updateCourseOfCenterOfCityOfCountryOfLanguageToLearn(@PathVariable String languageName, @PathVariable String countryName,
-			  														   @PathVariable String cityName, @PathVariable String centerName, @RequestBody Course course) {
+	public Course updateCourse(@RequestBody Course course) {
 		
-		courseService.saveCourseOfCenterOfCityOfCountryOfLanguageToLearn(languageName, countryName, cityName, centerName, course);
+		courseService.saveCourse(course);
 		
 		return course;
 	}
 	
 	@DeleteMapping("/{languageName}/{countryName}/{cityName}/{centerName}/courses/{courseId}")
-	public String deleteCourseOfCenterOfCityOfCountryOfLanguageToLearn(@PathVariable String languageName, @PathVariable String countryName,
-			   														   @PathVariable String cityName, @PathVariable String centerName, 
-			   														   @PathVariable int courseId) {
+	public String deleteCourse(@PathVariable int courseId) {
 		
-		courseService.deleteCourseOfCenterOfCityOfCountryOfLanguageToLearn(languageName, countryName, cityName, centerName, courseId);
+		courseService.deleteCourse(courseId);
 		
-		return "Course with id " + courseId 
-			   + " in education center: " + StringFormatter.formatPathVariable(centerName) 
-			   + ", city: " + StringFormatter.formatPathVariable(cityName) 
-			   + ", country: " + StringFormatter.formatPathVariable(countryName) 
-			   + " was deleted";
+		return "Course with id " + courseId + " was deleted";
 	}
 }
