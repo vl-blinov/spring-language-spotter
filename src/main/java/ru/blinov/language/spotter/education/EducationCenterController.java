@@ -31,8 +31,8 @@ public class EducationCenterController {
 	}
 	
 	@GetMapping("/{languageName}/{countryName}/{cityName}/{centerName}")
-	public EducationCenter findEducationCenter(@PathVariable String centerName) {
-		return educationCenterService.findEducationCenter(StringFormatter.formatPathVariable(centerName));
+	public EducationCenter findEducationCenter(@PathVariable String languageName, @PathVariable String centerName) {
+		return educationCenterService.findEducationCenter(StringFormatter.formatPathVariable(languageName), StringFormatter.formatPathVariable(centerName));
 	}
 	
 	@PostMapping("/{languageName}/{countryName}/{cityName}/centers")

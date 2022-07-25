@@ -23,12 +23,12 @@ public class EducationCenterService {
 	}
 	
 	@Transactional(readOnly = true)
-	public EducationCenter findEducationCenter(String centerName) {
+	public EducationCenter findEducationCenter(String languageName, String centerName) {
 		
-		Optional<EducationCenter> center = educationCenterRepository.findByName(centerName);
+		Optional<EducationCenter> center = educationCenterRepository.findByLanguageNameAndCenterName(languageName, centerName);
 		
 		if(center.isEmpty()) {
-			throw new RuntimeException("Education center with name '" + centerName + "' does not exist");
+			throw new RuntimeException("Education center with name '" + centerName + "' with language name '" + languageName + "' is not found");
 		}
 		
 		return center.get();
@@ -45,7 +45,7 @@ public class EducationCenterService {
 		Optional<EducationCenter> center = educationCenterRepository.findByName(centerName);
 		
 		if(center.isEmpty()) {
-			throw new RuntimeException("Education center with name '" + centerName + "' does not exist");
+			throw new RuntimeException("Education center with name '" + centerName + "' is not found");
 		}
 		
 		educationCenterRepository.deleteByName(centerName);
