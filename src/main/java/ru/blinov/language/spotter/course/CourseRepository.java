@@ -12,12 +12,19 @@ public interface CourseRepository extends JpaRepository<Course, Integer> {
 				+ " RIGHT JOIN education_center"
 				+ " ON course.education_center_id = education_center.id"
 				+ " WHERE education_center.name =:centerName", nativeQuery = true)
-	List<Course> findAllByCenterName(String centerName);
+	public List<Course> findAllByCenterName(String centerName);
 	
 	@Query(value = "SELECT * FROM course"
 				+ " RIGHT JOIN education_center"
 				+ " ON course.education_center_id = education_center.id"
 				+ " WHERE education_center.name =:centerName"
 				+ " LIMIT 1", nativeQuery = true)
-	Optional<Course> findOneByCenterName(String centerName);
+	public Optional<Course> findOneByCenterName(String centerName);
+
+	@Query(value = "SELECT * FROM course"
+				+ " JOIN education_center ON course.education_center_id = education_center.id"
+				+ " JOIN language ON course.language_id = language.id"
+				+ " WHERE language.name =:languageName"
+				+ " AND education_center.name IN :centersNames", nativeQuery = true)
+	public List<Course> findAllByLanguageNameAndCentersNames(String languageName, List<String> centersNames);
 }
