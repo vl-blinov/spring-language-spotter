@@ -18,7 +18,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import ru.blinov.language.spotter.city.City;
 import ru.blinov.language.spotter.language.Language;
-import ru.blinov.language.spotter.util.StringFormatter;
 
 @Entity
 @Table(name="country")
@@ -40,8 +39,7 @@ public class Country {
 	private List<Language> languages;
 	
 	@OneToMany(mappedBy="country",
-			   cascade={CascadeType.DETACH, CascadeType.MERGE,
-					    CascadeType.PERSIST, CascadeType.REFRESH})
+			   cascade=CascadeType.ALL)
 	private List<City> cities;
 
 	public Country() {
@@ -84,9 +82,5 @@ public class Country {
 
 	public void setCities(List<City> cities) {
 		this.cities = cities;
-	}
-	
-	public boolean hasLanguage(String languageName) {
-		return languages.stream().filter(language -> StringFormatter.formatPathVariable(languageName).equals(language.getName())).findAny().isPresent();
 	}
 }
