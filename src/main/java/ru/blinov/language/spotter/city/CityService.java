@@ -19,7 +19,7 @@ public class CityService {
 	
 	@Transactional(readOnly = true)
 	public List<City> findAllCities(String countryName, String languageName) {
-		return cityRepository.findAllByCountryNameAndLanguageName(countryName, languageName);
+		return cityRepository.findAllByLanguageNameAndCountryName(languageName, countryName);
 	}
 	
 	@Transactional

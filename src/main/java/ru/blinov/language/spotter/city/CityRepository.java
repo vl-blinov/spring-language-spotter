@@ -12,11 +12,11 @@ public interface CityRepository extends JpaRepository<City, Integer> {
 				+ " JOIN country ON city.country_id = country.id"
 				+ " JOIN language_city ON city.id = language_city.city_id"
 				+ " JOIN language ON language_city.language_id = language.id"
-				+ " WHERE country.name =:countryName"
-				+ " AND language.name =:languageName", nativeQuery = true)
-	List<City> findAllByCountryNameAndLanguageName(String countryName, String languageName);
+				+ " WHERE language.name =:languageName"
+				+ " AND country.name =:countryName", nativeQuery = true)
+	public List<City> findAllByLanguageNameAndCountryName(String languageName, String countryName);
 
-	Optional<City> findByName(String cityName);
+	public Optional<City> findByName(String cityName);
 
-	void deleteByName(String cityName);
+	public void deleteByName(String cityName);
 }
