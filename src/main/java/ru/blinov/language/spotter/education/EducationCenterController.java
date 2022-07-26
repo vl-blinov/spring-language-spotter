@@ -52,12 +52,20 @@ public class EducationCenterController {
 	}
 	
 	@DeleteMapping("/{languageName}/{countryName}/{cityName}/{centerName}")
-	public String deleteEducationCenter(@PathVariable String centerName) {
+	public String deleteEducationCenter(@PathVariable String languageName, @PathVariable String countryName, @PathVariable String cityName,
+										@PathVariable String centerName) {
+		
+		languageName = StringFormatter.formatPathVariable(languageName);
+		
+		countryName = StringFormatter.formatPathVariable(countryName);
+		
+		cityName = StringFormatter.formatPathVariable(cityName);
 		
 		centerName = StringFormatter.formatPathVariable(centerName);
 		
-		educationCenterService.deleteEducationCenter(centerName);
+		educationCenterService.deleteEducationCenter(languageName, countryName, cityName, centerName);
 		
-		return "Education center with name " + centerName + " was deleted";
+		return "Education center with name '" + centerName + "' in city with name '" + cityName + "' in country with name '" + countryName
+				+ "' for language with name '" + languageName + "' was deleted";
 	}
 }

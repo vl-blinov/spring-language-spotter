@@ -21,6 +21,14 @@ public interface EducationCenterRepository extends JpaRepository<EducationCenter
 				+ " JOIN language_education_center ON education_center.id = language_education_center.education_center_id"
 				+ " JOIN language ON language_education_center.language_id = language.id"
 				+ " WHERE language.name =:languageName"
+				+ " AND city.name =:cityName", nativeQuery = true)
+	public List<EducationCenter> findAllByLanguageNameAndCityName(String languageName, String cityName);
+	
+	@Query(value = "SELECT * FROM education_center"
+				+ " JOIN city ON education_center.city_id = city.id"
+				+ " JOIN language_education_center ON education_center.id = language_education_center.education_center_id"
+				+ " JOIN language ON language_education_center.language_id = language.id"
+				+ " WHERE language.name =:languageName"
 				+ " AND city.name IN :citiesNames", nativeQuery = true)
 	public List<EducationCenter> findAllByLanguageNameAndCitiesNames(String languageName, List<String> citiesNames);
 
