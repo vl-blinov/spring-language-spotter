@@ -47,12 +47,16 @@ public class CityController {
 	}
 	
 	@DeleteMapping("/{languageName}/{countryName}/{cityName}")
-	public String deleteCity(@PathVariable String cityName) {
+	public String deleteCity(@PathVariable String languageName, @PathVariable String countryName, @PathVariable String cityName) {
+		
+		languageName = StringFormatter.formatPathVariable(languageName);
+		
+		countryName = StringFormatter.formatPathVariable(countryName);
 		
 		cityName = StringFormatter.formatPathVariable(cityName);
 		
-		cityService.deleteCity(cityName);
+		cityService.deleteCity(languageName, countryName, cityName);
 		
-		return "City with name '" + cityName + "' was deleted";
+		return "City with name '" + cityName + "' in country with name '" + countryName + "' for language with name '" + languageName + "' was deleted";
 	}
 }
