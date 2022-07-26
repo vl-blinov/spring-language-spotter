@@ -71,21 +71,21 @@ public class CountryService {
 			throw new RuntimeException("Country with name '" + countryName + "' is not found");
 		}
 		
-		//>>>1.1
-		
 		Country country = countryOptional.get();
+		
+		//>>>2
 		
 		List<Country> countries = language.getCountries();
 		
 		if(!countries.contains(country)) {
-			throw new RuntimeException("Country with name '" + countryName + "' in language with name '" + languageName + "' is not found");
+			throw new RuntimeException("Country with name '" + countryName + "' for language with name '" + languageName + "' is not found");
 		}
 		
 		countries.removeIf(c -> c.getName().equals(countryName));
 		
 		languageRepository.save(language);
 
-		//>>>2
+		//>>>3
 		
 		List<Language> countryLanguages = country.getLanguages();
 		
@@ -100,7 +100,7 @@ public class CountryService {
 		
 		countryRepository.save(country);
 
-		//>>>3
+		//>>>4
 		
 		List<City> cities = cityRepository.findAllByLanguageNameAndCountryName(languageName, countryName);
 		
@@ -124,7 +124,7 @@ public class CountryService {
 		
 		cityRepository.saveAll(cities);
 
-		//>>>4
+		//>>>5
 		
 		List<String> citiesNames = new ArrayList<>();
 		
@@ -154,7 +154,7 @@ public class CountryService {
 		
 		educationCenterRepository.saveAll(centers);
 
-		//>>>5
+		//>>>6
 		
 		List<String> centersNames = new ArrayList<>();
 		

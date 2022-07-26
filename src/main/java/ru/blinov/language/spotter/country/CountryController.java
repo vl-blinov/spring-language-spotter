@@ -55,6 +55,6 @@ public class CountryController {
 		
 		countryService.deleteCountry(languageName, countryName);
 		
-		return "Country with name '" + countryName + "' for language with name '" + languageName +  "' was deleted";
+		return "Country with name '" + countryName + "' for language with name '" + languageName + "' was deleted";
 	}
 }
