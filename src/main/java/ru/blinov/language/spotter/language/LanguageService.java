@@ -1,6 +1,5 @@
 package ru.blinov.language.spotter.language;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -90,13 +89,7 @@ public class LanguageService {
 
 		//>>>3
 		
-		List<String> countriesNames = new ArrayList<>();
-		
-		countries.forEach(c -> {
-			countriesNames.add(c.getName());
-		});
-		
-		List<City> cities = cityRepository.findAllByLanguageNameAndCountriesNames(languageName, countriesNames);
+		List<City> cities = language.getCities();
 		
 		cities.forEach(c -> {
 			
@@ -120,13 +113,7 @@ public class LanguageService {
 
 		//>>>4
 		
-		List<String> citiesNames = new ArrayList<>();
-		
-		cities.forEach(c -> {
-			citiesNames.add(c.getName());
-		});
-		
-		List<EducationCenter> centers = educationCenterRepository.findAllByLanguageNameAndCitiesNames(languageName, citiesNames);
+		List<EducationCenter> centers = language.getEducationCenters();
 		
 		centers.forEach(c -> {
 			
@@ -150,13 +137,7 @@ public class LanguageService {
 
 		//>>>5
 		
-		List<String> centersNames = new ArrayList<>();
-		
-		centers.forEach(c -> {
-			centersNames.add(c.getName());
-		});
-		
-		List<Course> courses = courseRepository.findAllByLanguageNameAndCentersNames(languageName, centersNames);
+		List<Course> courses = language.getCourses();
 		
 		courses.forEach(c -> {
 			if(c.getLanguage().getName().equals(languageName)) {
@@ -166,6 +147,10 @@ public class LanguageService {
 		
 		courses.removeIf(c -> c.getLanguage().getName().equals(languageName));
 		
-		courseRepository.saveAll(courses);			
+		courseRepository.saveAll(courses);
+		
+		//>>>6
+		
+		languageRepository.delete(language);
 	}
 }
