@@ -1,4 +1,4 @@
-package ru.blinov.language.spotter.education;
+package ru.blinov.language.spotter.center;
 
 import java.util.List;
 
@@ -71,6 +71,7 @@ public class EducationCenter {
 	}
 
 	public EducationCenter(String name, String address, double registrationFeeAmount, String registrationFeeCurrency, double rating) {
+		
 		this.name = name;
 		this.address = address;
 		this.registrationFeeAmount = registrationFeeAmount;

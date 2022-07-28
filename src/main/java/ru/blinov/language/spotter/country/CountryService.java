@@ -8,12 +8,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import ru.blinov.language.spotter.center.EducationCenter;
+import ru.blinov.language.spotter.center.EducationCenterRepository;
 import ru.blinov.language.spotter.city.City;
 import ru.blinov.language.spotter.city.CityRepository;
 import ru.blinov.language.spotter.course.Course;
 import ru.blinov.language.spotter.course.CourseRepository;
-import ru.blinov.language.spotter.education.EducationCenter;
-import ru.blinov.language.spotter.education.EducationCenterRepository;
 import ru.blinov.language.spotter.language.Language;
 import ru.blinov.language.spotter.language.LanguageRepository;
 

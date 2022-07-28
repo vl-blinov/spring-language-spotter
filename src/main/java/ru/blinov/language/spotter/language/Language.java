@@ -16,10 +16,10 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import ru.blinov.language.spotter.center.EducationCenter;
 import ru.blinov.language.spotter.city.City;
 import ru.blinov.language.spotter.country.Country;
 import ru.blinov.language.spotter.course.Course;
-import ru.blinov.language.spotter.education.EducationCenter;
 
 @Entity
 @Table(name="language")

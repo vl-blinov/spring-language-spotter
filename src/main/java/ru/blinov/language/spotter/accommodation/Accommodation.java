@@ -12,7 +12,7 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import ru.blinov.language.spotter.education.EducationCenter;
+import ru.blinov.language.spotter.center.EducationCenter;
 
 @Entity
 @Table(name="accommodation")
@@ -51,7 +51,8 @@ public class Accommodation {
 	}
 
 	public Accommodation(String accommodationType, String room, String food, String ageRestriction,
-			double pricePerWeekAmount, String pricePerWeekCurrency) {
+						 double pricePerWeekAmount, String pricePerWeekCurrency) {
+		
 		this.accommodationType = accommodationType;
 		this.room = room;
 		this.food = food;

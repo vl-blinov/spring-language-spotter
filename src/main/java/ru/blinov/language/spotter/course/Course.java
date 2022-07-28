@@ -12,7 +12,7 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import ru.blinov.language.spotter.education.EducationCenter;
+import ru.blinov.language.spotter.center.EducationCenter;
 import ru.blinov.language.spotter.language.Language;
 
 @Entity
@@ -69,8 +69,9 @@ public class Course {
 	}
 
 	public Course(String type, int studentsPerClass, String courseDuration, int lessonsPerWeek, String classTime,
-			String lessonDuration, String ageRestriction, String entryLevel, double pricePerWeekAmount,
-			String pricePerWeekCurrency) {
+				  String lessonDuration, String ageRestriction, String entryLevel, double pricePerWeekAmount,
+				  String pricePerWeekCurrency) {
+		
 		this.type = type;
 		this.studentsPerClass = studentsPerClass;
 		this.courseDuration = courseDuration;

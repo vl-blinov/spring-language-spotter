@@ -46,7 +46,7 @@ public class LanguageController {
 		return language;
 	}
 	
-	@DeleteMapping("/languages/{languageName}")
+	@DeleteMapping("/{languageName}")
 	public String deleteLanguage(@PathVariable String languageName) {
 		
 		languageName = StringFormatter.formatPathVariable(languageName);

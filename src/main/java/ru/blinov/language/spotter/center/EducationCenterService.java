@@ -1,4 +1,4 @@
-package ru.blinov.language.spotter.education;
+package ru.blinov.language.spotter.center;
 
 import java.util.List;
 import java.util.Optional;
@@ -94,8 +94,8 @@ public class EducationCenterService {
 		
 		Optional<EducationCenter> centerOptional = educationCenterRepository.findByName(centerName);
 		
-		if(cityOptional.isEmpty()) {
-			throw new RuntimeException("City with name '" + cityName + "' is not found");
+		if(centerOptional.isEmpty()) {
+			throw new RuntimeException("Education center with name '" + cityName + "' is not found");
 		}
 		
 		EducationCenter center = centerOptional.get();

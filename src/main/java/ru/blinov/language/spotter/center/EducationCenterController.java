@@ -1,4 +1,4 @@
-package ru.blinov.language.spotter.education;
+package ru.blinov.language.spotter.center;
 
 import java.util.List;
 
