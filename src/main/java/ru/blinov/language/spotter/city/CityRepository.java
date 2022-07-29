@@ -17,6 +17,4 @@ public interface CityRepository extends JpaRepository<City, Integer> {
 	public List<City> findAllByLanguageNameAndCountryName(String languageName, String countryName);
 
 	public Optional<City> findByName(String cityName);
-
-	public void deleteByName(String cityName);
 }
