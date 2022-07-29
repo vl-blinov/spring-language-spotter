@@ -1,63 +1,44 @@
 package ru.blinov.language.spotter.accommodation;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import ru.blinov.language.spotter.validator.UrlValidator;
 
 @Service
 public class AccommodationService {
 	
 	private AccommodationRepository accommodationRepository;
 	
+	private UrlValidator urlValidator;
+	
 	@Autowired
-	public AccommodationService(AccommodationRepository accommodationRepository) {
+	public AccommodationService(AccommodationRepository accommodationRepository, UrlValidator urlValidator) {
+		
 		this.accommodationRepository = accommodationRepository;
+		this.urlValidator = urlValidator;
 	}
 	
 	@Transactional(readOnly = true)
-	public List<Accommodation> findAllAccommodations(String centerName) {
+	public List<Accommodation> findAllAccommodations(String languageName, String countryName, String cityName, String centerName) {
 		
-		List<Accommodation> accommodations = accommodationRepository.findAllByCenterName(centerName);
+		urlValidator.checkLanguageAndCountryAndCityAndCenter(languageName, countryName, cityName, centerName);
 		
-		if(accommodations.isEmpty()) {
-			throw new RuntimeException("Education center with name '" + centerName + "' does not exist");
-		}
-		
-		if(accommodations.contains(null)) {
-			accommodations.clear();
-		}
-		
-		return accommodations;
+		return accommodationRepository.findAllByCenterName(centerName);
 	}
-	
+
 	@Transactional
 	public void saveAccommodation(Accommodation accommodation) {
-		
-		if(accommodation.getId() == 0) {
-			
-			String centerName = accommodation.getEducationCenter().getName();
-			
-			Optional<Accommodation> accommodationOfCenter = accommodationRepository.findOneByCenterName(centerName);
-			
-			if(accommodationOfCenter.isEmpty()) {
-				throw new RuntimeException("Education center with name '" + centerName + "' does not exist");
-			}
-		}
-		
 		accommodationRepository.save(accommodation);
 	}
 	
 	@Transactional
-	public void deleteAccommodation(int accommodationId) {
+	public void deleteAccommodation(String languageName, String countryName, String cityName, String centerName, int accommodationId) {
 		
-		Optional<Accommodation> accommodation = accommodationRepository.findById(accommodationId);
-		
-		if(accommodation.isEmpty()) {
-			throw new RuntimeException("Accommodation with id " + accommodationId + "is not found");
-		}
+		urlValidator.checkLanguageAndCountryAndCityAndCenterAndAccommodation(languageName, countryName, cityName, centerName, accommodationId);
 		
 		accommodationRepository.deleteById(accommodationId);
 	}

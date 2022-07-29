@@ -2,7 +2,7 @@ package ru.blinov.language.spotter.country;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,8 +14,10 @@ import ru.blinov.language.spotter.city.City;
 import ru.blinov.language.spotter.city.CityRepository;
 import ru.blinov.language.spotter.course.Course;
 import ru.blinov.language.spotter.course.CourseRepository;
+import ru.blinov.language.spotter.enums.Entity;
 import ru.blinov.language.spotter.language.Language;
 import ru.blinov.language.spotter.language.LanguageRepository;
+import ru.blinov.language.spotter.validator.UrlValidator;
 
 @Service
 public class CountryService {
@@ -30,20 +32,26 @@ public class CountryService {
 	
 	private CourseRepository courseRepository;
 	
+	private UrlValidator urlValidator;
+	
 	@Autowired
 	public CountryService(LanguageRepository languageRepository, CountryRepository countryRepository,
 						  CityRepository cityRepository, EducationCenterRepository educationCenterRepository,
-						  CourseRepository courseRepository) {
+						  CourseRepository courseRepository, UrlValidator urlValidator) {
 		
 		this.languageRepository = languageRepository;
 		this.countryRepository = countryRepository;
 		this.cityRepository = cityRepository;
 		this.educationCenterRepository = educationCenterRepository;
 		this.courseRepository = courseRepository;
+		this.urlValidator = urlValidator;
 	}
 	
 	@Transactional(readOnly = true)
 	public List<Country> findAllCountries(String languageName) {
+		
+		urlValidator.checkLanguage(languageName);
+		
 		return countryRepository.findAllByLanguageName(languageName);
 	}
 
@@ -55,35 +63,11 @@ public class CountryService {
 	@Transactional
 	public void deleteCountry(String languageName, String countryName) {
 		
-		//>>>1
+		Map<Entity, Object> entities = urlValidator.checkLanguageAndCountry(languageName, countryName);
 		
-		Optional<Language> languageOptional = languageRepository.findByName(languageName);
+		Language language = (Language) entities.get(Entity.LANGUAGE);
 		
-		if(languageOptional.isEmpty()) {
-			throw new RuntimeException("Language with name '" + languageName + "' is not found");
-		}
-		
-		Language language = languageOptional.get();
-		
-		Optional<Country> countryOptional = countryRepository.findByName(countryName);
-		
-		if(countryOptional.isEmpty()) {
-			throw new RuntimeException("Country with name '" + countryName + "' is not found");
-		}
-		
-		Country country = countryOptional.get();
-		
-		//>>>2
-		
-		List<Country> countries = language.getCountries();
-		
-		if(!countries.contains(country)) {
-			throw new RuntimeException("Country with name '" + countryName + "' for language with name '" + languageName + "' is not found");
-		}
-		
-		countries.removeIf(c -> c.getName().equals(countryName));
-		
-		languageRepository.save(language);
+		Country country = (Country) entities.get(Entity.COUNTRY);
 
 		//>>>3
 		

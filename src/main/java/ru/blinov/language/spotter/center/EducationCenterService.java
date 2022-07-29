@@ -1,7 +1,7 @@
 package ru.blinov.language.spotter.center;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,8 +13,10 @@ import ru.blinov.language.spotter.country.Country;
 import ru.blinov.language.spotter.country.CountryRepository;
 import ru.blinov.language.spotter.course.Course;
 import ru.blinov.language.spotter.course.CourseRepository;
+import ru.blinov.language.spotter.enums.Entity;
 import ru.blinov.language.spotter.language.Language;
 import ru.blinov.language.spotter.language.LanguageRepository;
+import ru.blinov.language.spotter.validator.UrlValidator;
 
 @Service
 public class EducationCenterService {
@@ -28,34 +30,38 @@ public class EducationCenterService {
 	private EducationCenterRepository educationCenterRepository;
 	
 	private CourseRepository courseRepository;
+	
+	private UrlValidator urlValidator;
 
 	@Autowired
 	public EducationCenterService(LanguageRepository languageRepository, CountryRepository countryRepository,
 								  CityRepository cityRepository, EducationCenterRepository educationCenterRepository,
-								  CourseRepository courseRepository) {
+								  CourseRepository courseRepository, UrlValidator urlValidator) {
 		
 		this.languageRepository = languageRepository;
 		this.countryRepository = countryRepository;
 		this.cityRepository = cityRepository;
 		this.educationCenterRepository = educationCenterRepository;
 		this.courseRepository = courseRepository;
+		this.urlValidator = urlValidator;
 	}
 	
 	@Transactional(readOnly = true)
-	public List<EducationCenter> findAllEducationCenters(String cityName, String languageName) {
-		return educationCenterRepository.findAllByCityNameAndLanguageName(cityName, languageName);
+	public List<EducationCenter> findAllEducationCenters(String languageName, String countryName, String cityName) {
+		
+		urlValidator.checkLanguageAndCountryAndCity(languageName, countryName, cityName);
+		
+		return educationCenterRepository.findAllByLanguageNameAndCityName(languageName, cityName);
 	}
 
 	@Transactional(readOnly = true)
-	public EducationCenter findEducationCenter(String languageName, String centerName) {
+	public EducationCenter findEducationCenter(String languageName, String countryName, String cityName, String centerName) {
 		
-		Optional<EducationCenter> center = educationCenterRepository.findByLanguageNameAndCenterName(languageName, centerName);
+		Map<Entity, Object> entities = urlValidator.checkLanguageAndCountryAndCityAndCenter(languageName, countryName, cityName, centerName);
 		
-		if(center.isEmpty()) {
-			throw new RuntimeException("Education center with name '" + centerName + "' with language name '" + languageName + "' is not found");
-		}
+		EducationCenter center = (EducationCenter) entities.get(Entity.EDUCATION_CENTER);
 		
-		return center.get();
+		return center;
 	}
 	
 	@Transactional
@@ -66,71 +72,15 @@ public class EducationCenterService {
 	@Transactional
 	public void deleteEducationCenter(String languageName, String countryName, String cityName, String centerName) {
 		
-		//>>>1
+		Map<Entity, Object> entities = urlValidator.checkLanguageAndCountryAndCityAndCenter(languageName, countryName, cityName, centerName);
 		
-		Optional<Language> languageOptional = languageRepository.findByName(languageName);
+		Language language = (Language) entities.get(Entity.LANGUAGE);
 		
-		if(languageOptional.isEmpty()) {
-			throw new RuntimeException("Language with name '" + languageName + "' is not found");
-		}
+		Country country = (Country) entities.get(Entity.COUNTRY);
 		
-		Language language = languageOptional.get();
+		City city = (City) entities.get(Entity.CITY);
 		
-		Optional<Country> countryOptional = countryRepository.findByName(countryName);
-		
-		if(countryOptional.isEmpty()) {
-			throw new RuntimeException("Country with name '" + countryName + "' is not found");
-		}
-		
-		Country country = countryOptional.get();
-		
-		Optional<City> cityOptional = cityRepository.findByName(cityName);
-		
-		if(cityOptional.isEmpty()) {
-			throw new RuntimeException("City with name '" + cityName + "' is not found");
-		}
-		
-		City city = cityOptional.get();
-		
-		Optional<EducationCenter> centerOptional = educationCenterRepository.findByName(centerName);
-		
-		if(centerOptional.isEmpty()) {
-			throw new RuntimeException("Education center with name '" + cityName + "' is not found");
-		}
-		
-		EducationCenter center = centerOptional.get();
-		
-		//>>>2
-		
-		List<Country> countries = language.getCountries();
-		
-		if(!countries.contains(country)) {
-			throw new RuntimeException("Country with name '" + countryName + "' for language with name '" + languageName + "' is not found");
-		}
-		
-		List<City> countryCities = country.getCities();
-		
-		if(!countryCities.contains(city)) {
-			throw new RuntimeException("City with name '" + cityName + "' in country with name '" + countryName + "' is not found");
-		}
-		
-		List<City> languageCities = language.getCities();
-		
-		if(!languageCities.contains(city)) {
-			throw new RuntimeException("City with name '" + cityName + "' for language with name '" + languageName + "' is not found");
-		}
-		
-		List<EducationCenter> cityCenters = city.getEducationCenters();
-		
-		if(!cityCenters.contains(center)) {
-			throw new RuntimeException("Education center with name '" + centerName + "' in city with name '" + cityName + "' is not found");
-		}
-		
-		List<EducationCenter> languageCenters = language.getEducationCenters();
-		
-		if(!languageCenters.contains(center)) {
-			throw new RuntimeException("Education center with name '" + centerName + "' for language with name '" + languageName + "' is not found");
-		}
+		EducationCenter center = (EducationCenter) entities.get(Entity.EDUCATION_CENTER);
 		
 		//>>>3
 		

@@ -1,7 +1,6 @@
 package ru.blinov.language.spotter.language;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,6 +14,8 @@ import ru.blinov.language.spotter.country.Country;
 import ru.blinov.language.spotter.country.CountryRepository;
 import ru.blinov.language.spotter.course.Course;
 import ru.blinov.language.spotter.course.CourseRepository;
+import ru.blinov.language.spotter.enums.Entity;
+import ru.blinov.language.spotter.validator.UrlValidator;
 
 @Service
 public class LanguageService {
@@ -28,17 +29,20 @@ public class LanguageService {
 	private EducationCenterRepository educationCenterRepository;
 	
 	private CourseRepository courseRepository;
+	
+	private UrlValidator urlValidator;
 
 	@Autowired
 	public LanguageService(LanguageRepository languageRepository, CountryRepository countryRepository,
 						   CityRepository cityRepository, EducationCenterRepository educationCenterRepository,
-						   CourseRepository courseRepository) {
+						   CourseRepository courseRepository, UrlValidator urlValidator) {
 		
 		this.languageRepository = languageRepository;
 		this.countryRepository = countryRepository;
 		this.cityRepository = cityRepository;
 		this.educationCenterRepository = educationCenterRepository;
 		this.courseRepository = courseRepository;
+		this.urlValidator = urlValidator;
 	}
 	
 	@Transactional(readOnly = true)
@@ -52,16 +56,8 @@ public class LanguageService {
 	
 	@Transactional
 	public void deleteLanguage(String languageName) {
-		
-		//>>>1
-		
-		Optional<Language> languageOptional = languageRepository.findByName(languageName);
-		
-		if(languageOptional.isEmpty()) {
-			throw new RuntimeException("Language with name '" + languageName + "' is not found");
-		}
-		
-		Language language = languageOptional.get();
+
+		Language language = (Language) urlValidator.checkLanguage(languageName).get(Entity.LANGUAGE);
 
 		//>>>2
 		
