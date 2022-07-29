@@ -26,8 +26,18 @@ public class AccommodationController {
 	}
 	
 	@GetMapping("/{languageName}/{countryName}/{cityName}/{centerName}/accommodations")
-	public List<Accommodation> findAllAccommodations(@PathVariable String centerName) {
-		return accommodationService.findAllAccommodations(StringFormatter.formatPathVariable(centerName));
+	public List<Accommodation> findAllAccommodations(@PathVariable String languageName, @PathVariable String countryName, @PathVariable String cityName,
+			  										 @PathVariable String centerName) {
+		
+		languageName = StringFormatter.formatPathVariable(languageName);
+		
+		countryName = StringFormatter.formatPathVariable(countryName);
+		
+		cityName = StringFormatter.formatPathVariable(cityName);
+		
+		centerName = StringFormatter.formatPathVariable(centerName);
+		
+		return accommodationService.findAllAccommodations(languageName, countryName, cityName, centerName);
 	}
 	
 	@PostMapping("/{languageName}/{countryName}/{cityName}/{centerName}/accommodations")
@@ -47,9 +57,18 @@ public class AccommodationController {
 	}
 	
 	@DeleteMapping("/{languageName}/{countryName}/{cityName}/{centerName}/accommodations/{accommodationId}")
-	public String deleteAccommodation(@PathVariable int accommodationId) {
+	public String deleteAccommodation(@PathVariable String languageName, @PathVariable String countryName, @PathVariable String cityName,
+									  @PathVariable String centerName, @PathVariable int accommodationId) {
 		
-		accommodationService.deleteAccommodation(accommodationId);
+		languageName = StringFormatter.formatPathVariable(languageName);
+		
+		countryName = StringFormatter.formatPathVariable(countryName);
+		
+		cityName = StringFormatter.formatPathVariable(cityName);
+		
+		centerName = StringFormatter.formatPathVariable(centerName);
+		
+		accommodationService.deleteAccommodation(languageName, countryName, cityName, centerName, accommodationId);
 		
 		return "Accommodation with id " + accommodationId + " was deleted";
 	}

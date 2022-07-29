@@ -26,13 +26,30 @@ public class EducationCenterController {
 	}
 	
 	@GetMapping("/{languageName}/{countryName}/{cityName}/centers")
-	public List<EducationCenter> findAllEducationCenters(@PathVariable String languageName, @PathVariable String cityName) {
-		return educationCenterService.findAllEducationCenters(StringFormatter.formatPathVariable(cityName), StringFormatter.formatPathVariable(languageName));
+	public List<EducationCenter> findAllEducationCenters(@PathVariable String languageName, @PathVariable String countryName, @PathVariable String cityName) {
+		
+		languageName = StringFormatter.formatPathVariable(languageName);
+		
+		countryName = StringFormatter.formatPathVariable(countryName);
+		
+		cityName = StringFormatter.formatPathVariable(cityName);
+		
+		return educationCenterService.findAllEducationCenters(languageName, countryName, cityName);
 	}
 	
 	@GetMapping("/{languageName}/{countryName}/{cityName}/{centerName}")
-	public EducationCenter findEducationCenter(@PathVariable String languageName, @PathVariable String centerName) {
-		return educationCenterService.findEducationCenter(StringFormatter.formatPathVariable(languageName), StringFormatter.formatPathVariable(centerName));
+	public EducationCenter findEducationCenter(@PathVariable String languageName, @PathVariable String countryName, @PathVariable String cityName,
+											   @PathVariable String centerName) {
+		
+		languageName = StringFormatter.formatPathVariable(languageName);
+		
+		countryName = StringFormatter.formatPathVariable(countryName);
+		
+		cityName = StringFormatter.formatPathVariable(cityName);
+		
+		centerName = StringFormatter.formatPathVariable(centerName);
+		
+		return educationCenterService.findEducationCenter(languageName, countryName, cityName, centerName);
 	}
 	
 	@PostMapping("/{languageName}/{countryName}/{cityName}/centers")

@@ -26,8 +26,18 @@ public class CourseController {
 	}
 	
 	@GetMapping("/{languageName}/{countryName}/{cityName}/{centerName}/courses")
-	public List<Course> findAllCourses(@PathVariable String centerName, @PathVariable String languageName) {
-		return courseService.findAllCourses(StringFormatter.formatPathVariable(centerName), StringFormatter.formatPathVariable(languageName));
+	public List<Course> findAllCourses(@PathVariable String languageName, @PathVariable String countryName, @PathVariable String cityName,
+			   						   @PathVariable String centerName) {
+		
+		languageName = StringFormatter.formatPathVariable(languageName);
+		
+		countryName = StringFormatter.formatPathVariable(countryName);
+		
+		cityName = StringFormatter.formatPathVariable(cityName);
+		
+		centerName = StringFormatter.formatPathVariable(centerName);
+		
+		return courseService.findAllCourses(languageName, countryName, cityName, centerName);
 	}
 	
 	@PostMapping("/{languageName}/{countryName}/{cityName}/{centerName}/courses")
@@ -47,9 +57,18 @@ public class CourseController {
 	}
 	
 	@DeleteMapping("/{languageName}/{countryName}/{cityName}/{centerName}/courses/{courseId}")
-	public String deleteCourse(@PathVariable int courseId) {
+	public String deleteCourse(@PathVariable String languageName, @PathVariable String countryName, @PathVariable String cityName,
+							   @PathVariable String centerName, @PathVariable int courseId) {
 		
-		courseService.deleteCourse(courseId);
+		languageName = StringFormatter.formatPathVariable(languageName);
+		
+		countryName = StringFormatter.formatPathVariable(countryName);
+		
+		cityName = StringFormatter.formatPathVariable(cityName);
+		
+		centerName = StringFormatter.formatPathVariable(centerName);
+
+		courseService.deleteCourse(languageName, countryName, cityName, centerName, courseId);
 		
 		return "Course with id " + courseId + " was deleted";
 	}
