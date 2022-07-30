@@ -17,7 +17,7 @@ import ru.blinov.language.spotter.course.CourseRepository;
 import ru.blinov.language.spotter.enums.Entity;
 import ru.blinov.language.spotter.language.Language;
 import ru.blinov.language.spotter.language.LanguageRepository;
-import ru.blinov.language.spotter.validator.UrlValidator;
+import ru.blinov.language.spotter.validator.RequestValidator;
 
 @Service
 public class CountryService {
@@ -32,25 +32,25 @@ public class CountryService {
 	
 	private CourseRepository courseRepository;
 	
-	private UrlValidator urlValidator;
+	private RequestValidator requestValidator;
 	
 	@Autowired
 	public CountryService(LanguageRepository languageRepository, CountryRepository countryRepository,
 						  CityRepository cityRepository, EducationCenterRepository educationCenterRepository,
-						  CourseRepository courseRepository, UrlValidator urlValidator) {
+						  CourseRepository courseRepository, RequestValidator requestValidator) {
 		
 		this.languageRepository = languageRepository;
 		this.countryRepository = countryRepository;
 		this.cityRepository = cityRepository;
 		this.educationCenterRepository = educationCenterRepository;
 		this.courseRepository = courseRepository;
-		this.urlValidator = urlValidator;
+		this.requestValidator = requestValidator;
 	}
 	
 	@Transactional(readOnly = true)
 	public List<Country> findAllCountries(String languageName) {
 		
-		urlValidator.checkLanguage(languageName);
+		requestValidator.checkLanguage(languageName);
 		
 		return countryRepository.findAllByLanguageName(languageName);
 	}
@@ -63,7 +63,7 @@ public class CountryService {
 	@Transactional
 	public void deleteCountry(String languageName, String countryName) {
 		
-		Map<Entity, Object> entities = urlValidator.checkLanguageAndCountry(languageName, countryName);
+		Map<Entity, Object> entities = requestValidator.checkLanguageAndCountry(languageName, countryName);
 		
 		Language language = (Language) entities.get(Entity.LANGUAGE);
 		

@@ -17,7 +17,7 @@ import ru.blinov.language.spotter.course.CourseRepository;
 import ru.blinov.language.spotter.enums.Entity;
 import ru.blinov.language.spotter.language.Language;
 import ru.blinov.language.spotter.language.LanguageRepository;
-import ru.blinov.language.spotter.validator.UrlValidator;
+import ru.blinov.language.spotter.validator.RequestValidator;
 
 @Service
 public class CityService {
@@ -32,25 +32,25 @@ public class CityService {
 	
 	private CourseRepository courseRepository;
 	
-	private UrlValidator urlValidator;
+	private RequestValidator requestValidator;
 	
 	@Autowired
 	public CityService(LanguageRepository languageRepository, CountryRepository countryRepository,
 					   CityRepository cityRepository, EducationCenterRepository educationCenterRepository,
-					   CourseRepository courseRepository, UrlValidator urlValidator) {
+					   CourseRepository courseRepository, RequestValidator requestValidator) {
 		
 		this.languageRepository = languageRepository;
 		this.countryRepository = countryRepository;
 		this.cityRepository = cityRepository;
 		this.educationCenterRepository = educationCenterRepository;
 		this.courseRepository = courseRepository;
-		this.urlValidator = urlValidator;
+		this.requestValidator = requestValidator;
 	}
 	
 	@Transactional(readOnly = true)
 	public List<City> findAllCities(String countryName, String languageName) {
 		
-		urlValidator.checkLanguageAndCountry(languageName, countryName);
+		requestValidator.checkLanguageAndCountry(languageName, countryName);
 		
 		return cityRepository.findAllByLanguageNameAndCountryName(languageName, countryName);
 	}
@@ -63,7 +63,7 @@ public class CityService {
 	@Transactional
 	public void deleteCity(String languageName, String countryName, String cityName) {
 		
-		Map<Entity, Object> entities = urlValidator.checkLanguageAndCountryAndCity(languageName, countryName, cityName);
+		Map<Entity, Object> entities = requestValidator.checkLanguageAndCountryAndCity(languageName, countryName, cityName);
 		
 		Language language = (Language) entities.get(Entity.LANGUAGE);
 		

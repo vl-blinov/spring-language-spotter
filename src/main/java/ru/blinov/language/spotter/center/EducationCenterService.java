@@ -16,7 +16,7 @@ import ru.blinov.language.spotter.course.CourseRepository;
 import ru.blinov.language.spotter.enums.Entity;
 import ru.blinov.language.spotter.language.Language;
 import ru.blinov.language.spotter.language.LanguageRepository;
-import ru.blinov.language.spotter.validator.UrlValidator;
+import ru.blinov.language.spotter.validator.RequestValidator;
 
 @Service
 public class EducationCenterService {
@@ -31,25 +31,25 @@ public class EducationCenterService {
 	
 	private CourseRepository courseRepository;
 	
-	private UrlValidator urlValidator;
+	private RequestValidator requestValidator;
 
 	@Autowired
 	public EducationCenterService(LanguageRepository languageRepository, CountryRepository countryRepository,
 								  CityRepository cityRepository, EducationCenterRepository educationCenterRepository,
-								  CourseRepository courseRepository, UrlValidator urlValidator) {
+								  CourseRepository courseRepository, RequestValidator requestValidator) {
 		
 		this.languageRepository = languageRepository;
 		this.countryRepository = countryRepository;
 		this.cityRepository = cityRepository;
 		this.educationCenterRepository = educationCenterRepository;
 		this.courseRepository = courseRepository;
-		this.urlValidator = urlValidator;
+		this.requestValidator = requestValidator;
 	}
 	
 	@Transactional(readOnly = true)
 	public List<EducationCenter> findAllEducationCenters(String languageName, String countryName, String cityName) {
 		
-		urlValidator.checkLanguageAndCountryAndCity(languageName, countryName, cityName);
+		requestValidator.checkLanguageAndCountryAndCity(languageName, countryName, cityName);
 		
 		return educationCenterRepository.findAllByLanguageNameAndCityName(languageName, cityName);
 	}
@@ -57,7 +57,7 @@ public class EducationCenterService {
 	@Transactional(readOnly = true)
 	public EducationCenter findEducationCenter(String languageName, String countryName, String cityName, String centerName) {
 		
-		Map<Entity, Object> entities = urlValidator.checkLanguageAndCountryAndCityAndCenter(languageName, countryName, cityName, centerName);
+		Map<Entity, Object> entities = requestValidator.checkLanguageAndCountryAndCityAndCenter(languageName, countryName, cityName, centerName);
 		
 		EducationCenter center = (EducationCenter) entities.get(Entity.EDUCATION_CENTER);
 		
@@ -72,7 +72,7 @@ public class EducationCenterService {
 	@Transactional
 	public void deleteEducationCenter(String languageName, String countryName, String cityName, String centerName) {
 		
-		Map<Entity, Object> entities = urlValidator.checkLanguageAndCountryAndCityAndCenter(languageName, countryName, cityName, centerName);
+		Map<Entity, Object> entities = requestValidator.checkLanguageAndCountryAndCityAndCenter(languageName, countryName, cityName, centerName);
 		
 		Language language = (Language) entities.get(Entity.LANGUAGE);
 		

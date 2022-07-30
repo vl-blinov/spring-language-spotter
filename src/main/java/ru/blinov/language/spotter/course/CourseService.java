@@ -6,26 +6,26 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import ru.blinov.language.spotter.validator.UrlValidator;
+import ru.blinov.language.spotter.validator.RequestValidator;
 
 @Service
 public class CourseService {
 	
 	private CourseRepository courseRepository;
 	
-	private UrlValidator urlValidator;
+	private RequestValidator requestValidator;
 
 	@Autowired
-	public CourseService(CourseRepository courseRepository, UrlValidator urlValidator) {
+	public CourseService(CourseRepository courseRepository, RequestValidator requestValidator) {
 		
 		this.courseRepository = courseRepository;
-		this.urlValidator = urlValidator;
+		this.requestValidator = requestValidator;
 	}
 	
 	@Transactional(readOnly = true)
 	public List<Course> findAllCourses(String languageName, String countryName, String cityName, String centerName) {
 		
-		urlValidator.checkLanguageAndCountryAndCityAndCenter(languageName, countryName, cityName, centerName);
+		requestValidator.checkLanguageAndCountryAndCityAndCenter(languageName, countryName, cityName, centerName);
 		
 		return courseRepository.findAllByLanguageNameAndCenterName(languageName, centerName);
 	}
@@ -38,7 +38,7 @@ public class CourseService {
 	@Transactional
 	public void deleteCourse(String languageName, String countryName, String cityName, String centerName, int courseId) {
 		
-		urlValidator.checkLanguageAndCountryAndCityAndCenterAndCourse(languageName, countryName, cityName, centerName, courseId);
+		requestValidator.checkLanguageAndCountryAndCityAndCenterAndCourse(languageName, countryName, cityName, centerName, courseId);
 		
 		courseRepository.deleteById(courseId);
 	}	

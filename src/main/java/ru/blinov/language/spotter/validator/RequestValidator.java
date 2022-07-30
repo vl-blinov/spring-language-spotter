@@ -22,7 +22,7 @@ import ru.blinov.language.spotter.language.Language;
 import ru.blinov.language.spotter.language.LanguageRepository;
 
 @Component
-public class UrlValidator {
+public class RequestValidator {
 	
 	private LanguageRepository languageRepository;
 	
@@ -37,7 +37,7 @@ public class UrlValidator {
 	private AccommodationRepository accommodationRepository;
 	
 	@Autowired
-	public UrlValidator(LanguageRepository languageRepository, CountryRepository countryRepository,
+	public RequestValidator(LanguageRepository languageRepository, CountryRepository countryRepository,
 						CityRepository cityRepository, EducationCenterRepository educationCenterRepository,
 						CourseRepository courseRepository) {
 		

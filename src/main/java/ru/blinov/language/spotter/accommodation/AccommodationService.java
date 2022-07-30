@@ -6,26 +6,26 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import ru.blinov.language.spotter.validator.UrlValidator;
+import ru.blinov.language.spotter.validator.RequestValidator;
 
 @Service
 public class AccommodationService {
 	
 	private AccommodationRepository accommodationRepository;
 	
-	private UrlValidator urlValidator;
+	private RequestValidator requestValidator;
 	
 	@Autowired
-	public AccommodationService(AccommodationRepository accommodationRepository, UrlValidator urlValidator) {
+	public AccommodationService(AccommodationRepository accommodationRepository, RequestValidator requestValidator) {
 		
 		this.accommodationRepository = accommodationRepository;
-		this.urlValidator = urlValidator;
+		this.requestValidator = requestValidator;
 	}
 	
 	@Transactional(readOnly = true)
 	public List<Accommodation> findAllAccommodations(String languageName, String countryName, String cityName, String centerName) {
 		
-		urlValidator.checkLanguageAndCountryAndCityAndCenter(languageName, countryName, cityName, centerName);
+		requestValidator.checkLanguageAndCountryAndCityAndCenter(languageName, countryName, cityName, centerName);
 		
 		return accommodationRepository.findAllByCenterName(centerName);
 	}
@@ -38,7 +38,7 @@ public class AccommodationService {
 	@Transactional
 	public void deleteAccommodation(String languageName, String countryName, String cityName, String centerName, int accommodationId) {
 		
-		urlValidator.checkLanguageAndCountryAndCityAndCenterAndAccommodation(languageName, countryName, cityName, centerName, accommodationId);
+		requestValidator.checkLanguageAndCountryAndCityAndCenterAndAccommodation(languageName, countryName, cityName, centerName, accommodationId);
 		
 		accommodationRepository.deleteById(accommodationId);
 	}

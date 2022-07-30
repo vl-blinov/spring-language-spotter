@@ -15,7 +15,7 @@ import ru.blinov.language.spotter.country.CountryRepository;
 import ru.blinov.language.spotter.course.Course;
 import ru.blinov.language.spotter.course.CourseRepository;
 import ru.blinov.language.spotter.enums.Entity;
-import ru.blinov.language.spotter.validator.UrlValidator;
+import ru.blinov.language.spotter.validator.RequestValidator;
 
 @Service
 public class LanguageService {
@@ -30,19 +30,19 @@ public class LanguageService {
 	
 	private CourseRepository courseRepository;
 	
-	private UrlValidator urlValidator;
+	private RequestValidator requestValidator;
 
 	@Autowired
 	public LanguageService(LanguageRepository languageRepository, CountryRepository countryRepository,
 						   CityRepository cityRepository, EducationCenterRepository educationCenterRepository,
-						   CourseRepository courseRepository, UrlValidator urlValidator) {
+						   CourseRepository courseRepository, RequestValidator requestValidator) {
 		
 		this.languageRepository = languageRepository;
 		this.countryRepository = countryRepository;
 		this.cityRepository = cityRepository;
 		this.educationCenterRepository = educationCenterRepository;
 		this.courseRepository = courseRepository;
-		this.urlValidator = urlValidator;
+		this.requestValidator = requestValidator;
 	}
 	
 	@Transactional(readOnly = true)
@@ -57,7 +57,7 @@ public class LanguageService {
 	@Transactional
 	public void deleteLanguage(String languageName) {
 
-		Language language = (Language) urlValidator.checkLanguage(languageName).get(Entity.LANGUAGE);
+		Language language = (Language) requestValidator.checkLanguage(languageName).get(Entity.LANGUAGE);
 
 		//>>>2
 		
