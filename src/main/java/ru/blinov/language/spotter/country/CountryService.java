@@ -2,7 +2,6 @@ package ru.blinov.language.spotter.country;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,7 +13,6 @@ import ru.blinov.language.spotter.city.City;
 import ru.blinov.language.spotter.city.CityRepository;
 import ru.blinov.language.spotter.course.Course;
 import ru.blinov.language.spotter.course.CourseRepository;
-import ru.blinov.language.spotter.enums.Entity;
 import ru.blinov.language.spotter.language.Language;
 import ru.blinov.language.spotter.language.LanguageRepository;
 import ru.blinov.language.spotter.validator.RequestValidator;
@@ -50,7 +48,7 @@ public class CountryService {
 	@Transactional(readOnly = true)
 	public List<Country> findAllCountries(String languageName) {
 		
-		requestValidator.checkLanguage(languageName);
+		requestValidator.checkUrlPathVariables(languageName);
 		
 		return countryRepository.findAllByLanguageName(languageName);
 	}
@@ -63,13 +61,11 @@ public class CountryService {
 	@Transactional
 	public void deleteCountry(String languageName, String countryName) {
 		
-		Map<Entity, Object> entities = requestValidator.checkLanguageAndCountry(languageName, countryName);
+		requestValidator.checkUrlPathVariables(languageName, countryName);
 		
-		Language language = (Language) entities.get(Entity.LANGUAGE);
+		Language language = languageRepository.findByName(languageName).get();
 		
-		Country country = (Country) entities.get(Entity.COUNTRY);
-
-		//>>>3
+		Country country = countryRepository.findByName(countryName).get();
 		
 		List<Language> countryLanguages = country.getLanguages();
 		
@@ -83,8 +79,6 @@ public class CountryService {
 		countryLanguages.removeIf(l -> l.getName().equals(languageName));
 		
 		countryRepository.save(country);
-
-		//>>>4
 		
 		List<City> cities = cityRepository.findAllByLanguageNameAndCountryName(languageName, countryName);
 		
@@ -107,8 +101,6 @@ public class CountryService {
 		});
 		
 		cityRepository.saveAll(cities);
-
-		//>>>5
 		
 		List<String> citiesNames = new ArrayList<>();
 		
@@ -137,8 +129,6 @@ public class CountryService {
 		});
 		
 		educationCenterRepository.saveAll(centers);
-
-		//>>>6
 		
 		List<String> centersNames = new ArrayList<>();
 		

@@ -14,7 +14,6 @@ import ru.blinov.language.spotter.country.Country;
 import ru.blinov.language.spotter.country.CountryRepository;
 import ru.blinov.language.spotter.course.Course;
 import ru.blinov.language.spotter.course.CourseRepository;
-import ru.blinov.language.spotter.enums.Entity;
 import ru.blinov.language.spotter.validator.RequestValidator;
 
 @Service
@@ -50,6 +49,7 @@ public class LanguageService {
 		return languageRepository.findAll();
 	}
 	
+	@Transactional
 	public void saveLanguage(Language language) {
 		languageRepository.save(language);
 	}
@@ -57,9 +57,9 @@ public class LanguageService {
 	@Transactional
 	public void deleteLanguage(String languageName) {
 
-		Language language = (Language) requestValidator.checkLanguage(languageName).get(Entity.LANGUAGE);
-
-		//>>>2
+		requestValidator.checkUrlPathVariables(languageName);
+		
+		Language language = languageRepository.findByName(languageName).get();
 		
 		List<Country> countries = language.getCountries();
 
@@ -82,8 +82,6 @@ public class LanguageService {
 		});
 		
 		countryRepository.saveAll(countries);
-
-		//>>>3
 		
 		List<City> cities = language.getCities();
 		
@@ -106,8 +104,6 @@ public class LanguageService {
 		});
 		
 		cityRepository.saveAll(cities);
-
-		//>>>4
 		
 		List<EducationCenter> centers = language.getEducationCenters();
 		
@@ -130,8 +126,6 @@ public class LanguageService {
 		});
 		
 		educationCenterRepository.saveAll(centers);
-
-		//>>>5
 		
 		List<Course> courses = language.getCourses();
 		
@@ -144,8 +138,6 @@ public class LanguageService {
 		courses.removeIf(c -> c.getLanguage().getName().equals(languageName));
 		
 		courseRepository.saveAll(courses);
-		
-		//>>>6
 		
 		languageRepository.delete(language);
 	}

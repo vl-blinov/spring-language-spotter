@@ -3,6 +3,10 @@ package ru.blinov.language.spotter.validator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -38,8 +42,8 @@ public class RequestValidator {
 	
 	@Autowired
 	public RequestValidator(LanguageRepository languageRepository, CountryRepository countryRepository,
-						CityRepository cityRepository, EducationCenterRepository educationCenterRepository,
-						CourseRepository courseRepository) {
+							CityRepository cityRepository, EducationCenterRepository educationCenterRepository,
+							CourseRepository courseRepository) {
 		
 		this.languageRepository = languageRepository;
 		this.countryRepository = countryRepository;
@@ -48,7 +52,45 @@ public class RequestValidator {
 		this.courseRepository = courseRepository;
 	}
 
-	public Map<Entity, Object> checkLanguage(String languageName) {
+	public void checkUrlPathVariables(String languageName) {
+		checkLanguage(languageName);
+	}
+	
+	public void checkUrlPathVariables(String languageName, String countryName) {
+		checkLanguageAndCountry(languageName, countryName);
+	}
+	
+	public void checkUrlPathVariables(String languageName, String countryName, String cityName) {
+		checkLanguageAndCountryAndCity(languageName, countryName, cityName);
+	}
+	
+	public void checkUrlPathVariables(String languageName, String countryName, String cityName, String centerName) {
+		checkLanguageAndCountryAndCityAndCenter(languageName, countryName, cityName, centerName);
+	}
+	
+	public void checkUrlPathVariables(String languageName, String countryName, String cityName, String centerName, int serviceId, HttpServletRequest request) {
+		
+		String requestUrl = request.getRequestURL().toString();
+
+		Pattern pattern = Pattern.compile("(/\\w+/\\w+/\\w+/\\w+/)(courses|accommodations)(/\\d)");
+		
+		Matcher matcher = pattern.matcher(requestUrl);
+		
+		matcher.find();
+		
+		if(matcher.matches()) {
+			
+			if(matcher.group(2).equals("courses")) {
+				checkLanguageAndCountryAndCityAndCenterAndCourse(languageName, countryName, cityName, centerName, serviceId);
+			} else {
+				checkLanguageAndCountryAndCityAndCenterAndAccommodation(languageName, countryName, cityName, centerName, serviceId);
+			}
+		} else {
+			throw new RuntimeException("URL is not valid");
+		}
+	}
+
+	private Map<Entity, Object> checkLanguage(String languageName) {
 		
 		Optional<Language> languageOptional = languageRepository.findByName(languageName);
 		
@@ -61,7 +103,7 @@ public class RequestValidator {
 		return Map.of(Entity.LANGUAGE, language);
 	}
 	
-	public Map<Entity, Object> checkLanguageAndCountry(String languageName, String countryName) {
+	private Map<Entity, Object> checkLanguageAndCountry(String languageName, String countryName) {
 		
 		Language language = (Language) checkLanguage(languageName).get(Entity.LANGUAGE);
 		
@@ -82,7 +124,7 @@ public class RequestValidator {
 		return Map.of(Entity.LANGUAGE, language, Entity.COUNTRY, country);
 	}
 	
-	public Map<Entity, Object> checkLanguageAndCountryAndCity(String languageName, String countryName, String cityName) {
+	private Map<Entity, Object> checkLanguageAndCountryAndCity(String languageName, String countryName, String cityName) {
 		
 		Map<Entity, Object> entities = checkLanguageAndCountry(languageName, countryName);
 		
@@ -113,7 +155,7 @@ public class RequestValidator {
 		return Map.of(Entity.LANGUAGE, language, Entity.COUNTRY, country, Entity.CITY, city);
 	}
 	
-	public Map<Entity, Object> checkLanguageAndCountryAndCityAndCenter(String languageName, String countryName, String cityName, String centerName) {
+	private Map<Entity, Object> checkLanguageAndCountryAndCityAndCenter(String languageName, String countryName, String cityName, String centerName) {
 		
 		Map<Entity, Object> entities = checkLanguageAndCountryAndCity(languageName, countryName, cityName);
 		
@@ -146,8 +188,8 @@ public class RequestValidator {
 		return Map.of(Entity.LANGUAGE, language, Entity.COUNTRY, country, Entity.CITY, city, Entity.EDUCATION_CENTER, center);
 	}
 	
-	public void checkLanguageAndCountryAndCityAndCenterAndCourse(String languageName, String countryName, String cityName, String centerName,
-																				int courseId) {
+	private void checkLanguageAndCountryAndCityAndCenterAndCourse(String languageName, String countryName, String cityName, String centerName,
+																  int courseId) {
 		
 		checkLanguageAndCountryAndCityAndCenter(languageName, countryName, cityName, centerName);
 		
@@ -168,8 +210,8 @@ public class RequestValidator {
 		}
 	}
 	
-	public void checkLanguageAndCountryAndCityAndCenterAndAccommodation(String languageName, String countryName, String cityName, String centerName,
-																 int accommodationId) {
+	private void checkLanguageAndCountryAndCityAndCenterAndAccommodation(String languageName, String countryName, String cityName, String centerName,
+																 		 int accommodationId) {
 		
 		checkLanguageAndCountryAndCityAndCenter(languageName, countryName, cityName, centerName);
 		

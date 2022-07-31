@@ -2,6 +2,8 @@ package ru.blinov.language.spotter.accommodation;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,7 +27,7 @@ public class AccommodationService {
 	@Transactional(readOnly = true)
 	public List<Accommodation> findAllAccommodations(String languageName, String countryName, String cityName, String centerName) {
 		
-		requestValidator.checkLanguageAndCountryAndCityAndCenter(languageName, countryName, cityName, centerName);
+		requestValidator.checkUrlPathVariables(languageName, countryName, cityName, centerName);
 		
 		return accommodationRepository.findAllByCenterName(centerName);
 	}
@@ -36,9 +38,9 @@ public class AccommodationService {
 	}
 	
 	@Transactional
-	public void deleteAccommodation(String languageName, String countryName, String cityName, String centerName, int accommodationId) {
+	public void deleteAccommodation(String languageName, String countryName, String cityName, String centerName, int accommodationId, HttpServletRequest request) {
 		
-		requestValidator.checkLanguageAndCountryAndCityAndCenterAndAccommodation(languageName, countryName, cityName, centerName, accommodationId);
+		requestValidator.checkUrlPathVariables(languageName, countryName, cityName, centerName, accommodationId, request);
 		
 		accommodationRepository.deleteById(accommodationId);
 	}

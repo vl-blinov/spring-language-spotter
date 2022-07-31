@@ -2,6 +2,8 @@ package ru.blinov.language.spotter.course;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -58,7 +60,7 @@ public class CourseController {
 	
 	@DeleteMapping("/{languageName}/{countryName}/{cityName}/{centerName}/courses/{courseId}")
 	public String deleteCourse(@PathVariable String languageName, @PathVariable String countryName, @PathVariable String cityName,
-							   @PathVariable String centerName, @PathVariable int courseId) {
+							   @PathVariable String centerName, @PathVariable int courseId, HttpServletRequest request) {
 		
 		languageName = StringFormatter.formatPathVariable(languageName);
 		
@@ -68,7 +70,7 @@ public class CourseController {
 		
 		centerName = StringFormatter.formatPathVariable(centerName);
 
-		courseService.deleteCourse(languageName, countryName, cityName, centerName, courseId);
+		courseService.deleteCourse(languageName, countryName, cityName, centerName, courseId, request);
 		
 		return "Course with id " + courseId + " was deleted";
 	}

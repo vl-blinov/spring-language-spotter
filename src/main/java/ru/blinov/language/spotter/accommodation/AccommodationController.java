@@ -2,6 +2,8 @@ package ru.blinov.language.spotter.accommodation;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -58,7 +60,7 @@ public class AccommodationController {
 	
 	@DeleteMapping("/{languageName}/{countryName}/{cityName}/{centerName}/accommodations/{accommodationId}")
 	public String deleteAccommodation(@PathVariable String languageName, @PathVariable String countryName, @PathVariable String cityName,
-									  @PathVariable String centerName, @PathVariable int accommodationId) {
+									  @PathVariable String centerName, @PathVariable int accommodationId, HttpServletRequest request) {
 		
 		languageName = StringFormatter.formatPathVariable(languageName);
 		
@@ -68,7 +70,7 @@ public class AccommodationController {
 		
 		centerName = StringFormatter.formatPathVariable(centerName);
 		
-		accommodationService.deleteAccommodation(languageName, countryName, cityName, centerName, accommodationId);
+		accommodationService.deleteAccommodation(languageName, countryName, cityName, centerName, accommodationId, request);
 		
 		return "Accommodation with id " + accommodationId + " was deleted";
 	}

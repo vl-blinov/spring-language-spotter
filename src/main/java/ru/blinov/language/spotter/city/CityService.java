@@ -2,7 +2,6 @@ package ru.blinov.language.spotter.city;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,11 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import ru.blinov.language.spotter.center.EducationCenter;
 import ru.blinov.language.spotter.center.EducationCenterRepository;
-import ru.blinov.language.spotter.country.Country;
-import ru.blinov.language.spotter.country.CountryRepository;
 import ru.blinov.language.spotter.course.Course;
 import ru.blinov.language.spotter.course.CourseRepository;
-import ru.blinov.language.spotter.enums.Entity;
 import ru.blinov.language.spotter.language.Language;
 import ru.blinov.language.spotter.language.LanguageRepository;
 import ru.blinov.language.spotter.validator.RequestValidator;
@@ -23,8 +19,6 @@ import ru.blinov.language.spotter.validator.RequestValidator;
 public class CityService {
 	
 	private LanguageRepository languageRepository;
-	
-	private CountryRepository countryRepository;
 	
 	private CityRepository cityRepository;
 	
@@ -35,12 +29,10 @@ public class CityService {
 	private RequestValidator requestValidator;
 	
 	@Autowired
-	public CityService(LanguageRepository languageRepository, CountryRepository countryRepository,
-					   CityRepository cityRepository, EducationCenterRepository educationCenterRepository,
-					   CourseRepository courseRepository, RequestValidator requestValidator) {
+	public CityService(LanguageRepository languageRepository, CityRepository cityRepository, EducationCenterRepository educationCenterRepository,
+					   CourseRepository courseRepository,RequestValidator requestValidator) {
 		
 		this.languageRepository = languageRepository;
-		this.countryRepository = countryRepository;
 		this.cityRepository = cityRepository;
 		this.educationCenterRepository = educationCenterRepository;
 		this.courseRepository = courseRepository;
@@ -50,7 +42,7 @@ public class CityService {
 	@Transactional(readOnly = true)
 	public List<City> findAllCities(String countryName, String languageName) {
 		
-		requestValidator.checkLanguageAndCountry(languageName, countryName);
+		requestValidator.checkUrlPathVariables(languageName, countryName);
 		
 		return cityRepository.findAllByLanguageNameAndCountryName(languageName, countryName);
 	}
@@ -63,15 +55,11 @@ public class CityService {
 	@Transactional
 	public void deleteCity(String languageName, String countryName, String cityName) {
 		
-		Map<Entity, Object> entities = requestValidator.checkLanguageAndCountryAndCity(languageName, countryName, cityName);
+		requestValidator.checkUrlPathVariables(languageName, countryName, cityName);
 		
-		Language language = (Language) entities.get(Entity.LANGUAGE);
+		Language language = languageRepository.findByName(languageName).get();
 		
-		Country country = (Country) entities.get(Entity.COUNTRY);
-		
-		City city = (City) entities.get(Entity.CITY);
-		
-		//>>>3
+		City city = cityRepository.findByName(cityName).get();
 		
 		List<Language> cityLanguages = city.getLanguages();
 		
@@ -85,8 +73,6 @@ public class CityService {
 		cityLanguages.removeIf(l -> l.getName().equals(languageName));
 		
 		cityRepository.save(city);
-		
-		//>>>4
 		
 		List<EducationCenter> centers = educationCenterRepository.findAllByLanguageNameAndCityName(languageName, cityName);
 		
@@ -109,8 +95,6 @@ public class CityService {
 		});
 		
 		educationCenterRepository.saveAll(centers);
-		
-		//>>>5
 		
 		List<String> centersNames = new ArrayList<>();
 		
