@@ -33,13 +33,13 @@ public class Accommodation {
 	@Column(name="accommodation_type")
 	private String accommodationType;
 	
-	@NotBlank(message="Room is mandatory")
-	@Column(name="room")
-	private String room;
+	@NotBlank(message="Room type is mandatory")
+	@Column(name="room_type")
+	private String roomType;
 	
-	@NotBlank(message="Food is mandatory")
-	@Column(name="food")
-	private String food;
+	@NotBlank(message="Meal included type is mandatory")
+	@Column(name="meal_included_type")
+	private String mealIncludedType;
 	
 	@NotBlank(message="Age restriction is mandatory")
 	@Column(name="age_restriction")
@@ -57,12 +57,12 @@ public class Accommodation {
 		
 	}
 
-	public Accommodation(String accommodationType, String room, String food, String ageRestriction,
+	public Accommodation(String accommodationType, String roomType, String mealIncludedType, String ageRestriction,
 						 double pricePerWeekAmount, String pricePerWeekCurrency) {
 		
 		this.accommodationType = accommodationType;
-		this.room = room;
-		this.food = food;
+		this.roomType = roomType;
+		this.mealIncludedType = mealIncludedType;
 		this.ageRestriction = ageRestriction;
 		this.pricePerWeekAmount = pricePerWeekAmount;
 		this.pricePerWeekCurrency = pricePerWeekCurrency;
@@ -93,20 +93,20 @@ public class Accommodation {
 		this.accommodationType = accommodationType;
 	}
 
-	public String getRoom() {
-		return room;
+	public String getRoomType() {
+		return roomType;
 	}
 
-	public void setRoom(String room) {
-		this.room = room;
+	public void setRoomType(String roomType) {
+		this.roomType = roomType;
 	}
 
-	public String getFood() {
-		return food;
+	public String getMealIncludedType() {
+		return mealIncludedType;
 	}
 
-	public void setFood(String food) {
-		this.food = food;
+	public void setMealIncludedType(String mealIncludedType) {
+		this.mealIncludedType = mealIncludedType;
 	}
 
 	public String getAgeRestriction() {

@@ -104,31 +104,31 @@ VALUES (10, 3, 'Standard Course', 12, '1 - 52 weeks', 20, 'Monday - Friday 09:30
 INSERT INTO course (education_center_id, language_id, course_type, students_per_class, course_duration, lessons_per_week, class_time, lesson_duration, age_restriction, entry_level, price_per_week_amount, price_per_week_currency)
 VALUES (11, 3, 'Business French', 8, '1 - 52 weeks', 30, 'Monday - Friday 08:45 – 12:00 & 13:00 – 14:30', '45 minutes', '18+ years old', 'Intermediate (B1)', 380, '€');
 
-INSERT INTO accommodation (education_center_id, accommodation_type, room, food, age_restriction, price_per_week_amount, price_per_week_currency)
+INSERT INTO accommodation (education_center_id, accommodation_type, room_type, meal_included_type, age_restriction, price_per_week_amount, price_per_week_currency)
 VALUES (1, 'Homestay', 'Single room', 'Half board', '16+ years old', 260, '€');
-INSERT INTO accommodation (education_center_id, accommodation_type, room, food, age_restriction, price_per_week_amount, price_per_week_currency)
+INSERT INTO accommodation (education_center_id, accommodation_type, room_type, meal_included_type, age_restriction, price_per_week_amount, price_per_week_currency)
 VALUES (1, 'Homestay', 'Bed in room for two', 'Half board', '16+ years old', 250, '€');
-INSERT INTO accommodation (education_center_id, accommodation_type, room, food, age_restriction, price_per_week_amount, price_per_week_currency)
+INSERT INTO accommodation (education_center_id, accommodation_type, room_type, meal_included_type, age_restriction, price_per_week_amount, price_per_week_currency)
 VALUES (2, 'City Apartments', 'Single room', 'No meals', '18+ years old', 310, '€');
-INSERT INTO accommodation (education_center_id, accommodation_type, room, food, age_restriction, price_per_week_amount, price_per_week_currency)
+INSERT INTO accommodation (education_center_id, accommodation_type, room_type, meal_included_type, age_restriction, price_per_week_amount, price_per_week_currency)
 VALUES (2, 'City Apartments', 'Bed in room for two', 'No meals', '18+ years old', 180, '€');
-INSERT INTO accommodation (education_center_id, accommodation_type, room, food, age_restriction, price_per_week_amount, price_per_week_currency)
+INSERT INTO accommodation (education_center_id, accommodation_type, room_type, meal_included_type, age_restriction, price_per_week_amount, price_per_week_currency)
 VALUES (3, 'Residence', 'Single room', 'No meals', '18+ years old', 185, '€');
-INSERT INTO accommodation (education_center_id, accommodation_type, room, food, age_restriction, price_per_week_amount, price_per_week_currency)
+INSERT INTO accommodation (education_center_id, accommodation_type, room_type, meal_included_type, age_restriction, price_per_week_amount, price_per_week_currency)
 VALUES (4, 'Shared apartment', 'Single room', 'No meals', '18+ years old', 145, '€');
-INSERT INTO accommodation (education_center_id, accommodation_type, room, food, age_restriction, price_per_week_amount, price_per_week_currency)
+INSERT INTO accommodation (education_center_id, accommodation_type, room_type, meal_included_type, age_restriction, price_per_week_amount, price_per_week_currency)
 VALUES (5, 'Residence', 'Single room', 'Breakfast only', '18+ years old', 355, '$');
-INSERT INTO accommodation (education_center_id, accommodation_type, room, food, age_restriction, price_per_week_amount, price_per_week_currency)
+INSERT INTO accommodation (education_center_id, accommodation_type, room_type, meal_included_type, age_restriction, price_per_week_amount, price_per_week_currency)
 VALUES (6, 'Dormitory', 'Bed in room for four', 'No meals', '18+ years old', 270, '$');
-INSERT INTO accommodation (education_center_id, accommodation_type, room, food, age_restriction, price_per_week_amount, price_per_week_currency)
+INSERT INTO accommodation (education_center_id, accommodation_type, room_type, meal_included_type, age_restriction, price_per_week_amount, price_per_week_currency)
 VALUES (7, 'Hostel', 'Bed in room for four', 'No meals', '18+ years old', 180, '€');
-INSERT INTO accommodation (education_center_id, accommodation_type, room, food, age_restriction, price_per_week_amount, price_per_week_currency)
+INSERT INTO accommodation (education_center_id, accommodation_type, room_type, meal_included_type, age_restriction, price_per_week_amount, price_per_week_currency)
 VALUES (8, 'Residence', 'Single room', 'No meals', '16+ years old', 250, '€');
-INSERT INTO accommodation (education_center_id, accommodation_type, room, food, age_restriction, price_per_week_amount, price_per_week_currency)
+INSERT INTO accommodation (education_center_id, accommodation_type, room_type, meal_included_type, age_restriction, price_per_week_amount, price_per_week_currency)
 VALUES (9, 'Residence', 'Single room', 'No meals', '18+ years old', 400, 'CAD$');
-INSERT INTO accommodation (education_center_id, accommodation_type, room, food, age_restriction, price_per_week_amount, price_per_week_currency)
+INSERT INTO accommodation (education_center_id, accommodation_type, room_type, meal_included_type, age_restriction, price_per_week_amount, price_per_week_currency)
 VALUES (9, 'Homestay', 'Single room', 'Full board', '16+ years old', 260, 'CAD$');
-INSERT INTO accommodation (education_center_id, accommodation_type, room, food, age_restriction, price_per_week_amount, price_per_week_currency)
+INSERT INTO accommodation (education_center_id, accommodation_type, room_type, meal_included_type, age_restriction, price_per_week_amount, price_per_week_currency)
 VALUES (10, 'Hotel', 'Single room', 'No meals', '18+ years old', 760, '€');
-INSERT INTO accommodation (education_center_id, accommodation_type, room, food, age_restriction, price_per_week_amount, price_per_week_currency)
+INSERT INTO accommodation (education_center_id, accommodation_type, room_type, meal_included_type, age_restriction, price_per_week_amount, price_per_week_currency)
 VALUES (11, 'Campus Residence', 'Bed in room for two', 'No meals', '18+ years old', 310, '€');

@@ -37,7 +37,7 @@ public class Course {
 	
 	@NotBlank(message="Course type is mandatory")
 	@Column(name="course_type")
-	private String type;
+	private String courseType;
 	
 	@NotBlank(message="Students per class is mandatory")
 	@Column(name="students_per_class")
@@ -79,11 +79,11 @@ public class Course {
 		
 	}
 
-	public Course(String type, int studentsPerClass, String courseDuration, int lessonsPerWeek, String classTime,
+	public Course(String courseType, int studentsPerClass, String courseDuration, int lessonsPerWeek, String classTime,
 				  String lessonDuration, String ageRestriction, String entryLevel, double pricePerWeekAmount,
 				  String pricePerWeekCurrency) {
 		
-		this.type = type;
+		this.courseType = courseType;
 		this.studentsPerClass = studentsPerClass;
 		this.courseDuration = courseDuration;
 		this.lessonsPerWeek = lessonsPerWeek;
@@ -112,12 +112,12 @@ public class Course {
 		this.educationCenter = educationCenter;
 	}
 
-	public String getType() {
-		return type;
+	public String getCourseType() {
+		return courseType;
 	}
 
-	public void setType(String type) {
-		this.type = type;
+	public void setCourseType(String courseType) {
+		this.courseType = courseType;
 	}
 
 	public int getStudentsPerClass() {
