@@ -3,6 +3,7 @@ package ru.blinov.language.spotter.course;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -43,7 +44,7 @@ public class CourseController {
 	}
 	
 	@PostMapping("/{languageName}/{countryName}/{cityName}/{centerName}/courses")
-	public Course addCourse(@RequestBody Course course) {
+	public Course addCourse(@Valid @RequestBody Course course) {
 		
 		courseService.saveCourse(course);
 		
@@ -51,7 +52,7 @@ public class CourseController {
 	}
 	
 	@PutMapping("/{languageName}/{countryName}/{cityName}/{centerName}/courses")
-	public Course updateCourse(@RequestBody Course course) {
+	public Course updateCourse(@Valid @RequestBody Course course) {
 		
 		courseService.saveCourse(course);
 		

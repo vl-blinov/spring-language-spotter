@@ -3,6 +3,7 @@ package ru.blinov.language.spotter.accommodation;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -43,7 +44,7 @@ public class AccommodationController {
 	}
 	
 	@PostMapping("/{languageName}/{countryName}/{cityName}/{centerName}/accommodations")
-	public Accommodation addAccommodation(@RequestBody Accommodation accommodation) {
+	public Accommodation addAccommodation(@Valid @RequestBody Accommodation accommodation) {
 		
 		accommodationService.saveAccommodation(accommodation);
 		
@@ -51,7 +52,7 @@ public class AccommodationController {
 	}
 	
 	@PutMapping("/{languageName}/{countryName}/{cityName}/{centerName}/accommodations")
-	public Accommodation updateAccommodation(@RequestBody Accommodation accommodation) {
+	public Accommodation updateAccommodation(@Valid @RequestBody Accommodation accommodation) {
 		
 		accommodationService.saveAccommodation(accommodation);
 		

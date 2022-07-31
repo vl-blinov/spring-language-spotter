@@ -2,6 +2,8 @@ package ru.blinov.language.spotter.city;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,7 +33,7 @@ public class CityController {
 	}
 	
 	@PostMapping("/{languageName}/{countryName}/cities")
-	public City addCity(@RequestBody City city) {
+	public City addCity(@Valid @RequestBody City city) {
 		
 		cityService.saveCity(city);
 		
@@ -39,7 +41,7 @@ public class CityController {
 	}
 	
 	@PutMapping("/{languageName}/{countryName}/cities")
-	public City updateCity(@RequestBody City city) {
+	public City updateCity(@Valid @RequestBody City city) {
 		
 		cityService.saveCity(city);
 		

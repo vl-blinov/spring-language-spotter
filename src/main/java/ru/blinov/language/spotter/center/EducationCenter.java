@@ -14,6 +14,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -31,6 +32,7 @@ public class EducationCenter {
 	@Column(name="id")
 	private int id;
 	
+	@NotBlank(message="Name is mandatory")
 	@Column(name="name")
 	private String name;
 	
@@ -54,12 +56,15 @@ public class EducationCenter {
 			   cascade=CascadeType.ALL)
 	private List<Accommodation> accommodations;
 	
+	@NotBlank(message="Address is mandatory")
 	@Column(name="address")
 	private String address;
 	
+	@NotBlank(message="Registration fee amount is mandatory")
 	@Column(name="registration_fee_amount")
 	private double registrationFeeAmount;
 	
+	@NotBlank(message="Registration fee currency is mandatory")
 	@Column(name="registration_fee_currency")
 	private String registrationFeeCurrency;
 	

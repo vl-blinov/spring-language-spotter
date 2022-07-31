@@ -2,6 +2,8 @@ package ru.blinov.language.spotter.language;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,7 +33,7 @@ public class LanguageController {
 	}
 	
 	@PostMapping("/languages")
-	public Language addLanguage(@RequestBody Language language) {
+	public Language addLanguage(@Valid @RequestBody Language language) {
 		
 		languageService.saveLanguage(language);
 		
@@ -39,7 +41,7 @@ public class LanguageController {
 	}
 	
 	@PutMapping("/languages")
-	public Language updateLanguage(@RequestBody Language language) {
+	public Language updateLanguage(@Valid @RequestBody Language language) {
 		
 		languageService.saveLanguage(language);
 		

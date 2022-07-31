@@ -2,6 +2,8 @@ package ru.blinov.language.spotter.center;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -53,7 +55,7 @@ public class EducationCenterController {
 	}
 	
 	@PostMapping("/{languageName}/{countryName}/{cityName}/centers")
-	public EducationCenter addEducationCenter(@RequestBody EducationCenter center) {
+	public EducationCenter addEducationCenter(@Valid @RequestBody EducationCenter center) {
 		
 		educationCenterService.saveEducationCenter(center);
 		
@@ -61,7 +63,7 @@ public class EducationCenterController {
 	}
 	
 	@PutMapping("/{languageName}/{countryName}/{cityName}/centers")
-	public EducationCenter updateEducationCenter(@RequestBody EducationCenter center) {
+	public EducationCenter updateEducationCenter(@Valid @RequestBody EducationCenter center) {
 		
 		educationCenterService.saveEducationCenter(center);
 		

@@ -2,6 +2,8 @@ package ru.blinov.language.spotter.country;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,7 +33,7 @@ public class CountryController {
 	}
 	
 	@PostMapping("/{languageName}/countries")
-	public Country addCountry(@RequestBody Country country) {
+	public Country addCountry(@Valid @RequestBody Country country) {
 		
 		countryService.saveCountry(country);
 		
@@ -39,7 +41,7 @@ public class CountryController {
 	}
 	
 	@PutMapping("/{languageName}/countries")
-	public Country updateCountry(@RequestBody Country country) {
+	public Country updateCountry(@Valid @RequestBody Country country) {
 		
 		countryService.saveCountry(country);
 		
