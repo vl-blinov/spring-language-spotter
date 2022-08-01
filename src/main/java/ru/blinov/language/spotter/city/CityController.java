@@ -51,11 +51,8 @@ public class CityController {
 	}
 	
 	@PutMapping("/{languageName}/{countryName}/cities")
-	public City updateCity(@PathVariable String languageName, @PathVariable String countryName, @Valid @RequestBody City city) {
-		
+	public void updateCity(@PathVariable String languageName, @PathVariable String countryName, @Valid @RequestBody City city) {
 		cityService.saveCity(languageName, countryName, city);
-		
-		return city;
 	}
 	
 	@DeleteMapping("/{languageName}/{countryName}/{cityName}")

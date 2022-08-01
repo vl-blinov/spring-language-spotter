@@ -51,11 +51,8 @@ public class CountryController {
 	}
 	
 	@PutMapping("/{languageName}/countries")
-	public Country updateCountry(@PathVariable String languageName, @Valid @RequestBody Country country) {
-		
+	public void updateCountry(@PathVariable String languageName, @Valid @RequestBody Country country) {
 		countryService.saveCountry(languageName, country);
-		
-		return country;
 	}
 	
 	@DeleteMapping("/{languageName}/{countryName}")

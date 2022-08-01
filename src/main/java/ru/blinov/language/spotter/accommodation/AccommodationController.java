@@ -63,12 +63,9 @@ public class AccommodationController {
 	}
 	
 	@PutMapping("/{languageName}/{countryName}/{cityName}/{centerName}/accommodations")
-	public Accommodation updateAccommodation(@PathVariable String languageName, @PathVariable String countryName, @PathVariable String cityName,
-											 @PathVariable String centerName, @Valid @RequestBody Accommodation accommodation) {
-		
+	public void updateAccommodation(@PathVariable String languageName, @PathVariable String countryName, @PathVariable String cityName,
+									@PathVariable String centerName, @Valid @RequestBody Accommodation accommodation) {
 		accommodationService.saveAccommodation(languageName, countryName, cityName, centerName, accommodation);
-		
-		return accommodation;
 	}
 	
 	@DeleteMapping("/{languageName}/{countryName}/{cityName}/{centerName}/accommodations/{accommodationId}")

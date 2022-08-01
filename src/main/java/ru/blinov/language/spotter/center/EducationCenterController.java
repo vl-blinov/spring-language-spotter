@@ -74,12 +74,9 @@ public class EducationCenterController {
 	}
 	
 	@PutMapping("/{languageName}/{countryName}/{cityName}/centers")
-	public EducationCenter updateEducationCenter(@PathVariable String languageName, @PathVariable String countryName, @PathVariable String cityName,
-												 @Valid @RequestBody EducationCenter center) {
-		
+	public void updateEducationCenter(@PathVariable String languageName, @PathVariable String countryName, @PathVariable String cityName,
+									  @Valid @RequestBody EducationCenter center) {
 		educationCenterService.saveEducationCenter(languageName, countryName, cityName, center);
-		
-		return center;
 	}
 	
 	@DeleteMapping("/{languageName}/{countryName}/{cityName}/{centerName}")

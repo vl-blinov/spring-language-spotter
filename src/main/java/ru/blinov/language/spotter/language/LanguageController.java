@@ -51,11 +51,8 @@ public class LanguageController {
 	}
 	
 	@PutMapping("/languages")
-	public Language updateLanguage(@Valid @RequestBody Language language) {
-		
+	public void updateLanguage(@Valid @RequestBody Language language) {
 		languageService.saveLanguage(language);
-		
-		return language;
 	}
 	
 	@DeleteMapping("/{languageName}")

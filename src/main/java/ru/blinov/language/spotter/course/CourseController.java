@@ -63,12 +63,9 @@ public class CourseController {
 	}
 	
 	@PutMapping("/{languageName}/{countryName}/{cityName}/{centerName}/courses")
-	public Course updateCourse(@PathVariable String languageName, @PathVariable String countryName, @PathVariable String cityName,
-							   @PathVariable String centerName, @Valid @RequestBody Course course) {
-		
+	public void updateCourse(@PathVariable String languageName, @PathVariable String countryName, @PathVariable String cityName,
+							 @PathVariable String centerName, @Valid @RequestBody Course course) {
 		courseService.saveCourse(languageName, countryName, cityName, centerName, course);
-		
-		return course;
 	}
 	
 	@DeleteMapping("/{languageName}/{countryName}/{cityName}/{centerName}/courses/{courseId}")
