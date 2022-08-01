@@ -44,17 +44,19 @@ public class CourseController {
 	}
 	
 	@PostMapping("/{languageName}/{countryName}/{cityName}/{centerName}/courses")
-	public Course addCourse(@Valid @RequestBody Course course) {
+	public Course addCourse(@PathVariable String languageName, @PathVariable String countryName, @PathVariable String cityName,
+							@PathVariable String centerName, @Valid @RequestBody Course course) {
 		
-		courseService.saveCourse(course);
+		courseService.saveCourse(languageName, countryName, cityName, centerName, course);
 		
 		return course;
 	}
 	
 	@PutMapping("/{languageName}/{countryName}/{cityName}/{centerName}/courses")
-	public Course updateCourse(@Valid @RequestBody Course course) {
+	public Course updateCourse(@PathVariable String languageName, @PathVariable String countryName, @PathVariable String cityName,
+							   @PathVariable String centerName, @Valid @RequestBody Course course) {
 		
-		courseService.saveCourse(course);
+		courseService.saveCourse(languageName, countryName, cityName, centerName, course);
 		
 		return course;
 	}

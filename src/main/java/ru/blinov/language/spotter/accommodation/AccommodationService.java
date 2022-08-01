@@ -33,7 +33,10 @@ public class AccommodationService {
 	}
 
 	@Transactional
-	public void saveAccommodation(Accommodation accommodation) {
+	public void saveAccommodation(String languageName, String countryName, String cityName, String centerName, Accommodation accommodation) {
+		
+		requestValidator.checkUrlPathVariables(languageName, countryName, cityName, centerName);
+		
 		accommodationRepository.save(accommodation);
 	}
 	

@@ -50,7 +50,10 @@ public class EducationCenterService {
 	}
 	
 	@Transactional
-	public void saveEducationCenter(EducationCenter center) {
+	public void saveEducationCenter(String languageName, String countryName, String cityName, EducationCenter center) {
+		
+		requestValidator.checkUrlPathVariables(languageName, countryName, cityName);
+		
 		educationCenterRepository.save(center);
 	}
 	

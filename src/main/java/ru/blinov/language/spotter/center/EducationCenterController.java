@@ -55,17 +55,19 @@ public class EducationCenterController {
 	}
 	
 	@PostMapping("/{languageName}/{countryName}/{cityName}/centers")
-	public EducationCenter addEducationCenter(@Valid @RequestBody EducationCenter center) {
+	public EducationCenter addEducationCenter(@PathVariable String languageName, @PathVariable String countryName, @PathVariable String cityName,
+											  @Valid @RequestBody EducationCenter center) {
 		
-		educationCenterService.saveEducationCenter(center);
+		educationCenterService.saveEducationCenter(languageName, countryName, cityName, center);
 		
 		return center;
 	}
 	
 	@PutMapping("/{languageName}/{countryName}/{cityName}/centers")
-	public EducationCenter updateEducationCenter(@Valid @RequestBody EducationCenter center) {
+	public EducationCenter updateEducationCenter(@PathVariable String languageName, @PathVariable String countryName, @PathVariable String cityName,
+												 @Valid @RequestBody EducationCenter center) {
 		
-		educationCenterService.saveEducationCenter(center);
+		educationCenterService.saveEducationCenter(languageName, countryName, cityName, center);
 		
 		return center;
 	}

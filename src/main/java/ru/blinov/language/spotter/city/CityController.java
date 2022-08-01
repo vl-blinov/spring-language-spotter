@@ -33,17 +33,17 @@ public class CityController {
 	}
 	
 	@PostMapping("/{languageName}/{countryName}/cities")
-	public City addCity(@Valid @RequestBody City city) {
+	public City addCity(@PathVariable String languageName, @PathVariable String countryName, @Valid @RequestBody City city) {
 		
-		cityService.saveCity(city);
+		cityService.saveCity(languageName, countryName, city);
 		
 		return city;
 	}
 	
 	@PutMapping("/{languageName}/{countryName}/cities")
-	public City updateCity(@Valid @RequestBody City city) {
+	public City updateCity(@PathVariable String languageName, @PathVariable String countryName, @Valid @RequestBody City city) {
 		
-		cityService.saveCity(city);
+		cityService.saveCity(languageName, countryName, city);
 		
 		return city;
 	}

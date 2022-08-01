@@ -54,7 +54,10 @@ public class CountryService {
 	}
 
 	@Transactional
-	public void saveCountry(Country country) {
+	public void saveCountry(String languageName, Country country) {
+		
+		requestValidator.checkUrlPathVariables(languageName);
+		
 		countryRepository.save(country);
 	}
 	

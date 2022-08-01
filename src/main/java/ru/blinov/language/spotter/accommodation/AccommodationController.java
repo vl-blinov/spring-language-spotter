@@ -44,17 +44,19 @@ public class AccommodationController {
 	}
 	
 	@PostMapping("/{languageName}/{countryName}/{cityName}/{centerName}/accommodations")
-	public Accommodation addAccommodation(@Valid @RequestBody Accommodation accommodation) {
+	public Accommodation addAccommodation(@PathVariable String languageName, @PathVariable String countryName, @PathVariable String cityName,
+				 						  @PathVariable String centerName, @Valid @RequestBody Accommodation accommodation) {
 		
-		accommodationService.saveAccommodation(accommodation);
+		accommodationService.saveAccommodation(languageName, countryName, cityName, centerName, accommodation);
 		
 		return accommodation;	
 	}
 	
 	@PutMapping("/{languageName}/{countryName}/{cityName}/{centerName}/accommodations")
-	public Accommodation updateAccommodation(@Valid @RequestBody Accommodation accommodation) {
+	public Accommodation updateAccommodation(@PathVariable String languageName, @PathVariable String countryName, @PathVariable String cityName,
+											 @PathVariable String centerName, @Valid @RequestBody Accommodation accommodation) {
 		
-		accommodationService.saveAccommodation(accommodation);
+		accommodationService.saveAccommodation(languageName, countryName, cityName, centerName, accommodation);
 		
 		return accommodation;
 	}

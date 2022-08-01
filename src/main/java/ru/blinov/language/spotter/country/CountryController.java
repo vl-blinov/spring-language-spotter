@@ -33,17 +33,17 @@ public class CountryController {
 	}
 	
 	@PostMapping("/{languageName}/countries")
-	public Country addCountry(@Valid @RequestBody Country country) {
+	public Country addCountry(@PathVariable String languageName, @Valid @RequestBody Country country) {
 		
-		countryService.saveCountry(country);
+		countryService.saveCountry(languageName, country);
 		
 		return country;
 	}
 	
 	@PutMapping("/{languageName}/countries")
-	public Country updateCountry(@Valid @RequestBody Country country) {
+	public Country updateCountry(@PathVariable String languageName, @Valid @RequestBody Country country) {
 		
-		countryService.saveCountry(country);
+		countryService.saveCountry(languageName, country);
 		
 		return country;
 	}

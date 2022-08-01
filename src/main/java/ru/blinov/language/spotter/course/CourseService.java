@@ -33,7 +33,10 @@ public class CourseService {
 	}
 	
 	@Transactional
-	public void saveCourse(Course course) {
+	public void saveCourse(String languageName, String countryName, String cityName, String centerName, Course course) {
+		
+		requestValidator.checkUrlPathVariables(languageName, countryName, cityName, centerName);
+		
 		courseRepository.save(course);	
 	}
 	

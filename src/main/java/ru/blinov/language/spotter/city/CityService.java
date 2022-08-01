@@ -48,7 +48,10 @@ public class CityService {
 	}
 
 	@Transactional
-	public void saveCity(City city) {
+	public void saveCity(String languageName, String countryName, City city) {
+		
+		requestValidator.checkUrlPathVariables(languageName, countryName);
+		
 		cityRepository.save(city);
 	}
 	
