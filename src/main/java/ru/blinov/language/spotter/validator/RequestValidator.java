@@ -22,6 +22,7 @@ import ru.blinov.language.spotter.country.CountryRepository;
 import ru.blinov.language.spotter.course.Course;
 import ru.blinov.language.spotter.course.CourseRepository;
 import ru.blinov.language.spotter.enums.Entity;
+import ru.blinov.language.spotter.exception.RequestUrlException;
 import ru.blinov.language.spotter.language.Language;
 import ru.blinov.language.spotter.language.LanguageRepository;
 
@@ -86,7 +87,7 @@ public class RequestValidator {
 				checkLanguageAndCountryAndCityAndCenterAndAccommodation(languageName, countryName, cityName, centerName, serviceId);
 			}
 		} else {
-			throw new RuntimeException("URL is not valid");
+			throw new RequestUrlException("URL is not valid");
 		}
 	}
 
@@ -95,7 +96,7 @@ public class RequestValidator {
 		Optional<Language> languageOptional = languageRepository.findByName(languageName);
 		
 		if(languageOptional.isEmpty()) {
-			throw new RuntimeException("Language with name '" + languageName + "' is not found");
+			throw new RequestUrlException("Language with name '" + languageName + "' is not found");
 		}
 		
 		Language language = languageOptional.get();
@@ -110,7 +111,7 @@ public class RequestValidator {
 		Optional<Country> countryOptional = countryRepository.findByName(countryName);
 		
 		if(countryOptional.isEmpty()) {
-			throw new RuntimeException("Country with name '" + countryName + "' is not found");
+			throw new RequestUrlException("Country with name '" + countryName + "' is not found");
 		}
 		
 		Country country = countryOptional.get();
@@ -118,7 +119,7 @@ public class RequestValidator {
 		List<Country> countries = language.getCountries();
 		
 		if(!countries.contains(country)) {
-			throw new RuntimeException("Country with name '" + countryName + "' for language with name '" + languageName + "' is not found");
+			throw new RequestUrlException("Country with name '" + countryName + "' for language with name '" + languageName + "' is not found");
 		}
 		
 		return Map.of(Entity.LANGUAGE, language, Entity.COUNTRY, country);
@@ -135,7 +136,7 @@ public class RequestValidator {
 		Optional<City> cityOptional = cityRepository.findByName(cityName);
 		
 		if(cityOptional.isEmpty()) {
-			throw new RuntimeException("City with name '" + cityName + "' is not found");
+			throw new RequestUrlException("City with name '" + cityName + "' is not found");
 		}
 		
 		City city = cityOptional.get();
@@ -143,13 +144,13 @@ public class RequestValidator {
 		List<City> countryCities = country.getCities();
 		
 		if(!countryCities.contains(city)) {
-			throw new RuntimeException("City with name '" + cityName + "' in country with name '" + countryName + "' is not found");
+			throw new RequestUrlException("City with name '" + cityName + "' in country with name '" + countryName + "' is not found");
 		}
 		
 		List<City> languageCities = language.getCities();
 		
 		if(!languageCities.contains(city)) {
-			throw new RuntimeException("City with name '" + cityName + "' for language with name '" + languageName + "' is not found");
+			throw new RequestUrlException("City with name '" + cityName + "' for language with name '" + languageName + "' is not found");
 		}
 		
 		return Map.of(Entity.LANGUAGE, language, Entity.COUNTRY, country, Entity.CITY, city);
@@ -168,7 +169,7 @@ public class RequestValidator {
 		Optional<EducationCenter> centerOptional = educationCenterRepository.findByName(centerName);
 		
 		if(centerOptional.isEmpty()) {
-			throw new RuntimeException("Education center with name '" + cityName + "' is not found");
+			throw new RequestUrlException("Education center with name '" + cityName + "' is not found");
 		}
 		
 		EducationCenter center = centerOptional.get();
@@ -176,13 +177,13 @@ public class RequestValidator {
 		List<EducationCenter> cityCenters = city.getEducationCenters();
 		
 		if(!cityCenters.contains(center)) {
-			throw new RuntimeException("Education center with name '" + centerName + "' in city with name '" + cityName + "' is not found");
+			throw new RequestUrlException("Education center with name '" + centerName + "' in city with name '" + cityName + "' is not found");
 		}
 		
 		List<EducationCenter> languageCenters = language.getEducationCenters();
 		
 		if(!languageCenters.contains(center)) {
-			throw new RuntimeException("Education center with name '" + centerName + "' for language with name '" + languageName + "' is not found");
+			throw new RequestUrlException("Education center with name '" + centerName + "' for language with name '" + languageName + "' is not found");
 		}
 
 		return Map.of(Entity.LANGUAGE, language, Entity.COUNTRY, country, Entity.CITY, city, Entity.EDUCATION_CENTER, center);
@@ -196,17 +197,17 @@ public class RequestValidator {
 		Optional<Course> courseOptional = courseRepository.findById(courseId);
 		
 		if(courseOptional.isEmpty()) {
-			throw new RuntimeException("Course with id " + courseId + " is not found");
+			throw new RequestUrlException("Course with id " + courseId + " is not found");
 		}
 		
 		Course course = courseOptional.get();
 		
 		if(!course.getEducationCenter().getName().equals(centerName)) {
-			throw new RuntimeException("Course with id " + courseId + " in education center with name '" + centerName + "' is not found");
+			throw new RequestUrlException("Course with id " + courseId + " in education center with name '" + centerName + "' is not found");
 		}
 		
 		if(!course.getLanguage().getName().equals(languageName)) {
-			throw new RuntimeException("Course with id " + courseId + " for language with name '" + languageName + "' is not found");
+			throw new RequestUrlException("Course with id " + courseId + " for language with name '" + languageName + "' is not found");
 		}
 	}
 	
@@ -218,13 +219,13 @@ public class RequestValidator {
 		Optional<Accommodation> accommodationOptional = accommodationRepository.findById(accommodationId);
 		
 		if(accommodationOptional.isEmpty()) {
-			throw new RuntimeException("Accommodation with id " + accommodationId + " is not found");
+			throw new RequestUrlException("Accommodation with id " + accommodationId + " is not found");
 		}
 		
 		Accommodation accommodation = accommodationOptional.get();
 		
 		if(!accommodation.getEducationCenter().getName().equals(centerName)) {
-			throw new RuntimeException("Accommodation with id " + accommodationId + " in education center with name '" + centerName + "' is not found");
+			throw new RequestUrlException("Accommodation with id " + accommodationId + " in education center with name '" + centerName + "' is not found");
 		}
 	}
 }
