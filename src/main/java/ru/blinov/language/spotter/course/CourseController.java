@@ -6,6 +6,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -62,7 +64,7 @@ public class CourseController {
 	}
 	
 	@DeleteMapping("/{languageName}/{countryName}/{cityName}/{centerName}/courses/{courseId}")
-	public String deleteCourse(@PathVariable String languageName, @PathVariable String countryName, @PathVariable String cityName,
+	public ResponseEntity<Object> deleteCourse(@PathVariable String languageName, @PathVariable String countryName, @PathVariable String cityName,
 							   @PathVariable String centerName, @PathVariable int courseId, HttpServletRequest request) {
 		
 		languageName = StringFormatter.formatPathVariable(languageName);
@@ -75,6 +77,6 @@ public class CourseController {
 
 		courseService.deleteCourse(languageName, countryName, cityName, centerName, courseId, request);
 		
-		return "Course with id " + courseId + " was deleted";
+		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
 }

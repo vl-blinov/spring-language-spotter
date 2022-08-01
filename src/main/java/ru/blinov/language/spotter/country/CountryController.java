@@ -5,6 +5,8 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -49,7 +51,7 @@ public class CountryController {
 	}
 	
 	@DeleteMapping("/{languageName}/{countryName}")
-	public String deleteCountry(@PathVariable String languageName, @PathVariable String countryName) {
+	public ResponseEntity<Object> deleteCountry(@PathVariable String languageName, @PathVariable String countryName) {
 		
 		languageName = StringFormatter.formatPathVariable(languageName);
 		
@@ -57,6 +59,6 @@ public class CountryController {
 		
 		countryService.deleteCountry(languageName, countryName);
 		
-		return "Country with name '" + countryName + "' for language with name '" + languageName + "' was deleted";
+		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
 }
