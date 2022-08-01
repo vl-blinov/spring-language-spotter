@@ -5,6 +5,7 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import ru.blinov.language.spotter.util.StringFormatter;
 
@@ -35,11 +37,17 @@ public class CountryController {
 	}
 	
 	@PostMapping("/{languageName}/countries")
-	public Country addCountry(@PathVariable String languageName, @Valid @RequestBody Country country) {
+	public ResponseEntity<Object> addCountry(@PathVariable String languageName, @Valid @RequestBody Country country) {
 		
 		countryService.saveCountry(languageName, country);
 		
-		return country;
+		String location = ServletUriComponentsBuilder
+				.fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(country.getId())
+                .toUriString();
+		
+		return ResponseEntity.status(HttpStatus.CREATED).header(HttpHeaders.LOCATION, location).build();
 	}
 	
 	@PutMapping("/{languageName}/countries")

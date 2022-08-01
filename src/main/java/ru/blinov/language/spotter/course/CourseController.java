@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import ru.blinov.language.spotter.util.StringFormatter;
 
@@ -46,12 +48,18 @@ public class CourseController {
 	}
 	
 	@PostMapping("/{languageName}/{countryName}/{cityName}/{centerName}/courses")
-	public Course addCourse(@PathVariable String languageName, @PathVariable String countryName, @PathVariable String cityName,
+	public ResponseEntity<Object> addCourse(@PathVariable String languageName, @PathVariable String countryName, @PathVariable String cityName,
 							@PathVariable String centerName, @Valid @RequestBody Course course) {
 		
 		courseService.saveCourse(languageName, countryName, cityName, centerName, course);
 		
-		return course;
+		String location = ServletUriComponentsBuilder
+				.fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(course.getId())
+                .toUriString();
+		
+		return ResponseEntity.status(HttpStatus.CREATED).header(HttpHeaders.LOCATION, location).build();
 	}
 	
 	@PutMapping("/{languageName}/{countryName}/{cityName}/{centerName}/courses")
