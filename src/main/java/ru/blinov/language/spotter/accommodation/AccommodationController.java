@@ -2,7 +2,6 @@ package ru.blinov.language.spotter.accommodation;
 
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +18,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import ru.blinov.language.spotter.util.StringFormatter;
-
 @RestController
 @RequestMapping("/api")
 public class AccommodationController {
@@ -32,26 +29,26 @@ public class AccommodationController {
 		this.accommodationService = accommodationService;
 	}
 	
+	@GetMapping("/accommodations")
+	public List<Accommodation> findAllAccommodations() {
+		return accommodationService.findAllAccommodations();
+	}
+	
 	@GetMapping("/{languageName}/{countryName}/{cityName}/{centerName}/accommodations")
 	public List<Accommodation> findAllAccommodations(@PathVariable String languageName, @PathVariable String countryName, @PathVariable String cityName,
-			  										 @PathVariable String centerName) {
-		
-		languageName = StringFormatter.formatPathVariable(languageName);
-		
-		countryName = StringFormatter.formatPathVariable(countryName);
-		
-		cityName = StringFormatter.formatPathVariable(cityName);
-		
-		centerName = StringFormatter.formatPathVariable(centerName);
-		
+			@PathVariable String centerName) {
 		return accommodationService.findAllAccommodations(languageName, countryName, cityName, centerName);
 	}
 	
-	@PostMapping("/{languageName}/{countryName}/{cityName}/{centerName}/accommodations")
-	public ResponseEntity<Object> addAccommodation(@PathVariable String languageName, @PathVariable String countryName, @PathVariable String cityName,
-				 						  @PathVariable String centerName, @Valid @RequestBody Accommodation accommodation) {
+	@GetMapping("/accommodations/{accommodationId}")
+	public Accommodation findAccommodation(@PathVariable Integer accommodationId) {
+		return accommodationService.findAccommodation(accommodationId);
+	}
+	
+	@PostMapping("/accommodations")
+	public ResponseEntity<Object> addAccommodation(@Valid @RequestBody Accommodation accommodation) {
 		
-		accommodationService.saveAccommodation(languageName, countryName, cityName, centerName, accommodation);
+		accommodationService.saveAccommodation(accommodation);
 		
 		String location = ServletUriComponentsBuilder
 				.fromCurrentRequest()
@@ -62,25 +59,15 @@ public class AccommodationController {
 		return ResponseEntity.status(HttpStatus.CREATED).header(HttpHeaders.LOCATION, location).build();	
 	}
 	
-	@PutMapping("/{languageName}/{countryName}/{cityName}/{centerName}/accommodations")
-	public void updateAccommodation(@PathVariable String languageName, @PathVariable String countryName, @PathVariable String cityName,
-									@PathVariable String centerName, @Valid @RequestBody Accommodation accommodation) {
-		accommodationService.saveAccommodation(languageName, countryName, cityName, centerName, accommodation);
+	@PutMapping("/accommodations")
+	public void updateAccommodation(@Valid @RequestBody Accommodation accommodation) {
+		accommodationService.saveAccommodation(accommodation);
 	}
 	
-	@DeleteMapping("/{languageName}/{countryName}/{cityName}/{centerName}/accommodations/{accommodationId}")
-	public ResponseEntity<Object> deleteAccommodation(@PathVariable String languageName, @PathVariable String countryName, @PathVariable String cityName,
-									  @PathVariable String centerName, @PathVariable int accommodationId, HttpServletRequest request) {
+	@DeleteMapping("/accommodations/{accommodationId}")
+	public ResponseEntity<Object> deleteAccommodation(@PathVariable Integer accommodationId) {
 		
-		languageName = StringFormatter.formatPathVariable(languageName);
-		
-		countryName = StringFormatter.formatPathVariable(countryName);
-		
-		cityName = StringFormatter.formatPathVariable(cityName);
-		
-		centerName = StringFormatter.formatPathVariable(centerName);
-		
-		accommodationService.deleteAccommodation(languageName, countryName, cityName, centerName, accommodationId, request);
+		accommodationService.deleteAccommodation(accommodationId);
 		
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}

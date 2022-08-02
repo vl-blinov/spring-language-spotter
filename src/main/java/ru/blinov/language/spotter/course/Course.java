@@ -23,7 +23,7 @@ public class Course {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="id")
-	private int id;
+	private Integer id;
 	
 	@ManyToOne(cascade= {CascadeType.DETACH, CascadeType.MERGE,
 			 			 CascadeType.PERSIST, CascadeType.REFRESH})
@@ -41,7 +41,7 @@ public class Course {
 	
 	@NotBlank(message="Students per class is mandatory")
 	@Column(name="students_per_class")
-	private int studentsPerClass;
+	private Integer studentsPerClass;
 	
 	@NotBlank(message="Course duration is mandatory")
 	@Column(name="course_duration")
@@ -49,7 +49,7 @@ public class Course {
 	
 	@NotBlank(message="Lessons per week	 is mandatory")
 	@Column(name="lessons_per_week")
-	private int lessonsPerWeek;
+	private Integer lessonsPerWeek;
 	
 	@NotBlank(message="Class time is mandatory")
 	@Column(name="class_time")
@@ -69,7 +69,7 @@ public class Course {
 	
 	@NotBlank(message="Price per week amount is mandatory")
 	@Column(name="price_per_week_amount")
-	private double pricePerWeekAmount;
+	private Double pricePerWeekAmount;
 	
 	@NotBlank(message="Price per week currency is mandatory")
 	@Column(name="price_per_week_currency")
@@ -79,8 +79,8 @@ public class Course {
 		
 	}
 
-	public Course(String courseType, int studentsPerClass, String courseDuration, int lessonsPerWeek, String classTime,
-				  String lessonDuration, String ageRestriction, String entryLevel, double pricePerWeekAmount,
+	public Course(String courseType, Integer studentsPerClass, String courseDuration, Integer lessonsPerWeek, String classTime,
+				  String lessonDuration, String ageRestriction, String entryLevel, Double pricePerWeekAmount,
 				  String pricePerWeekCurrency) {
 		
 		this.courseType = courseType;
@@ -95,11 +95,11 @@ public class Course {
 		this.pricePerWeekCurrency = pricePerWeekCurrency;
 	}
 
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 	
@@ -120,11 +120,11 @@ public class Course {
 		this.courseType = courseType;
 	}
 
-	public int getStudentsPerClass() {
+	public Integer getStudentsPerClass() {
 		return studentsPerClass;
 	}
 
-	public void setStudentsPerClass(int studentsPerClass) {
+	public void setStudentsPerClass(Integer studentsPerClass) {
 		this.studentsPerClass = studentsPerClass;
 	}
 
@@ -136,11 +136,11 @@ public class Course {
 		this.courseDuration = courseDuration;
 	}
 	
-	public int getLessonsPerWeek() {
+	public Integer getLessonsPerWeek() {
 		return lessonsPerWeek;
 	}
 
-	public void setLessonsPerWeek(int lessonsPerWeek) {
+	public void setLessonsPerWeek(Integer lessonsPerWeek) {
 		this.lessonsPerWeek = lessonsPerWeek;
 	}
 
@@ -176,11 +176,11 @@ public class Course {
 		this.entryLevel = entryLevel;
 	}
 
-	public double getPricePerWeekAmount() {
+	public Double getPricePerWeekAmount() {
 		return pricePerWeekAmount;
 	}
 
-	public void setPricePerWeekAmount(double pricePerWeekAmount) {
+	public void setPricePerWeekAmount(Double pricePerWeekAmount) {
 		this.pricePerWeekAmount = pricePerWeekAmount;
 	}
 

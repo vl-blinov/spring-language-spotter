@@ -2,7 +2,6 @@ package ru.blinov.language.spotter.course;
 
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +18,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import ru.blinov.language.spotter.util.StringFormatter;
-
 @RestController
 @RequestMapping("/api")
 public class CourseController {
@@ -32,26 +29,26 @@ public class CourseController {
 		this.courseService = courseService;
 	}
 	
+	@GetMapping("/courses")
+	public List<Course> findAllCourses() {	
+		return courseService.findAllCourses();
+	}
+	
 	@GetMapping("/{languageName}/{countryName}/{cityName}/{centerName}/courses")
 	public List<Course> findAllCourses(@PathVariable String languageName, @PathVariable String countryName, @PathVariable String cityName,
-			   						   @PathVariable String centerName) {
-		
-		languageName = StringFormatter.formatPathVariable(languageName);
-		
-		countryName = StringFormatter.formatPathVariable(countryName);
-		
-		cityName = StringFormatter.formatPathVariable(cityName);
-		
-		centerName = StringFormatter.formatPathVariable(centerName);
-		
+			@PathVariable String centerName) {	
 		return courseService.findAllCourses(languageName, countryName, cityName, centerName);
 	}
 	
-	@PostMapping("/{languageName}/{countryName}/{cityName}/{centerName}/courses")
-	public ResponseEntity<Object> addCourse(@PathVariable String languageName, @PathVariable String countryName, @PathVariable String cityName,
-							@PathVariable String centerName, @Valid @RequestBody Course course) {
+	@GetMapping("/courses/{courseId}")
+	public Course findCourse(@PathVariable Integer courseId) {
+		return courseService.findCourse(courseId);
+	}
+	
+	@PostMapping("/courses")
+	public ResponseEntity<Object> addCourse(@Valid @RequestBody Course course) {
 		
-		courseService.saveCourse(languageName, countryName, cityName, centerName, course);
+		courseService.saveCourse(course);
 		
 		String location = ServletUriComponentsBuilder
 				.fromCurrentRequest()
@@ -62,25 +59,15 @@ public class CourseController {
 		return ResponseEntity.status(HttpStatus.CREATED).header(HttpHeaders.LOCATION, location).build();
 	}
 	
-	@PutMapping("/{languageName}/{countryName}/{cityName}/{centerName}/courses")
-	public void updateCourse(@PathVariable String languageName, @PathVariable String countryName, @PathVariable String cityName,
-							 @PathVariable String centerName, @Valid @RequestBody Course course) {
-		courseService.saveCourse(languageName, countryName, cityName, centerName, course);
+	@PutMapping("/courses")
+	public void updateCourse(@Valid @RequestBody Course course) {
+		courseService.saveCourse(course);
 	}
 	
-	@DeleteMapping("/{languageName}/{countryName}/{cityName}/{centerName}/courses/{courseId}")
-	public ResponseEntity<Object> deleteCourse(@PathVariable String languageName, @PathVariable String countryName, @PathVariable String cityName,
-							   @PathVariable String centerName, @PathVariable int courseId, HttpServletRequest request) {
-		
-		languageName = StringFormatter.formatPathVariable(languageName);
-		
-		countryName = StringFormatter.formatPathVariable(countryName);
-		
-		cityName = StringFormatter.formatPathVariable(cityName);
-		
-		centerName = StringFormatter.formatPathVariable(centerName);
+	@DeleteMapping("/courses/{courseId}")
+	public ResponseEntity<Object> deleteCourse(@PathVariable Integer courseId) {
 
-		courseService.deleteCourse(languageName, countryName, cityName, centerName, courseId, request);
+		courseService.deleteCourse(courseId);
 		
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}

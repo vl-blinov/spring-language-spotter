@@ -18,8 +18,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import ru.blinov.language.spotter.util.StringFormatter;
-
 @RestController
 @RequestMapping("/api")
 public class CountryController {
@@ -31,39 +29,60 @@ public class CountryController {
 		this.countryService = countryService;
 	}
 	
-	@GetMapping("/{languageName}/countries")
-	public List<Country> findAllCountries(@PathVariable String languageName) {	
-		return countryService.findAllCountries(StringFormatter.formatPathVariable(languageName));
+	@GetMapping("/countries")
+	public List<Country> findAllCountries() {	
+		return countryService.findAllCountries();
 	}
 	
-	@PostMapping("/{languageName}/countries")
-	public ResponseEntity<Object> addCountry(@PathVariable String languageName, @Valid @RequestBody Country country) {
+	@GetMapping("/{languageName}/countries")
+	public List<Country> findAllCountries(@PathVariable String languageName) {	
+		return countryService.findAllCountries(languageName);
+	}
+	
+	@GetMapping("/countries/{countryId}")
+	public Country findCountry(@PathVariable Integer countryId) {
+		return countryService.findCountry(countryId);
+	}
+	
+	@PostMapping("/countries")
+	public ResponseEntity<Object> addCountry(@Valid @RequestBody Country country) {
 		
-		countryService.saveCountry(languageName, country);
+		countryService.addCountry(country);
 		
 		String location = ServletUriComponentsBuilder
 				.fromCurrentRequest()
-                .path("/{id}")
+                .path("/{countryId}")
                 .buildAndExpand(country.getId())
                 .toUriString();
 		
 		return ResponseEntity.status(HttpStatus.CREATED).header(HttpHeaders.LOCATION, location).build();
 	}
 	
-	@PutMapping("/{languageName}/countries")
-	public void updateCountry(@PathVariable String languageName, @Valid @RequestBody Country country) {
-		countryService.saveCountry(languageName, country);
+	@PutMapping("/countries/{countryId}/languages/{languageId}")
+	public void addLanguageToCountry(@PathVariable Integer countryId, @PathVariable Integer languageId) {
+		countryService.addLanguageToCountry(countryId, languageId);
 	}
 	
-	@DeleteMapping("/{languageName}/{countryName}")
-	public ResponseEntity<Object> deleteCountry(@PathVariable String languageName, @PathVariable String countryName) {
+	@PutMapping("/countries/{countryId}/cities/{cityId}")
+	public void addCityToCountry(@PathVariable Integer countryId, @PathVariable Integer cityId) {
+		countryService.addCityToCountry(countryId, cityId);
+	}
+
+	@DeleteMapping("/countries/{countryId}")
+	public ResponseEntity<Object> deleteCountry(@PathVariable Integer countryId) {
 		
-		languageName = StringFormatter.formatPathVariable(languageName);
-		
-		countryName = StringFormatter.formatPathVariable(countryName);
-		
-		countryService.deleteCountry(languageName, countryName);
+		countryService.deleteCountry(countryId);
 		
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+	}
+	
+	@DeleteMapping("/countries/{countryId}/languages/{languageId}")
+	public void removeLanguageFromCountry(@PathVariable Integer countryId, @PathVariable Integer languageId) {
+		countryService.removeLanguageFromCountry(countryId, languageId);
+	}
+	
+	@DeleteMapping("/countries/{countryId}/cities/{cityId}")
+	public void removeCityFromCountry(@PathVariable Integer countryId, @PathVariable Integer cityId) {
+		countryService.removeCityFromCountry(countryId, cityId);
 	}
 }

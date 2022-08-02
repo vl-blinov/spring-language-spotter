@@ -18,8 +18,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import ru.blinov.language.spotter.util.StringFormatter;
-
 @RestController
 @RequestMapping("/api")
 public class CityController {
@@ -31,41 +29,60 @@ public class CityController {
 		this.cityService = cityService;
 	}
 	
-	@GetMapping("/{languageName}/{countryName}/cities")
-	public List<City> findAllCities(@PathVariable String languageName, @PathVariable String countryName) {
-		return cityService.findAllCities(StringFormatter.formatPathVariable(countryName), StringFormatter.formatPathVariable(languageName));
+	@GetMapping("/cities")
+	public List<City> findAllCities() {
+		return cityService.findAllCities();
 	}
 	
-	@PostMapping("/{languageName}/{countryName}/cities")
-	public ResponseEntity<Object> addCity(@PathVariable String languageName, @PathVariable String countryName, @Valid @RequestBody City city) {
+	@GetMapping("/{languageName}/{countryName}/cities")
+	public List<City> findAllCities(@PathVariable String languageName, @PathVariable String countryName) {
+		return cityService.findAllCities(languageName, countryName);
+	}
+	
+	@GetMapping("/cities/{cityId}")
+	public City findCity(@PathVariable Integer cityId) {
+		return cityService.findCity(cityId);
+	}
+	
+	@PostMapping("/cities")
+	public ResponseEntity<Object> addCity(@Valid @RequestBody City city) {
 		
-		cityService.saveCity(languageName, countryName, city);
+		cityService.addCity(city);
 		
 		String location = ServletUriComponentsBuilder
 				.fromCurrentRequest()
-                .path("/{id}")
+                .path("/{cityId}")
                 .buildAndExpand(city.getId())
                 .toUriString();
 		
 		return ResponseEntity.status(HttpStatus.CREATED).header(HttpHeaders.LOCATION, location).build();
 	}
 	
-	@PutMapping("/{languageName}/{countryName}/cities")
-	public void updateCity(@PathVariable String languageName, @PathVariable String countryName, @Valid @RequestBody City city) {
-		cityService.saveCity(languageName, countryName, city);
+	@PutMapping("/cities/{cityId}/languages/{languageId}")
+	public void addLanguageToCity(@PathVariable Integer cityId, @PathVariable Integer languageId) {
+		cityService.addLanguageToCity(cityId, languageId);
 	}
 	
-	@DeleteMapping("/{languageName}/{countryName}/{cityName}")
-	public ResponseEntity<Object> deleteCity(@PathVariable String languageName, @PathVariable String countryName, @PathVariable String cityName) {
+	@PutMapping("/cities/{cityId}/centers/{centerId}")
+	public void addEducationCenterToCity(@PathVariable Integer cityId, @PathVariable Integer centerId) {
+		cityService.addEducationCenterToCity(cityId, centerId);
+	}
+	
+	@DeleteMapping("/cities/{cityId}")
+	public ResponseEntity<Object> deleteCity(@PathVariable Integer cityId) {
 		
-		languageName = StringFormatter.formatPathVariable(languageName);
-		
-		countryName = StringFormatter.formatPathVariable(countryName);
-		
-		cityName = StringFormatter.formatPathVariable(cityName);
-		
-		cityService.deleteCity(languageName, countryName, cityName);
+		cityService.deleteCity(cityId);
 		
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+	}
+	
+	@DeleteMapping("/cities/{cityId}/languages/{languageId}")
+	public void removeLanguageFromCity(@PathVariable Integer cityId, @PathVariable Integer languageId) {
+		cityService.removeLanguageFromCity(cityId, languageId);
+	}
+	
+	@DeleteMapping("/cities/{cityId}/centers/{centerId}")
+	public void removeEducationCenterFromCity(@PathVariable Integer cityId, @PathVariable Integer centerId) {
+		cityService.removeEducationCenterFromCity(cityId, centerId);
 	}
 }

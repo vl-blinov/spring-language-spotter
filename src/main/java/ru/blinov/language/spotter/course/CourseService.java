@@ -1,13 +1,14 @@
 package ru.blinov.language.spotter.course;
 
 import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import ru.blinov.language.spotter.exception.RequestUrlException;
+import ru.blinov.language.spotter.util.StringFormatter;
 import ru.blinov.language.spotter.validator.RequestValidator;
 
 @Service
@@ -19,32 +20,55 @@ public class CourseService {
 
 	@Autowired
 	public CourseService(CourseRepository courseRepository, RequestValidator requestValidator) {
-		
 		this.courseRepository = courseRepository;
 		this.requestValidator = requestValidator;
 	}
 	
 	@Transactional(readOnly = true)
+	public List<Course> findAllCourses() {
+		return courseRepository.findAll();
+	}
+	
+	@Transactional(readOnly = true)
 	public List<Course> findAllCourses(String languageName, String countryName, String cityName, String centerName) {
+		
+		languageName = StringFormatter.formatPathVariable(languageName);
+		
+		countryName = StringFormatter.formatPathVariable(countryName);
+		
+		cityName = StringFormatter.formatPathVariable(cityName);
+		
+		centerName = StringFormatter.formatPathVariable(centerName);
 		
 		requestValidator.checkUrlPathVariables(languageName, countryName, cityName, centerName);
 		
 		return courseRepository.findAllByLanguageNameAndCenterName(languageName, centerName);
 	}
+
+	@Transactional
+	public Course findCourse(Integer courseId) {
+		
+		Optional<Course> courseOptional = courseRepository.findById(courseId);
+		
+		if(courseOptional.isEmpty()) {
+			throw new RequestUrlException("Course with id '" + courseId + "' is not found");
+		}
+		
+		Course course = courseOptional.get();
+		
+		return course;
+	}	
 	
 	@Transactional
-	public void saveCourse(String languageName, String countryName, String cityName, String centerName, Course course) {
-		
-		requestValidator.checkUrlPathVariables(languageName, countryName, cityName, centerName);
-		
+	public void saveCourse(Course course) {
 		courseRepository.save(course);	
 	}
 	
 	@Transactional
-	public void deleteCourse(String languageName, String countryName, String cityName, String centerName, int courseId, HttpServletRequest request) {
+	public void deleteCourse(Integer courseId) {
 		
-		requestValidator.checkUrlPathVariables(languageName, countryName, cityName, centerName, courseId, request);
+		Course course = findCourse(courseId);
 		
-		courseRepository.deleteById(courseId);
-	}	
+		courseRepository.delete(course);
+	}
 }

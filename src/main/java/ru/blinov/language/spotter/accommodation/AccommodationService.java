@@ -1,13 +1,14 @@
 package ru.blinov.language.spotter.accommodation;
 
 import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import ru.blinov.language.spotter.exception.RequestUrlException;
+import ru.blinov.language.spotter.util.StringFormatter;
 import ru.blinov.language.spotter.validator.RequestValidator;
 
 @Service
@@ -19,32 +20,55 @@ public class AccommodationService {
 	
 	@Autowired
 	public AccommodationService(AccommodationRepository accommodationRepository, RequestValidator requestValidator) {
-		
 		this.accommodationRepository = accommodationRepository;
 		this.requestValidator = requestValidator;
 	}
 	
 	@Transactional(readOnly = true)
+	public List<Accommodation> findAllAccommodations() {
+		return accommodationRepository.findAll();
+	}
+	
+	@Transactional(readOnly = true)
 	public List<Accommodation> findAllAccommodations(String languageName, String countryName, String cityName, String centerName) {
+		
+		languageName = StringFormatter.formatPathVariable(languageName);
+		
+		countryName = StringFormatter.formatPathVariable(countryName);
+		
+		cityName = StringFormatter.formatPathVariable(cityName);
+		
+		centerName = StringFormatter.formatPathVariable(centerName);
 		
 		requestValidator.checkUrlPathVariables(languageName, countryName, cityName, centerName);
 		
 		return accommodationRepository.findAllByCenterName(centerName);
 	}
 
+	@Transactional(readOnly = true)
+	public Accommodation findAccommodation(Integer accommodationId) {
+		
+		Optional<Accommodation> accommodationOptional = accommodationRepository.findById(accommodationId);
+		
+		if(accommodationOptional.isEmpty()) {
+			throw new RequestUrlException("Accommodation with id '" + accommodationId + "' is not found");
+		}
+		
+		Accommodation accommodation = accommodationOptional.get();
+		
+		return accommodation;
+	}
+
 	@Transactional
-	public void saveAccommodation(String languageName, String countryName, String cityName, String centerName, Accommodation accommodation) {
-		
-		requestValidator.checkUrlPathVariables(languageName, countryName, cityName, centerName);
-		
+	public void saveAccommodation(Accommodation accommodation) {
 		accommodationRepository.save(accommodation);
 	}
 	
 	@Transactional
-	public void deleteAccommodation(String languageName, String countryName, String cityName, String centerName, int accommodationId, HttpServletRequest request) {
+	public void deleteAccommodation(Integer accommodationId) {		
 		
-		requestValidator.checkUrlPathVariables(languageName, countryName, cityName, centerName, accommodationId, request);
-		
-		accommodationRepository.deleteById(accommodationId);
+		Accommodation accommodation = findAccommodation(accommodationId);
+
+		accommodationRepository.delete(accommodation);
 	}
 }

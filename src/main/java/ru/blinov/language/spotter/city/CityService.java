@@ -1,120 +1,121 @@
 package ru.blinov.language.spotter.city;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import ru.blinov.language.spotter.center.EducationCenter;
-import ru.blinov.language.spotter.center.EducationCenterRepository;
-import ru.blinov.language.spotter.course.Course;
-import ru.blinov.language.spotter.course.CourseRepository;
+import ru.blinov.language.spotter.center.EducationCenterService;
+import ru.blinov.language.spotter.exception.RequestUrlException;
 import ru.blinov.language.spotter.language.Language;
-import ru.blinov.language.spotter.language.LanguageRepository;
+import ru.blinov.language.spotter.language.LanguageService;
+import ru.blinov.language.spotter.util.StringFormatter;
 import ru.blinov.language.spotter.validator.RequestValidator;
 
 @Service
 public class CityService {
 	
-	private LanguageRepository languageRepository;
+	private LanguageService languageService;
+	
+	private EducationCenterService educationCenterService;
 	
 	private CityRepository cityRepository;
 	
-	private EducationCenterRepository educationCenterRepository;
-	
-	private CourseRepository courseRepository;
-	
 	private RequestValidator requestValidator;
-	
+
 	@Autowired
-	public CityService(LanguageRepository languageRepository, CityRepository cityRepository, EducationCenterRepository educationCenterRepository,
-					   CourseRepository courseRepository,RequestValidator requestValidator) {
-		
-		this.languageRepository = languageRepository;
+	public CityService(LanguageService languageService, EducationCenterService educationCenterService,
+			CityRepository cityRepository, RequestValidator requestValidator) {
+		this.languageService = languageService;
+		this.educationCenterService = educationCenterService;
 		this.cityRepository = cityRepository;
-		this.educationCenterRepository = educationCenterRepository;
-		this.courseRepository = courseRepository;
 		this.requestValidator = requestValidator;
 	}
 	
 	@Transactional(readOnly = true)
-	public List<City> findAllCities(String countryName, String languageName) {
+	public List<City> findAllCities() {
+		return cityRepository.findAll();
+	}
+	
+	@Transactional(readOnly = true)
+	public List<City> findAllCities(String languageName, String countryName) {
+		
+		languageName = StringFormatter.formatPathVariable(languageName);
+		
+		countryName = StringFormatter.formatPathVariable(countryName);
 		
 		requestValidator.checkUrlPathVariables(languageName, countryName);
-		
+
 		return cityRepository.findAllByLanguageNameAndCountryName(languageName, countryName);
 	}
 
+	@Transactional(readOnly = true)
+	public City findCity(Integer cityId) {
+		
+		Optional<City> cityOptional = cityRepository.findById(cityId);
+		
+		if(cityOptional.isEmpty()) {
+			throw new RequestUrlException("City with id '" + cityId + "' is not found");
+		}
+		
+		City city = cityOptional.get();
+		
+		return city;
+	}
+
 	@Transactional
-	public void saveCity(String languageName, String countryName, City city) {
-		
-		requestValidator.checkUrlPathVariables(languageName, countryName);
-		
+	public void addCity(City city) {
 		cityRepository.save(city);
 	}
 	
 	@Transactional
-	public void deleteCity(String languageName, String countryName, String cityName) {
+	public void addLanguageToCity(Integer cityId, Integer languageId) {
 		
-		requestValidator.checkUrlPathVariables(languageName, countryName, cityName);
+		Language language = languageService.findLanguage(languageId);
 		
-		Language language = languageRepository.findByName(languageName).get();
+		City city = findCity(cityId);
 		
-		City city = cityRepository.findByName(cityName).get();
+		city.addLanguage(language);
+	}
+	
+	@Transactional
+	public void addEducationCenterToCity(Integer cityId, Integer centerId) {
 		
-		List<Language> cityLanguages = city.getLanguages();
+		City city = findCity(cityId);
 		
-		if(cityLanguages.size() == 1 && cityLanguages.contains(language)) {
-			
-			cityRepository.delete(city);
-			
-			return;
-		}
+		EducationCenter center = educationCenterService.findEducationCenter(centerId);
+
+		city.addEducationCenter(center);
+	}
+	
+	@Transactional
+	public void deleteCity(Integer cityId) {
 		
-		cityLanguages.removeIf(l -> l.getName().equals(languageName));
+		City city = findCity(cityId);
 		
-		cityRepository.save(city);
+		cityRepository.delete(city);
+	}
+	
+	@Transactional
+	public void removeLanguageFromCity(Integer cityId, Integer languageId) {
 		
-		List<EducationCenter> centers = educationCenterRepository.findAllByLanguageNameAndCityName(languageName, cityName);
+		Language language = languageService.findLanguage(languageId);
 		
-		centers.forEach(c -> {
-			
-			List<Language> centerLanguages = c.getLanguages();
-			
-			if(centerLanguages.size() == 1 && centerLanguages.contains(language)) {
-				educationCenterRepository.delete(c);
-			} else {
-				centerLanguages.removeIf(l -> l.getName().equals(languageName));
-			}
-		});
+		City city = findCity(cityId);
 		
-		centers.removeIf(c -> {
-			
-			List<Language> centerLanguages = c.getLanguages();
-			
-			return centerLanguages.size() == 1 && centerLanguages.contains(language);
-		});
+		city.removeLanguage(language);
+	}
+	
+	@Transactional
+	public void removeEducationCenterFromCity(Integer cityId, Integer centerId) {
 		
-		educationCenterRepository.saveAll(centers);
+		City city = findCity(cityId);
 		
-		List<String> centersNames = new ArrayList<>();
-		
-		centers.forEach(c -> {
-			centersNames.add(c.getName());
-		});
-		
-		List<Course> courses = courseRepository.findAllByLanguageNameAndCentersNames(languageName, centersNames);
-		
-		courses.forEach(c -> {
-			if(c.getLanguage().getName().equals(languageName)) {
-				courseRepository.delete(c);
-			}
-		});
-		
-		courses.removeIf(c -> c.getLanguage().getName().equals(languageName));
-		
-		courseRepository.saveAll(courses);
+		EducationCenter center = educationCenterService.findEducationCenter(centerId);
+
+		city.removeEducationCenter(center);
 	}
 }

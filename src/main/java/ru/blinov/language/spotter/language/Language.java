@@ -29,7 +29,7 @@ public class Language {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="id")
-	private int id;
+	private Integer id;
 	
 	@NotBlank(message="Name is mandatory")
 	@Column(name="name")
@@ -57,8 +57,7 @@ public class Language {
 	private List<EducationCenter> educationCenters;
 	
 	@OneToMany(mappedBy="language",
-			   cascade={CascadeType.DETACH, CascadeType.MERGE,
-					    CascadeType.PERSIST, CascadeType.REFRESH})
+			   cascade=CascadeType.ALL)
 	private List<Course> courses;
 
 	public Language() {
@@ -69,11 +68,11 @@ public class Language {
 		this.name = name;
 	}
 
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 

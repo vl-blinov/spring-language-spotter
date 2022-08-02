@@ -18,8 +18,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import ru.blinov.language.spotter.util.StringFormatter;
-
 @RestController
 @RequestMapping("/api")
 public class EducationCenterController {
@@ -31,68 +29,81 @@ public class EducationCenterController {
 		this.educationCenterService = educationCenterService;
 	}
 	
+	@GetMapping("/centers")
+	public List<EducationCenter> findAllEducationCenters() {
+		return educationCenterService.findAllEducationCenters();
+	}
+	
 	@GetMapping("/{languageName}/{countryName}/{cityName}/centers")
-	public List<EducationCenter> findAllEducationCenters(@PathVariable String languageName, @PathVariable String countryName, @PathVariable String cityName) {
-		
-		languageName = StringFormatter.formatPathVariable(languageName);
-		
-		countryName = StringFormatter.formatPathVariable(countryName);
-		
-		cityName = StringFormatter.formatPathVariable(cityName);
-		
+	public List<EducationCenter> findAllEducationCenters(@PathVariable String languageName, @PathVariable String countryName,
+			@PathVariable String cityName) {
 		return educationCenterService.findAllEducationCenters(languageName, countryName, cityName);
 	}
 	
 	@GetMapping("/{languageName}/{countryName}/{cityName}/{centerName}")
-	public EducationCenter findEducationCenter(@PathVariable String languageName, @PathVariable String countryName, @PathVariable String cityName,
-											   @PathVariable String centerName) {
-		
-		languageName = StringFormatter.formatPathVariable(languageName);
-		
-		countryName = StringFormatter.formatPathVariable(countryName);
-		
-		cityName = StringFormatter.formatPathVariable(cityName);
-		
-		centerName = StringFormatter.formatPathVariable(centerName);
-		
-		return educationCenterService.findEducationCenter(languageName, countryName, cityName, centerName);
+	public EducationCenter findEducationCenter(@PathVariable String centerName) {
+		return educationCenterService.findEducationCenter(centerName);
 	}
 	
-	@PostMapping("/{languageName}/{countryName}/{cityName}/centers")
-	public ResponseEntity<Object> addEducationCenter(@PathVariable String languageName, @PathVariable String countryName, @PathVariable String cityName,
-											  @Valid @RequestBody EducationCenter center) {
+	@GetMapping("/centers/{centerId}")
+	public EducationCenter findEducationCenter(@PathVariable Integer centerId) {
+		return educationCenterService.findEducationCenter(centerId);
+	}
+	
+	@PostMapping("/centers")
+	public ResponseEntity<Object> addEducationCenter(@Valid @RequestBody EducationCenter center) {
 		
-		educationCenterService.saveEducationCenter(languageName, countryName, cityName, center);
+		educationCenterService.saveEducationCenter(center);
 		
 		String location = ServletUriComponentsBuilder
 				.fromCurrentRequest()
-                .path("/{id}")
+                .path("/{centerId}")
                 .buildAndExpand(center.getId())
                 .toUriString();
 		
 		return ResponseEntity.status(HttpStatus.CREATED).header(HttpHeaders.LOCATION, location).build();
 	}
 	
-	@PutMapping("/{languageName}/{countryName}/{cityName}/centers")
-	public void updateEducationCenter(@PathVariable String languageName, @PathVariable String countryName, @PathVariable String cityName,
-									  @Valid @RequestBody EducationCenter center) {
-		educationCenterService.saveEducationCenter(languageName, countryName, cityName, center);
+	@PutMapping("/centers")
+	public void updateEducationCenter(@Valid @RequestBody EducationCenter center) {
+		educationCenterService.saveEducationCenter(center);
 	}
 	
-	@DeleteMapping("/{languageName}/{countryName}/{cityName}/{centerName}")
-	public ResponseEntity<Object> deleteEducationCenter(@PathVariable String languageName, @PathVariable String countryName, @PathVariable String cityName,
-										@PathVariable String centerName) {
+	@PutMapping("/centers/{centerId}/languages/{languageId}")
+	public void addLanguageToEducationCenter(@PathVariable Integer centerId, @PathVariable Integer languageId) {
+		educationCenterService.addLanguageToEducationCenter(centerId, languageId);
+	}
+	
+	@PutMapping("/centers/{centerId}/courses/{courseId}")
+	public void addCourseToEducationCenter(@PathVariable Integer centerId, @PathVariable Integer courseId) {
+		educationCenterService.addCourseToEducationCenter(centerId, courseId);
+	}
+	
+	@PutMapping("/centers/{centerId}/accommodations/{accommodationId}")
+	public void addAccommodationToEducationCenter(@PathVariable Integer centerId, @PathVariable Integer accommodationId) {
+		educationCenterService.addAccommodationToEducationCenter(centerId, accommodationId);
+	}
+	
+	@DeleteMapping("/centers/{centerId}")
+	public ResponseEntity<Object> deleteEducationCenter(@PathVariable Integer centerId) {
 		
-		languageName = StringFormatter.formatPathVariable(languageName);
-		
-		countryName = StringFormatter.formatPathVariable(countryName);
-		
-		cityName = StringFormatter.formatPathVariable(cityName);
-		
-		centerName = StringFormatter.formatPathVariable(centerName);
-		
-		educationCenterService.deleteEducationCenter(languageName, countryName, cityName, centerName);
+		educationCenterService.deleteEducationCenter(centerId);
 		
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+	}
+	
+	@DeleteMapping("/centers/{centerId}/languages/{languageId}")
+	public void removeLanguageFromEducationCenter(@PathVariable Integer centerId, @PathVariable Integer languageId) {
+		educationCenterService.removeLanguageFromEducationCenter(centerId, languageId);
+	}
+	
+	@DeleteMapping("/centers/{centerId}/courses/{courseId}")
+	public void removeCourseFromEducationCenter(@PathVariable Integer centerId, @PathVariable Integer courseId) {
+		educationCenterService.removeCourseFromEducationCenter(centerId, courseId);
+	}
+	
+	@DeleteMapping("/centers/{centerId}/accommodations/{accommodationId}")
+	public void removeAccommodationFromEducationCenter(@PathVariable Integer centerId, @PathVariable Integer accommodationId) {
+		educationCenterService.removeAccommodationFromEducationCenter(centerId, accommodationId);
 	}
 }

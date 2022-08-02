@@ -27,7 +27,7 @@ public class Country {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="id")
-	private int id;
+	private Integer id;
 	
 	@NotBlank(message="Name is mandatory")
 	@Column(name="name")
@@ -52,11 +52,11 @@ public class Country {
 		this.name = name;
 	}
 
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 
@@ -84,5 +84,21 @@ public class Country {
 
 	public void setCities(List<City> cities) {
 		this.cities = cities;
+	}
+	
+	public void addLanguage(Language language) {
+		languages.add(language);
+	}
+	
+	public void removeLanguage(Language language) {
+		languages.remove(language);
+	}
+	
+	public void addCity(City city) {
+		cities.add(city);
+	}
+	
+	public void removeCity(City city) {
+		cities.remove(city);
 	}
 }

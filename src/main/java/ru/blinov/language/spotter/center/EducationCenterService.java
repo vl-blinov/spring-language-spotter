@@ -1,40 +1,59 @@
 package ru.blinov.language.spotter.center;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import ru.blinov.language.spotter.accommodation.Accommodation;
+import ru.blinov.language.spotter.accommodation.AccommodationService;
 import ru.blinov.language.spotter.course.Course;
-import ru.blinov.language.spotter.course.CourseRepository;
+import ru.blinov.language.spotter.course.CourseService;
+import ru.blinov.language.spotter.exception.RequestUrlException;
 import ru.blinov.language.spotter.language.Language;
-import ru.blinov.language.spotter.language.LanguageRepository;
+import ru.blinov.language.spotter.language.LanguageService;
+import ru.blinov.language.spotter.util.StringFormatter;
 import ru.blinov.language.spotter.validator.RequestValidator;
 
 @Service
 public class EducationCenterService {
 	
-	private LanguageRepository languageRepository;
+	private LanguageService languageService;
+	
+	private CourseService courseService;
+	
+	private AccommodationService accommodationService;
 	
 	private EducationCenterRepository educationCenterRepository;
-	
-	private CourseRepository courseRepository;
 	
 	private RequestValidator requestValidator;
 
 	@Autowired
-	public EducationCenterService(LanguageRepository languageRepository, EducationCenterRepository educationCenterRepository,
-								  CourseRepository courseRepository, RequestValidator requestValidator) {
-		
-		this.languageRepository = languageRepository;
+	public EducationCenterService(LanguageService languageService, CourseService courseService,
+			AccommodationService accommodationService, EducationCenterRepository educationCenterRepository,
+			RequestValidator requestValidator) {
+		this.languageService = languageService;
+		this.courseService = courseService;
+		this.accommodationService = accommodationService;
 		this.educationCenterRepository = educationCenterRepository;
-		this.courseRepository = courseRepository;
 		this.requestValidator = requestValidator;
 	}
 	
 	@Transactional(readOnly = true)
+	public List<EducationCenter> findAllEducationCenters() {
+		return educationCenterRepository.findAll();
+	}
+	
+	@Transactional(readOnly = true)
 	public List<EducationCenter> findAllEducationCenters(String languageName, String countryName, String cityName) {
+		
+		languageName = StringFormatter.formatPathVariable(languageName);
+		
+		countryName = StringFormatter.formatPathVariable(countryName);
+		
+		cityName = StringFormatter.formatPathVariable(cityName);
 		
 		requestValidator.checkUrlPathVariables(languageName, countryName, cityName);
 		
@@ -42,53 +61,103 @@ public class EducationCenterService {
 	}
 
 	@Transactional(readOnly = true)
-	public EducationCenter findEducationCenter(String languageName, String countryName, String cityName, String centerName) {
+	public EducationCenter findEducationCenter(String centerName) {
 		
-		requestValidator.checkUrlPathVariables(languageName, countryName, cityName, centerName);
+		Optional<EducationCenter> centerOptional = educationCenterRepository.findByName(centerName);
 		
-		return educationCenterRepository.findByName(centerName).get();
-	}
-	
-	@Transactional
-	public void saveEducationCenter(String languageName, String countryName, String cityName, EducationCenter center) {
-		
-		requestValidator.checkUrlPathVariables(languageName, countryName, cityName);
-		
-		educationCenterRepository.save(center);
-	}
-	
-	@Transactional
-	public void deleteEducationCenter(String languageName, String countryName, String cityName, String centerName) {
-		
-		requestValidator.checkUrlPathVariables(languageName, countryName, cityName, centerName);
-		
-		Language language = languageRepository.findByName(languageName).get();
-		
-		EducationCenter center = educationCenterRepository.findByName(centerName).get();
-		
-		List<Language> centerLanguages = center.getLanguages();
-		
-		if(centerLanguages.size() == 1 && centerLanguages.contains(language)) {
-			
-			educationCenterRepository.delete(center);
-			
-			return;
+		if(centerOptional.isEmpty()) {
+			throw new RequestUrlException("Education center with name '" + centerName + "' is not found");
 		}
 		
-		centerLanguages.removeIf(l -> l.getName().equals(languageName));
+		EducationCenter center = centerOptional.get();
 		
+		return center;
+	}
+	
+	@Transactional(readOnly = true)
+	public EducationCenter findEducationCenter(Integer centerId) {
+		
+		Optional<EducationCenter> centerOptional = educationCenterRepository.findById(centerId);
+		
+		if(centerOptional.isEmpty()) {
+			throw new RequestUrlException("Education center with id '" + centerId + "' is not found");
+		}
+		
+		EducationCenter center = centerOptional.get();
+		
+		return center;
+	}
+	
+	@Transactional
+	public void saveEducationCenter(EducationCenter center) {
 		educationCenterRepository.save(center);
+	}
+	
+	@Transactional
+	public void addLanguageToEducationCenter(Integer centerId, Integer languageId) {
+
+		EducationCenter center = findEducationCenter(centerId);
 		
-		List<Course> courses = courseRepository.findAllByLanguageNameAndCenterName(languageName, centerName);
+		Language language = languageService.findLanguage(languageId);
 		
-		courses.forEach(c -> {
-			if(c.getLanguage().getName().equals(languageName)) {
-				courseRepository.delete(c);
-			}
-		});
+		center.addLanguage(language);
+	}
+
+	@Transactional
+	public void addCourseToEducationCenter(Integer centerId, Integer courseId) {
 		
-		courses.removeIf(c -> c.getLanguage().getName().equals(languageName));
+		EducationCenter center = findEducationCenter(centerId);
 		
-		courseRepository.saveAll(courses);
+		Course course = courseService.findCourse(courseId);
+		
+		center.addCourse(course);	
+	}
+
+	@Transactional
+	public void addAccommodationToEducationCenter(Integer centerId, Integer accommodationId) {
+		
+		EducationCenter center = findEducationCenter(centerId);
+		
+		Accommodation accommodation = accommodationService.findAccommodation(accommodationId);
+		
+		center.addAccommodation(accommodation);
+	}
+	
+	@Transactional
+	public void deleteEducationCenter(Integer centerId) {
+		
+		EducationCenter center = findEducationCenter(centerId);
+		
+		educationCenterRepository.delete(center);	
+	}
+
+	@Transactional
+	public void removeLanguageFromEducationCenter(Integer centerId, Integer languageId) {
+		
+		EducationCenter center = findEducationCenter(centerId);
+		
+		Language language = languageService.findLanguage(languageId);
+
+		center.removeLanguage(language);
+	}
+
+	@Transactional
+	public void removeCourseFromEducationCenter(Integer centerId, Integer courseId) {
+		
+		EducationCenter center = findEducationCenter(centerId);
+		
+		Course course = courseService.findCourse(courseId);
+		
+		center.removeCourse(course);
+	}
+
+	@Transactional
+	public void removeAccommodationFromEducationCenter(Integer centerId, Integer accommodationId) {
+		
+		EducationCenter center = findEducationCenter(centerId);
+		
+		Accommodation accommodation = accommodationService.findAccommodation(accommodationId);
+		
+		center.removeAccommodation(accommodation);	
 	}
 }

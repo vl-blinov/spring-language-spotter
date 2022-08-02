@@ -30,7 +30,7 @@ public class EducationCenter {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="id")
-	private int id;
+	private Integer id;
 	
 	@NotBlank(message="Name is mandatory")
 	@Column(name="name")
@@ -62,20 +62,20 @@ public class EducationCenter {
 	
 	@NotBlank(message="Registration fee amount is mandatory")
 	@Column(name="registration_fee_amount")
-	private double registrationFeeAmount;
+	private Double registrationFeeAmount;
 	
 	@NotBlank(message="Registration fee currency is mandatory")
 	@Column(name="registration_fee_currency")
 	private String registrationFeeCurrency;
 	
 	@Column(name="rating")
-	private double rating;
+	private Double rating;
 
 	public EducationCenter() {
 		
 	}
 
-	public EducationCenter(String name, String address, double registrationFeeAmount, String registrationFeeCurrency, double rating) {
+	public EducationCenter(String name, String address, Double registrationFeeAmount, String registrationFeeCurrency, Double rating) {
 		
 		this.name = name;
 		this.address = address;
@@ -84,11 +84,11 @@ public class EducationCenter {
 		this.rating = rating;
 	}
 
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 
@@ -144,11 +144,11 @@ public class EducationCenter {
 		this.address = address;
 	}
 
-	public double getRegistrationFeeAmount() {
+	public Double getRegistrationFeeAmount() {
 		return registrationFeeAmount;
 	}
 
-	public void setRegistrationFeeAmount(double registrationFeeAmount) {
+	public void setRegistrationFeeAmount(Double registrationFeeAmount) {
 		this.registrationFeeAmount = registrationFeeAmount;
 	}
 
@@ -160,11 +160,35 @@ public class EducationCenter {
 		this.registrationFeeCurrency = registrationFeeCurrency;
 	}
 
-	public double getRating() {
+	public Double getRating() {
 		return rating;
 	}
 
-	public void setRating(double rating) {
+	public void setRating(Double rating) {
 		this.rating = rating;
+	}
+	
+	public void addLanguage(Language language) {
+		languages.add(language);
+	}
+	
+	public void removeLanguage(Language language) {
+		languages.remove(language);
+	}
+	
+	public void addCourse(Course course) {
+		courses.add(course);
+	}
+	
+	public void removeCourse(Course course) {
+		courses.remove(course);
+	}
+	
+	public void addAccommodation(Accommodation accommodation) {
+		accommodations.add(accommodation);
+	}
+	
+	public void removeAccommodation(Accommodation accommodation) {
+		accommodations.remove(accommodation);
 	}
 }

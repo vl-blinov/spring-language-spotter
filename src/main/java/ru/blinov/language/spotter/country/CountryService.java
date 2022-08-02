@@ -1,154 +1,119 @@
 package ru.blinov.language.spotter.country;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import ru.blinov.language.spotter.center.EducationCenter;
-import ru.blinov.language.spotter.center.EducationCenterRepository;
 import ru.blinov.language.spotter.city.City;
-import ru.blinov.language.spotter.city.CityRepository;
-import ru.blinov.language.spotter.course.Course;
-import ru.blinov.language.spotter.course.CourseRepository;
+import ru.blinov.language.spotter.city.CityService;
+import ru.blinov.language.spotter.exception.RequestUrlException;
 import ru.blinov.language.spotter.language.Language;
-import ru.blinov.language.spotter.language.LanguageRepository;
+import ru.blinov.language.spotter.language.LanguageService;
+import ru.blinov.language.spotter.util.StringFormatter;
 import ru.blinov.language.spotter.validator.RequestValidator;
 
 @Service
 public class CountryService {
 	
-	private LanguageRepository languageRepository;
+	private LanguageService languageService;
+	
+	private CityService cityService;
 	
 	private CountryRepository countryRepository;
-	
-	private CityRepository cityRepository;
-	
-	private EducationCenterRepository educationCenterRepository;
-	
-	private CourseRepository courseRepository;
 	
 	private RequestValidator requestValidator;
 	
 	@Autowired
-	public CountryService(LanguageRepository languageRepository, CountryRepository countryRepository,
-						  CityRepository cityRepository, EducationCenterRepository educationCenterRepository,
-						  CourseRepository courseRepository, RequestValidator requestValidator) {
-		
-		this.languageRepository = languageRepository;
+	public CountryService(LanguageService languageService, CityService cityService, CountryRepository countryRepository,
+			RequestValidator requestValidator) {
+		this.languageService = languageService;
+		this.cityService = cityService;
 		this.countryRepository = countryRepository;
-		this.cityRepository = cityRepository;
-		this.educationCenterRepository = educationCenterRepository;
-		this.courseRepository = courseRepository;
 		this.requestValidator = requestValidator;
 	}
 	
 	@Transactional(readOnly = true)
+	public List<Country> findAllCountries() {
+		return countryRepository.findAll();
+	}
+	
+	@Transactional(readOnly = true)
 	public List<Country> findAllCountries(String languageName) {
+		
+		languageName = StringFormatter.formatPathVariable(languageName);
 		
 		requestValidator.checkUrlPathVariables(languageName);
 		
 		return countryRepository.findAllByLanguageName(languageName);
 	}
 
+	@Transactional(readOnly = true)
+	public Country findCountry(Integer countryId) {
+		
+		Optional<Country> countryOptional = countryRepository.findById(countryId);
+		
+		if(countryOptional.isEmpty()) {
+			throw new RequestUrlException("Country with id '" + countryId + "' is not found");
+		}
+		
+		Country country = countryOptional.get();
+		
+		return country;
+	}
+	
 	@Transactional
-	public void saveCountry(String languageName, Country country) {
-		
-		requestValidator.checkUrlPathVariables(languageName);
-		
+	public void addCountry(Country country) {
 		countryRepository.save(country);
 	}
 	
 	@Transactional
-	public void deleteCountry(String languageName, String countryName) {
+	public void addLanguageToCountry(Integer countryId, Integer languageId) {
+
+		Language language = languageService.findLanguage(languageId);
 		
-		requestValidator.checkUrlPathVariables(languageName, countryName);
+		Country country = findCountry(countryId);
 		
-		Language language = languageRepository.findByName(languageName).get();
+		country.addLanguage(language);
+	}
+	
+	@Transactional
+	public void addCityToCountry(Integer countryId, Integer cityId) {
 		
-		Country country = countryRepository.findByName(countryName).get();
+		Country country = findCountry(countryId);
 		
-		List<Language> countryLanguages = country.getLanguages();
+		City city = cityService.findCity(cityId);
 		
-		if(countryLanguages.size() == 1 && countryLanguages.contains(language)) {
-			
-			countryRepository.delete(country);
-			
-			return;
-		}
+		country.addCity(city);
+	}
+	
+	@Transactional
+	public void deleteCountry(Integer countryId) {
 		
-		countryLanguages.removeIf(l -> l.getName().equals(languageName));
+		Country country = findCountry(countryId);
 		
-		countryRepository.save(country);
+		countryRepository.delete(country);
+	}
+
+	@Transactional
+	public void removeLanguageFromCountry(Integer countryId, Integer languageId) {
 		
-		List<City> cities = cityRepository.findAllByLanguageNameAndCountryName(languageName, countryName);
+		Language language = languageService.findLanguage(languageId);
 		
-		cities.forEach(c -> {
-			
-			List<Language> cityLanguages = c.getLanguages();
-			
-			if(cityLanguages.size() == 1 && cityLanguages.contains(language)) {
-				cityRepository.delete(c);
-			} else {
-				cityLanguages.removeIf(l -> l.getName().equals(languageName));
-			}	
-		});
+		Country country = findCountry(countryId);
 		
-		cities.removeIf(c -> {
-			
-			List<Language> cityLanguages = c.getLanguages();
-			
-			return cityLanguages.size() == 1 && cityLanguages.contains(language);
-		});
+		country.removeLanguage(language);
+	}
+	
+	@Transactional
+	public void removeCityFromCountry(Integer countryId, Integer cityId) {
 		
-		cityRepository.saveAll(cities);
+		Country country = findCountry(countryId);
 		
-		List<String> citiesNames = new ArrayList<>();
+		City city = cityService.findCity(cityId);
 		
-		cities.forEach(c -> {
-			citiesNames.add(c.getName());
-		});
-		
-		List<EducationCenter> centers = educationCenterRepository.findAllByLanguageNameAndCitiesNames(languageName, citiesNames);
-		
-		centers.forEach(c -> {
-			
-			List<Language> centerLanguages = c.getLanguages();
-			
-			if(centerLanguages.size() == 1 && centerLanguages.contains(language)) {
-				educationCenterRepository.delete(c);
-			} else {
-				centerLanguages.removeIf(l -> l.getName().equals(languageName));
-			}
-		});
-		
-		centers.removeIf(c -> {
-			
-			List<Language> centerLanguages = c.getLanguages();
-			
-			return centerLanguages.size() == 1 && centerLanguages.contains(language);
-		});
-		
-		educationCenterRepository.saveAll(centers);
-		
-		List<String> centersNames = new ArrayList<>();
-		
-		centers.forEach(c -> {
-			centersNames.add(c.getName());
-		});
-		
-		List<Course> courses = courseRepository.findAllByLanguageNameAndCentersNames(languageName, centersNames);
-		
-		courses.forEach(c -> {
-			if(c.getLanguage().getName().equals(languageName)) {
-				courseRepository.delete(c);
-			}
-		});
-		
-		courses.removeIf(c -> c.getLanguage().getName().equals(languageName));
-		
-		courseRepository.saveAll(courses);
+		country.removeCity(city);	
 	}
 }

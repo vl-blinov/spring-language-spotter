@@ -22,7 +22,7 @@ public class Accommodation {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="id")
-	private int id;
+	private Integer id;
 	
 	@ManyToOne(cascade= {CascadeType.DETACH, CascadeType.MERGE,
 			 			 CascadeType.PERSIST, CascadeType.REFRESH})
@@ -47,7 +47,7 @@ public class Accommodation {
 	
 	@NotBlank(message="Price per week amount is mandatory")
 	@Column(name="price_per_week_amount")
-	private double pricePerWeekAmount;
+	private Double pricePerWeekAmount;
 	
 	@NotBlank(message="Price per week currency is mandatory")
 	@Column(name="price_per_week_currency")
@@ -58,7 +58,7 @@ public class Accommodation {
 	}
 
 	public Accommodation(String accommodationType, String roomType, String mealIncludedType, String ageRestriction,
-						 double pricePerWeekAmount, String pricePerWeekCurrency) {
+						 Double pricePerWeekAmount, String pricePerWeekCurrency) {
 		
 		this.accommodationType = accommodationType;
 		this.roomType = roomType;
@@ -68,11 +68,11 @@ public class Accommodation {
 		this.pricePerWeekCurrency = pricePerWeekCurrency;
 	}
 
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 	
@@ -117,11 +117,11 @@ public class Accommodation {
 		this.ageRestriction = ageRestriction;
 	}
 
-	public double getPricePerWeekAmount() {
+	public Double getPricePerWeekAmount() {
 		return pricePerWeekAmount;
 	}
 
-	public void setPricePerWeekAmount(double pricePerWeekAmount) {
+	public void setPricePerWeekAmount(Double pricePerWeekAmount) {
 		this.pricePerWeekAmount = pricePerWeekAmount;
 	}
 

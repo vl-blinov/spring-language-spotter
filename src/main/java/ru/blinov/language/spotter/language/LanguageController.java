@@ -12,13 +12,10 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
-import ru.blinov.language.spotter.util.StringFormatter;
 
 @RestController
 @RequestMapping("/api")
@@ -37,35 +34,28 @@ public class LanguageController {
 	}
 	
 	@GetMapping("/languages/{languageId}")
-	public Language findLanguage(@PathVariable int languageId) {
+	public Language findLanguage(@PathVariable Integer languageId) {
 		return languageService.findLanguage(languageId);
 	}
 	
 	@PostMapping("/languages")
 	public ResponseEntity<Object> addLanguage(@Valid @RequestBody Language language) {
 		
-		languageService.saveLanguage(language);
+		languageService.addLanguage(language);
 		
 		String location = ServletUriComponentsBuilder
 				.fromCurrentRequest()
-                .path("/{id}")
+                .path("/{languageId}")
                 .buildAndExpand(language.getId())
                 .toUriString();
 		
 		return ResponseEntity.status(HttpStatus.CREATED).header(HttpHeaders.LOCATION, location).build();
 	}
 	
-	@PutMapping("/languages")
-	public void updateLanguage(@Valid @RequestBody Language language) {
-		languageService.saveLanguage(language);
-	}
-	
-	@DeleteMapping("/{languageName}")
-	public ResponseEntity<Object> deleteLanguage(@PathVariable String languageName) {
+	@DeleteMapping("/languages/{languageId}")
+	public ResponseEntity<Object> deleteLanguage(@PathVariable Integer languageId) {
 		
-		languageName = StringFormatter.formatPathVariable(languageName);
-		
-		languageService.deleteLanguage(languageName);
+		languageService.deleteLanguage(languageId);
 		
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}	
