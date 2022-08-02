@@ -57,6 +57,10 @@ public class RequestValidator {
 		checkLanguage(languageName);
 	}
 	
+	public void checkUrlPathVariables(int languageId) {
+		checkLanguage(languageId);
+	}
+	
 	public void checkUrlPathVariables(String languageName, String countryName) {
 		checkLanguageAndCountry(languageName, countryName);
 	}
@@ -102,6 +106,15 @@ public class RequestValidator {
 		Language language = languageOptional.get();
 		
 		return Map.of(Entity.LANGUAGE, language);
+	}
+	
+	private void checkLanguage(int languageId) {
+		
+		Optional<Language> languageOptional = languageRepository.findById(languageId);
+		
+		if(languageOptional.isEmpty()) {
+			throw new RequestUrlException("Language with id '" + languageId + "' is not found");
+		}
 	}
 	
 	private Map<Entity, Object> checkLanguageAndCountry(String languageName, String countryName) {

@@ -49,6 +49,14 @@ public class LanguageService {
 		return languageRepository.findAll();
 	}
 	
+	@Transactional(readOnly = true)
+	public Language findLanguage(int languageId) {
+		
+		requestValidator.checkUrlPathVariables(languageId);
+		
+		return languageRepository.findById(languageId).get();
+	}
+	
 	@Transactional
 	public void saveLanguage(Language language) {
 		languageRepository.save(language);
