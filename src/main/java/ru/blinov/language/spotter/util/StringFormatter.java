@@ -4,13 +4,13 @@ import org.springframework.util.StringUtils;
 
 public class StringFormatter {
 	
-	public static String formatPathVariable(String string) {
+	public static String formatPathVariable(String pathVariable) {
 
-		if(!string.contains("_")) {
-			return StringUtils.capitalize(string);
+		if(!pathVariable.contains("_")) {
+			return StringUtils.capitalize(pathVariable);
 		}
 		
-		String[] array = StringUtils.delimitedListToStringArray(string, "_");
+		String[] array = StringUtils.delimitedListToStringArray(pathVariable, "_");
 		
 		array = capitalizeArrayElements(array);
 
