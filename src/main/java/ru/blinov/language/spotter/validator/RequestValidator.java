@@ -17,6 +17,7 @@ import ru.blinov.language.spotter.enums.Entity;
 import ru.blinov.language.spotter.exception.RequestUrlException;
 import ru.blinov.language.spotter.language.Language;
 import ru.blinov.language.spotter.language.LanguageRepository;
+import ru.blinov.language.spotter.util.StringFormatter;
 
 @Component
 public class RequestValidator {
@@ -39,18 +40,42 @@ public class RequestValidator {
 	}
 
 	public void checkUrlPathVariables(String languageName) {
+		
+		languageName = StringFormatter.formatPathVariable(languageName);
+		
 		checkLanguage(languageName);
 	}
 
 	public void checkUrlPathVariables(String languageName, String countryName) {
+		
+		languageName = StringFormatter.formatPathVariable(languageName);
+		
+		countryName = StringFormatter.formatPathVariable(countryName);
+		
 		checkLanguageAndCountry(languageName, countryName);
 	}
 	
 	public void checkUrlPathVariables(String languageName, String countryName, String cityName) {
+		
+		languageName = StringFormatter.formatPathVariable(languageName);
+		
+		countryName = StringFormatter.formatPathVariable(countryName);
+		
+		cityName = StringFormatter.formatPathVariable(cityName);
+		
 		checkLanguageAndCountryAndCity(languageName, countryName, cityName);
 	}
 	
 	public void checkUrlPathVariables(String languageName, String countryName, String cityName, String centerName) {
+		
+		languageName = StringFormatter.formatPathVariable(languageName);
+		
+		countryName = StringFormatter.formatPathVariable(countryName);
+		
+		cityName = StringFormatter.formatPathVariable(cityName);
+		
+		centerName = StringFormatter.formatPathVariable(centerName);
+		
 		checkLanguageAndCountryAndCityAndCenter(languageName, countryName, cityName, centerName);
 	}
 
