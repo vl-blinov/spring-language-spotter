@@ -32,17 +32,10 @@ public class CourseService {
 	@Transactional(readOnly = true)
 	public List<Course> findAllCourses(String languageName, String countryName, String cityName, String centerName) {
 		
-		languageName = StringFormatter.formatPathVariable(languageName);
-		
-		countryName = StringFormatter.formatPathVariable(countryName);
-		
-		cityName = StringFormatter.formatPathVariable(cityName);
-		
-		centerName = StringFormatter.formatPathVariable(centerName);
-		
 		requestValidator.checkUrlPathVariables(languageName, countryName, cityName, centerName);
 		
-		return courseRepository.findAllByLanguageNameAndCenterName(languageName, centerName);
+		return courseRepository.findAllByLanguageNameAndCenterName(StringFormatter.formatPathVariable(languageName),
+				StringFormatter.formatPathVariable(centerName));
 	}
 
 	@Transactional

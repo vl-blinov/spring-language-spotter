@@ -43,13 +43,10 @@ public class CityService {
 	@Transactional(readOnly = true)
 	public List<City> findAllCities(String languageName, String countryName) {
 		
-		languageName = StringFormatter.formatPathVariable(languageName);
-		
-		countryName = StringFormatter.formatPathVariable(countryName);
-		
 		requestValidator.checkUrlPathVariables(languageName, countryName);
 
-		return cityRepository.findAllByLanguageNameAndCountryName(languageName, countryName);
+		return cityRepository.findAllByLanguageNameAndCountryName(StringFormatter.formatPathVariable(languageName),
+				StringFormatter.formatPathVariable(countryName));
 	}
 
 	@Transactional(readOnly = true)

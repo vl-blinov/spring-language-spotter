@@ -49,15 +49,10 @@ public class EducationCenterService {
 	@Transactional(readOnly = true)
 	public List<EducationCenter> findAllEducationCenters(String languageName, String countryName, String cityName) {
 		
-		languageName = StringFormatter.formatPathVariable(languageName);
-		
-		countryName = StringFormatter.formatPathVariable(countryName);
-		
-		cityName = StringFormatter.formatPathVariable(cityName);
-		
 		requestValidator.checkUrlPathVariables(languageName, countryName, cityName);
 		
-		return educationCenterRepository.findAllByLanguageNameAndCityName(languageName, cityName);
+		return educationCenterRepository.findAllByLanguageNameAndCityName(StringFormatter.formatPathVariable(languageName),
+				StringFormatter.formatPathVariable(cityName));
 	}
 
 	@Transactional(readOnly = true)

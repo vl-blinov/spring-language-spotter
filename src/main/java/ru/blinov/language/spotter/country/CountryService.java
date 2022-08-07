@@ -42,12 +42,10 @@ public class CountryService {
 	
 	@Transactional(readOnly = true)
 	public List<Country> findAllCountries(String languageName) {
-		
-		languageName = StringFormatter.formatPathVariable(languageName);
-		
+
 		requestValidator.checkUrlPathVariables(languageName);
 		
-		return countryRepository.findAllByLanguageName(languageName);
+		return countryRepository.findAllByLanguageName(StringFormatter.formatPathVariable(languageName));
 	}
 
 	@Transactional(readOnly = true)
