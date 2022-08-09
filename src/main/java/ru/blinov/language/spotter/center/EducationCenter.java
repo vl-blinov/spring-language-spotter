@@ -191,4 +191,8 @@ public class EducationCenter {
 	public void removeAccommodation(Accommodation accommodation) {
 		accommodations.remove(accommodation);
 	}
+	
+	public boolean hasLanguage(String languageName) {
+		return languages.stream().filter(l -> l.getName().equals(languageName)).findAny().isPresent();
+	}
 }

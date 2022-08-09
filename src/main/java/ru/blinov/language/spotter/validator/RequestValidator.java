@@ -1,7 +1,5 @@
 package ru.blinov.language.spotter.validator;
 
-import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +11,6 @@ import ru.blinov.language.spotter.city.City;
 import ru.blinov.language.spotter.city.CityRepository;
 import ru.blinov.language.spotter.country.Country;
 import ru.blinov.language.spotter.country.CountryRepository;
-import ru.blinov.language.spotter.enums.Entity;
 import ru.blinov.language.spotter.enums.RequestUrlMessage;
 import ru.blinov.language.spotter.exception.RequestUrlException;
 import ru.blinov.language.spotter.language.Language;
@@ -44,7 +41,11 @@ public class RequestValidator {
 		
 		languageName = StringFormatter.formatPathVariable(languageName);
 		
-		checkLanguage(languageName);
+		Optional<Language> languageOptional = languageRepository.findByName(languageName);
+		
+		if(languageOptional.isEmpty()) {
+			throw new RequestUrlException(RequestUrlMessage.LANGUAGE_NOT_FOUND.getMessage());
+		}
 	}
 
 	public void checkUrlPathVariables(String languageName, String countryName) {
@@ -53,7 +54,19 @@ public class RequestValidator {
 		
 		countryName = StringFormatter.formatPathVariable(countryName);
 		
-		checkLanguageAndCountry(languageName, countryName);
+		checkUrlPathVariables(languageName);
+		
+		Optional<Country> countryOptional = countryRepository.findByName(countryName);
+		
+		if(countryOptional.isEmpty()) {
+			throw new RequestUrlException(RequestUrlMessage.COUNTRY_NOT_FOUND.getMessage());
+		}
+		
+		Country country = countryOptional.get();
+		
+		if(!country.hasLanguage(languageName)) {
+			throw new RequestUrlException(RequestUrlMessage.COUNTRY_LANGUAGE_DISCR.getMessage());
+		}
 	}
 	
 	public void checkUrlPathVariables(String languageName, String countryName, String cityName) {
@@ -64,7 +77,23 @@ public class RequestValidator {
 		
 		cityName = StringFormatter.formatPathVariable(cityName);
 		
-		checkLanguageAndCountryAndCity(languageName, countryName, cityName);
+		checkUrlPathVariables(languageName, countryName);
+		
+		Optional<City> cityOptional = cityRepository.findByName(cityName);
+		
+		if(cityOptional.isEmpty()) {
+			throw new RequestUrlException(RequestUrlMessage.CITY_NOT_FOUND.getMessage());
+		}
+		
+		City city = cityOptional.get();
+		
+		if(!city.getCountry().getName().equals(countryName)) {
+			throw new RequestUrlException(RequestUrlMessage.CITY_COUNTRY_DISCR.getMessage());
+		}
+		
+		if(!city.hasLanguage(languageName)) {
+			throw new RequestUrlException(RequestUrlMessage.CITY_LANGUAGE_DISCR.getMessage());
+		}	
 	}
 	
 	public void checkUrlPathVariables(String languageName, String countryName, String cityName, String centerName) {
@@ -77,83 +106,7 @@ public class RequestValidator {
 		
 		centerName = StringFormatter.formatPathVariable(centerName);
 		
-		checkLanguageAndCountryAndCityAndCenter(languageName, countryName, cityName, centerName);
-	}
-
-	private Map<Entity, Object> checkLanguage(String languageName) {
-		
-		Optional<Language> languageOptional = languageRepository.findByName(languageName);
-		
-		if(languageOptional.isEmpty()) {
-			throw new RequestUrlException(RequestUrlMessage.LANGUAGE_NOT_FOUND.getMessage());
-		}
-		
-		Language language = languageOptional.get();
-		
-		return Map.of(Entity.LANGUAGE, language);
-	}
-	
-	private Map<Entity, Object> checkLanguageAndCountry(String languageName, String countryName) {
-		
-		Language language = (Language) checkLanguage(languageName).get(Entity.LANGUAGE);
-		
-		Optional<Country> countryOptional = countryRepository.findByName(countryName);
-		
-		if(countryOptional.isEmpty()) {
-			throw new RequestUrlException(RequestUrlMessage.COUNTRY_NOT_FOUND.getMessage());
-		}
-		
-		Country country = countryOptional.get();
-		
-		List<Country> countries = language.getCountries();
-		
-		if(!countries.contains(country)) {
-			throw new RequestUrlException(RequestUrlMessage.COUNTRY_LANGUAGE_DISCR.getMessage());
-		}
-		
-		return Map.of(Entity.LANGUAGE, language, Entity.COUNTRY, country);
-	}
-	
-	private Map<Entity, Object> checkLanguageAndCountryAndCity(String languageName, String countryName, String cityName) {
-		
-		Map<Entity, Object> entities = checkLanguageAndCountry(languageName, countryName);
-		
-		Language language = (Language) entities.get(Entity.LANGUAGE);
-		
-		Country country = (Country) entities.get(Entity.COUNTRY);
-		
-		Optional<City> cityOptional = cityRepository.findByName(cityName);
-		
-		if(cityOptional.isEmpty()) {
-			throw new RequestUrlException(RequestUrlMessage.CITY_NOT_FOUND.getMessage());
-		}
-		
-		City city = cityOptional.get();
-		
-		List<City> countryCities = country.getCities();
-		
-		if(!countryCities.contains(city)) {
-			throw new RequestUrlException(RequestUrlMessage.CITY_COUNTRY_DISCR.getMessage());
-		}
-		
-		List<City> languageCities = language.getCities();
-		
-		if(!languageCities.contains(city)) {
-			throw new RequestUrlException(RequestUrlMessage.CITY_LANGUAGE_DISCR.getMessage());
-		}
-		
-		return Map.of(Entity.LANGUAGE, language, Entity.COUNTRY, country, Entity.CITY, city);
-	}
-	
-	private Map<Entity, Object> checkLanguageAndCountryAndCityAndCenter(String languageName, String countryName, String cityName, String centerName) {
-		
-		Map<Entity, Object> entities = checkLanguageAndCountryAndCity(languageName, countryName, cityName);
-		
-		Language language = (Language) entities.get(Entity.LANGUAGE);
-		
-		Country country = (Country) entities.get(Entity.COUNTRY);
-		
-		City city = (City) entities.get(Entity.CITY);
+		checkUrlPathVariables(languageName, countryName, cityName);
 		
 		Optional<EducationCenter> centerOptional = educationCenterRepository.findByName(centerName);
 		
@@ -163,18 +116,12 @@ public class RequestValidator {
 		
 		EducationCenter center = centerOptional.get();
 		
-		List<EducationCenter> cityCenters = city.getEducationCenters();
-		
-		if(!cityCenters.contains(center)) {
+		if(!center.getCity().getName().equals(cityName)) {
 			throw new RequestUrlException(RequestUrlMessage.EDUCATION_CENTER_CITY_DISCR.getMessage());
 		}
 		
-		List<EducationCenter> languageCenters = language.getEducationCenters();
-		
-		if(!languageCenters.contains(center)) {
+		if(!center.hasLanguage(languageName)) {
 			throw new RequestUrlException(RequestUrlMessage.EDUCATION_CENTER_LANGUAGE_DISCR.getMessage());
 		}
-
-		return Map.of(Entity.LANGUAGE, language, Entity.COUNTRY, country, Entity.CITY, city, Entity.EDUCATION_CENTER, center);
 	}
 }

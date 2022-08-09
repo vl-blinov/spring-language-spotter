@@ -117,4 +117,8 @@ public class City {
 	public void removeEducationCenter(EducationCenter center) {
 		educationCenters.remove(center);
 	}
+	
+	public boolean hasLanguage(String languageName) {
+		return languages.stream().filter(l -> l.getName().equals(languageName)).findAny().isPresent();
+	}
 }
