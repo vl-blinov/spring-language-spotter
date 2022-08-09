@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import ru.blinov.language.spotter.enums.RequestUrlMessage;
 import ru.blinov.language.spotter.exception.RequestUrlException;
 import ru.blinov.language.spotter.util.StringFormatter;
 import ru.blinov.language.spotter.validator.RequestValidator;
@@ -43,7 +44,7 @@ public class AccommodationService {
 		Optional<Accommodation> accommodationOptional = accommodationRepository.findById(accommodationId);
 		
 		if(accommodationOptional.isEmpty()) {
-			throw new RequestUrlException("Accommodation with id '" + accommodationId + "' is not found");
+			throw new RequestUrlException(RequestUrlMessage.ACCOMMODATION_NOT_FOUND.getMessage());
 		}
 		
 		Accommodation accommodation = accommodationOptional.get();

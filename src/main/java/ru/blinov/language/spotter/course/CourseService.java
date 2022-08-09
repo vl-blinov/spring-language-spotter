@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import ru.blinov.language.spotter.enums.RequestUrlMessage;
 import ru.blinov.language.spotter.exception.RequestUrlException;
 import ru.blinov.language.spotter.util.StringFormatter;
 import ru.blinov.language.spotter.validator.RequestValidator;
@@ -44,7 +45,7 @@ public class CourseService {
 		Optional<Course> courseOptional = courseRepository.findById(courseId);
 		
 		if(courseOptional.isEmpty()) {
-			throw new RequestUrlException("Course with id '" + courseId + "' is not found");
+			throw new RequestUrlException(RequestUrlMessage.COURSE_NOT_FOUND.getMessage());
 		}
 		
 		Course course = courseOptional.get();

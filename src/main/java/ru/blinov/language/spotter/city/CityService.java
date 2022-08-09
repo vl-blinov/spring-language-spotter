@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import ru.blinov.language.spotter.center.EducationCenter;
 import ru.blinov.language.spotter.center.EducationCenterService;
+import ru.blinov.language.spotter.enums.RequestUrlMessage;
 import ru.blinov.language.spotter.exception.RequestUrlException;
 import ru.blinov.language.spotter.language.Language;
 import ru.blinov.language.spotter.language.LanguageService;
@@ -55,7 +56,7 @@ public class CityService {
 		Optional<City> cityOptional = cityRepository.findById(cityId);
 		
 		if(cityOptional.isEmpty()) {
-			throw new RequestUrlException("City with id '" + cityId + "' is not found");
+			throw new RequestUrlException(RequestUrlMessage.CITY_NOT_FOUND.getMessage());
 		}
 		
 		City city = cityOptional.get();

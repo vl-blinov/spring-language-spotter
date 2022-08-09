@@ -11,6 +11,7 @@ import ru.blinov.language.spotter.accommodation.Accommodation;
 import ru.blinov.language.spotter.accommodation.AccommodationService;
 import ru.blinov.language.spotter.course.Course;
 import ru.blinov.language.spotter.course.CourseService;
+import ru.blinov.language.spotter.enums.RequestUrlMessage;
 import ru.blinov.language.spotter.exception.RequestUrlException;
 import ru.blinov.language.spotter.language.Language;
 import ru.blinov.language.spotter.language.LanguageService;
@@ -61,7 +62,7 @@ public class EducationCenterService {
 		Optional<EducationCenter> centerOptional = educationCenterRepository.findByName(centerName);
 		
 		if(centerOptional.isEmpty()) {
-			throw new RequestUrlException("Education center with name '" + centerName + "' is not found");
+			throw new RequestUrlException(RequestUrlMessage.EDUCATION_CENTER_NOT_FOUND.getMessage());
 		}
 		
 		EducationCenter center = centerOptional.get();
@@ -75,7 +76,7 @@ public class EducationCenterService {
 		Optional<EducationCenter> centerOptional = educationCenterRepository.findById(centerId);
 		
 		if(centerOptional.isEmpty()) {
-			throw new RequestUrlException("Education center with id '" + centerId + "' is not found");
+			throw new RequestUrlException(RequestUrlMessage.EDUCATION_CENTER_NOT_FOUND.getMessage());
 		}
 		
 		EducationCenter center = centerOptional.get();

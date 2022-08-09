@@ -14,6 +14,7 @@ import ru.blinov.language.spotter.city.CityRepository;
 import ru.blinov.language.spotter.country.Country;
 import ru.blinov.language.spotter.country.CountryRepository;
 import ru.blinov.language.spotter.enums.Entity;
+import ru.blinov.language.spotter.enums.RequestUrlMessage;
 import ru.blinov.language.spotter.exception.RequestUrlException;
 import ru.blinov.language.spotter.language.Language;
 import ru.blinov.language.spotter.language.LanguageRepository;
@@ -84,7 +85,7 @@ public class RequestValidator {
 		Optional<Language> languageOptional = languageRepository.findByName(languageName);
 		
 		if(languageOptional.isEmpty()) {
-			throw new RequestUrlException("Language with name '" + languageName + "' is not found");
+			throw new RequestUrlException(RequestUrlMessage.LANGUAGE_NOT_FOUND.getMessage());
 		}
 		
 		Language language = languageOptional.get();
@@ -99,7 +100,7 @@ public class RequestValidator {
 		Optional<Country> countryOptional = countryRepository.findByName(countryName);
 		
 		if(countryOptional.isEmpty()) {
-			throw new RequestUrlException("Country with name '" + countryName + "' is not found");
+			throw new RequestUrlException(RequestUrlMessage.COUNTRY_NOT_FOUND.getMessage());
 		}
 		
 		Country country = countryOptional.get();
@@ -107,7 +108,7 @@ public class RequestValidator {
 		List<Country> countries = language.getCountries();
 		
 		if(!countries.contains(country)) {
-			throw new RequestUrlException("Country with name '" + countryName + "' for language with name '" + languageName + "' is not found");
+			throw new RequestUrlException(RequestUrlMessage.COUNTRY_LANGUAGE_DISCR.getMessage());
 		}
 		
 		return Map.of(Entity.LANGUAGE, language, Entity.COUNTRY, country);
@@ -124,7 +125,7 @@ public class RequestValidator {
 		Optional<City> cityOptional = cityRepository.findByName(cityName);
 		
 		if(cityOptional.isEmpty()) {
-			throw new RequestUrlException("City with name '" + cityName + "' is not found");
+			throw new RequestUrlException(RequestUrlMessage.CITY_NOT_FOUND.getMessage());
 		}
 		
 		City city = cityOptional.get();
@@ -132,13 +133,13 @@ public class RequestValidator {
 		List<City> countryCities = country.getCities();
 		
 		if(!countryCities.contains(city)) {
-			throw new RequestUrlException("City with name '" + cityName + "' in country with name '" + countryName + "' is not found");
+			throw new RequestUrlException(RequestUrlMessage.CITY_COUNTRY_DISCR.getMessage());
 		}
 		
 		List<City> languageCities = language.getCities();
 		
 		if(!languageCities.contains(city)) {
-			throw new RequestUrlException("City with name '" + cityName + "' for language with name '" + languageName + "' is not found");
+			throw new RequestUrlException(RequestUrlMessage.CITY_LANGUAGE_DISCR.getMessage());
 		}
 		
 		return Map.of(Entity.LANGUAGE, language, Entity.COUNTRY, country, Entity.CITY, city);
@@ -157,7 +158,7 @@ public class RequestValidator {
 		Optional<EducationCenter> centerOptional = educationCenterRepository.findByName(centerName);
 		
 		if(centerOptional.isEmpty()) {
-			throw new RequestUrlException("Education center with name '" + cityName + "' is not found");
+			throw new RequestUrlException(RequestUrlMessage.EDUCATION_CENTER_NOT_FOUND.getMessage());
 		}
 		
 		EducationCenter center = centerOptional.get();
@@ -165,13 +166,13 @@ public class RequestValidator {
 		List<EducationCenter> cityCenters = city.getEducationCenters();
 		
 		if(!cityCenters.contains(center)) {
-			throw new RequestUrlException("Education center with name '" + centerName + "' in city with name '" + cityName + "' is not found");
+			throw new RequestUrlException(RequestUrlMessage.EDUCATION_CENTER_CITY_DISCR.getMessage());
 		}
 		
 		List<EducationCenter> languageCenters = language.getEducationCenters();
 		
 		if(!languageCenters.contains(center)) {
-			throw new RequestUrlException("Education center with name '" + centerName + "' for language with name '" + languageName + "' is not found");
+			throw new RequestUrlException(RequestUrlMessage.EDUCATION_CENTER_LANGUAGE_DISCR.getMessage());
 		}
 
 		return Map.of(Entity.LANGUAGE, language, Entity.COUNTRY, country, Entity.CITY, city, Entity.EDUCATION_CENTER, center);

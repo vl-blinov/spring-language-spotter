@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import ru.blinov.language.spotter.course.Course;
+import ru.blinov.language.spotter.enums.RequestUrlMessage;
 import ru.blinov.language.spotter.exception.RequestUrlException;
 
 @Service
@@ -31,7 +32,7 @@ public class LanguageService {
 		Optional<Language> languageOptional = languageRepository.findById(languageId);
 		
 		if(languageOptional.isEmpty()) {
-			throw new RequestUrlException("Language with id '" + languageId + "' is not found");
+			throw new RequestUrlException(RequestUrlMessage.LANGUAGE_NOT_FOUND.getMessage());
 		}
 		
 		Language language = languageOptional.get();
