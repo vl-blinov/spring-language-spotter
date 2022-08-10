@@ -52,12 +52,8 @@ public class LanguageService {
 
 		List<Course> courses = language.getCourses();
 		
-		courses.forEach(c -> {	
-			if(c.getLanguage().getId() == languageId) {
-				c.setLanguage(null);
-			}
-		});
+		courses.forEach(c -> c.setLanguage(null));
 
-		languageRepository.delete(language);	
+		languageRepository.deleteById(languageId);
 	}
 }
