@@ -31,11 +31,14 @@ public class AccommodationService {
 	}
 	
 	@Transactional(readOnly = true)
-	public List<Accommodation> findAllAccommodations(String languageName, String countryName, String cityName, String centerName) {
+	public List<Accommodation> findAllAccommodations(String languageNamePathVariable, String countryNamePathVariable, String cityNamePathVariable,
+			String centerNamePathVariable) {
 		
-		requestValidator.checkUrlPathVariables(languageName, countryName, cityName, centerName);
+		requestValidator.checkUrlPathVariables(languageNamePathVariable, countryNamePathVariable, cityNamePathVariable, centerNamePathVariable);
 		
-		return accommodationRepository.findAllByCenterName(StringFormatter.formatPathVariable(centerName));
+		String centerName = StringFormatter.formatPathVariable(centerNamePathVariable);
+		
+		return accommodationRepository.findAllByCenterName(centerName);
 	}
 
 	@Transactional(readOnly = true)

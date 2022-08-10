@@ -37,9 +37,9 @@ public class RequestValidator {
 		this.educationCenterRepository = educationCenterRepository;
 	}
 
-	public void checkUrlPathVariables(String languageName) {
+	public void checkUrlPathVariables(String languageNamePathVariable) {
 		
-		languageName = StringFormatter.formatPathVariable(languageName);
+		String languageName = StringFormatter.formatPathVariable(languageNamePathVariable);
 		
 		Optional<Language> languageOptional = languageRepository.findByName(languageName);
 		
@@ -48,13 +48,13 @@ public class RequestValidator {
 		}
 	}
 
-	public void checkUrlPathVariables(String languageName, String countryName) {
+	public void checkUrlPathVariables(String languageNamePathVariable, String countryNamePathVariable) {
 		
-		languageName = StringFormatter.formatPathVariable(languageName);
+		String languageName = StringFormatter.formatPathVariable(languageNamePathVariable);
 		
-		countryName = StringFormatter.formatPathVariable(countryName);
+		String countryName = StringFormatter.formatPathVariable(countryNamePathVariable);
 		
-		checkUrlPathVariables(languageName);
+		checkUrlPathVariables(languageNamePathVariable);
 		
 		Optional<Country> countryOptional = countryRepository.findByName(countryName);
 		
@@ -69,15 +69,15 @@ public class RequestValidator {
 		}
 	}
 	
-	public void checkUrlPathVariables(String languageName, String countryName, String cityName) {
+	public void checkUrlPathVariables(String languageNamePathVariable, String countryNamePathVariable, String cityNamePathVariable) {
 		
-		languageName = StringFormatter.formatPathVariable(languageName);
+		String languageName = StringFormatter.formatPathVariable(languageNamePathVariable);
 		
-		countryName = StringFormatter.formatPathVariable(countryName);
+		String countryName = StringFormatter.formatPathVariable(countryNamePathVariable);
 		
-		cityName = StringFormatter.formatPathVariable(cityName);
+		String cityName = StringFormatter.formatPathVariable(cityNamePathVariable);
 		
-		checkUrlPathVariables(languageName, countryName);
+		checkUrlPathVariables(languageNamePathVariable, countryNamePathVariable);
 		
 		Optional<City> cityOptional = cityRepository.findByName(cityName);
 		
@@ -96,17 +96,16 @@ public class RequestValidator {
 		}	
 	}
 	
-	public void checkUrlPathVariables(String languageName, String countryName, String cityName, String centerName) {
+	public void checkUrlPathVariables(String languageNamePathVariable, String countryNamePathVariable, String cityNamePathVariable,
+			String centerNamePathVariable) {
 		
-		languageName = StringFormatter.formatPathVariable(languageName);
+		String languageName = StringFormatter.formatPathVariable(languageNamePathVariable);
 		
-		countryName = StringFormatter.formatPathVariable(countryName);
+		String cityName = StringFormatter.formatPathVariable(cityNamePathVariable);
 		
-		cityName = StringFormatter.formatPathVariable(cityName);
+		String centerName = StringFormatter.formatPathVariable(centerNamePathVariable);
 		
-		centerName = StringFormatter.formatPathVariable(centerName);
-		
-		checkUrlPathVariables(languageName, countryName, cityName);
+		checkUrlPathVariables(languageNamePathVariable, countryNamePathVariable, cityNamePathVariable);
 		
 		Optional<EducationCenter> centerOptional = educationCenterRepository.findByName(centerName);
 		

@@ -48,16 +48,21 @@ public class EducationCenterService {
 	}
 	
 	@Transactional(readOnly = true)
-	public List<EducationCenter> findAllEducationCenters(String languageName, String countryName, String cityName) {
+	public List<EducationCenter> findAllEducationCenters(String languageNamePathVariable, String countryNamePathVariable, String cityNamePathVariable) {
 		
-		requestValidator.checkUrlPathVariables(languageName, countryName, cityName);
+		requestValidator.checkUrlPathVariables(languageNamePathVariable, countryNamePathVariable, cityNamePathVariable);
 		
-		return educationCenterRepository.findAllByLanguageNameAndCityName(StringFormatter.formatPathVariable(languageName),
-				StringFormatter.formatPathVariable(cityName));
+		String languageName = StringFormatter.formatPathVariable(languageNamePathVariable);
+		
+		String cityName = StringFormatter.formatPathVariable(cityNamePathVariable);
+		
+		return educationCenterRepository.findAllByLanguageNameAndCityName(languageName, cityName);
 	}
 
 	@Transactional(readOnly = true)
-	public EducationCenter findEducationCenter(String centerName) {
+	public EducationCenter findEducationCenter(String centerNamePathVariable) {
+		
+		String centerName = StringFormatter.formatPathVariable(centerNamePathVariable);
 		
 		Optional<EducationCenter> centerOptional = educationCenterRepository.findByName(centerName);
 		

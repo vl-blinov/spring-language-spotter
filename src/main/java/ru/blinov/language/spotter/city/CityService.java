@@ -42,12 +42,15 @@ public class CityService {
 	}
 	
 	@Transactional(readOnly = true)
-	public List<City> findAllCities(String languageName, String countryName) {
+	public List<City> findAllCities(String languageNamePathVariable, String countryNamePathVariable) {
 		
-		requestValidator.checkUrlPathVariables(languageName, countryName);
-
-		return cityRepository.findAllByLanguageNameAndCountryName(StringFormatter.formatPathVariable(languageName),
-				StringFormatter.formatPathVariable(countryName));
+		requestValidator.checkUrlPathVariables(languageNamePathVariable, countryNamePathVariable);
+		
+		String languageName = StringFormatter.formatPathVariable(languageNamePathVariable);
+		
+		String countryName = StringFormatter.formatPathVariable(countryNamePathVariable);
+		
+		return cityRepository.findAllByLanguageNameAndCountryName(languageName, countryName);
 	}
 
 	@Transactional(readOnly = true)

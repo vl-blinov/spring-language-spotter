@@ -31,12 +31,16 @@ public class CourseService {
 	}
 	
 	@Transactional(readOnly = true)
-	public List<Course> findAllCourses(String languageName, String countryName, String cityName, String centerName) {
+	public List<Course> findAllCourses(String languageNamePathVariable, String countryNamePathVariable, String cityNamePathVariable,
+			String centerNamePathVariable) {
 		
-		requestValidator.checkUrlPathVariables(languageName, countryName, cityName, centerName);
+		requestValidator.checkUrlPathVariables(languageNamePathVariable, countryNamePathVariable, cityNamePathVariable, centerNamePathVariable);
 		
-		return courseRepository.findAllByLanguageNameAndCenterName(StringFormatter.formatPathVariable(languageName),
-				StringFormatter.formatPathVariable(centerName));
+		String languageName = StringFormatter.formatPathVariable(languageNamePathVariable);
+		
+		String centerName = StringFormatter.formatPathVariable(centerNamePathVariable);
+		
+		return courseRepository.findAllByLanguageNameAndCenterName(languageName, centerName);
 	}
 
 	@Transactional
