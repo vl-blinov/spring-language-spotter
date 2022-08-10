@@ -2,44 +2,57 @@ package ru.blinov.language.spotter.validator;
 
 import static org.junit.Assert.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.mockito.Mockito.when;
+
+import java.util.List;
+import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.DynamicPropertyRegistry;
-import org.springframework.test.context.DynamicPropertySource;
-import org.springframework.test.context.TestPropertySource;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.transaction.annotation.Transactional;
-import org.testcontainers.containers.PostgreSQLContainer;
-import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.junit.jupiter.Testcontainers;
 
+import ru.blinov.language.spotter.center.EducationCenter;
+import ru.blinov.language.spotter.center.EducationCenterRepository;
+import ru.blinov.language.spotter.city.City;
+import ru.blinov.language.spotter.city.CityRepository;
+import ru.blinov.language.spotter.country.Country;
+import ru.blinov.language.spotter.country.CountryRepository;
 import ru.blinov.language.spotter.enums.RequestUrlMessage;
 import ru.blinov.language.spotter.exception.RequestUrlException;
+import ru.blinov.language.spotter.language.Language;
+import ru.blinov.language.spotter.language.LanguageRepository;
+import ru.blinov.language.spotter.util.StringFormatter;
 
-@SpringBootTest
-@Testcontainers
-@TestPropertySource(locations = "classpath:application-test.properties")
+@ExtendWith(MockitoExtension.class)
 public class RequestValidatorTest {
 	
-	@Autowired
-	private RequestValidator sut;
+	@Mock
+	private LanguageRepository languageRepository;
 	
-	@Container
-	private static PostgreSQLContainer<?> container = new PostgreSQLContainer<>("postgres:latest");
-
-	@DynamicPropertySource
-	public static void overrideProperties(DynamicPropertyRegistry registry) {
-		registry.add("spring.datasource.url", container::getJdbcUrl);
-		registry.add("spring.datasource.username", container::getUsername);
-		registry.add("spring.datasource.password", container::getPassword);
-	}
+	@Mock
+	private CountryRepository countryRepository;
+	
+	@Mock
+	private CityRepository cityRepository;
+	
+	@Mock
+	private EducationCenterRepository educationCenterRepository;
+	
+	@InjectMocks
+	private RequestValidator sut;
 	
 	@Test
 	public void While_checking_language_should_not_throw_any_exception() {
 		
 		//Arrange
 		String languageNamePathVariable = "english";
+		String languageName = StringFormatter.formatPathVariable(languageNamePathVariable);
+		Language language = new Language();
+		language.setName(languageName);
+		when(languageRepository.findByName(languageName)).thenReturn(Optional.of(language));
 
 		//Assert
 		assertDoesNotThrow(
@@ -51,9 +64,11 @@ public class RequestValidatorTest {
 		
 		//Arrange
 		String languageNamePathVariable = "englishh";
+		String languageName = StringFormatter.formatPathVariable(languageNamePathVariable);	
+		when(languageRepository.findByName(languageName)).thenReturn(Optional.empty());
 		
 		String message = RequestUrlMessage.LANGUAGE_NOT_FOUND.getMessage();
-
+		
 		//Assert
 		assertThrows(message,
 				RequestUrlException.class,
@@ -66,7 +81,17 @@ public class RequestValidatorTest {
 		
 		//Arrange
 		String languageNamePathVariable = "english";
+		String languageName = StringFormatter.formatPathVariable(languageNamePathVariable);
+		Language language = new Language();
+		language.setName(languageName);
+		when(languageRepository.findByName(languageName)).thenReturn(Optional.of(language));
+		
 		String countryNamePathVariable = "ireland";
+		String countryName = StringFormatter.formatPathVariable(countryNamePathVariable);	
+		Country country = new Country();
+		country.setName(countryName);
+		country.setLanguages(List.of(language));
+		when(countryRepository.findByName(countryName)).thenReturn(Optional.of(country));
 
 		//Assert
 		assertDoesNotThrow(
@@ -78,8 +103,14 @@ public class RequestValidatorTest {
 		
 		//Arrange
 		String languageNamePathVariable = "english";
+		String languageName = StringFormatter.formatPathVariable(languageNamePathVariable);
+		Language language = new Language();
+		language.setName(languageName);
+		when(languageRepository.findByName(languageName)).thenReturn(Optional.of(language));
 		
 		String countryNamePathVariable = "irelandd";
+		String countryName = StringFormatter.formatPathVariable(countryNamePathVariable);
+		when(countryRepository.findByName(countryName)).thenReturn(Optional.empty());
 		
 		String message = RequestUrlMessage.COUNTRY_NOT_FOUND.getMessage();
 
@@ -87,8 +118,7 @@ public class RequestValidatorTest {
 		assertThrows(message,
 				RequestUrlException.class,
 				() -> sut.checkUrlPathVariables(languageNamePathVariable, countryNamePathVariable));
-	}
-	
+	}	
 	
 	@Test
 	@Transactional
@@ -96,11 +126,21 @@ public class RequestValidatorTest {
 		
 		//Arrange
 		String languageNamePathVariable = "french";
+		String languageName = StringFormatter.formatPathVariable(languageNamePathVariable);
+		Language language = new Language();
+		language.setName(languageName);
+		when(languageRepository.findByName(languageName)).thenReturn(Optional.of(language));
 		
 		String countryNamePathVariable = "ireland";
+		String countryName = StringFormatter.formatPathVariable(countryNamePathVariable);
+		Country country = new Country();
+		Language languageOfCountry = new Language();
+		languageOfCountry.setName("English");
+		country.setLanguages(List.of(languageOfCountry));
+		when(countryRepository.findByName(countryName)).thenReturn(Optional.of(country));
 		
 		String message = RequestUrlMessage.COUNTRY_LANGUAGE_DISCR.getMessage();
-
+		
 		//Assert
 		assertThrows(message,
 				RequestUrlException.class,
@@ -113,10 +153,25 @@ public class RequestValidatorTest {
 		
 		//Arrange
 		String languageNamePathVariable = "english";
+		String languageName = StringFormatter.formatPathVariable(languageNamePathVariable);
+		Language language = new Language();
+		language.setName(languageName);
+		when(languageRepository.findByName(languageName)).thenReturn(Optional.of(language));
 		
 		String countryNamePathVariable = "ireland";
+		String countryName = StringFormatter.formatPathVariable(countryNamePathVariable);
+		Country country = new Country();
+		country.setName(countryName);
+		country.setLanguages(List.of(language));
+		when(countryRepository.findByName(countryName)).thenReturn(Optional.of(country));
 		
 		String cityNamePathVariable = "dublin";
+		String cityName = StringFormatter.formatPathVariable(cityNamePathVariable);
+		City city = new City();
+		city.setName(cityName);
+		city.setCountry(country);
+		city.setLanguages(List.of(language));
+		when(cityRepository.findByName(cityName)).thenReturn(Optional.of(city));
 
 		//Assert
 		assertDoesNotThrow(
@@ -129,10 +184,21 @@ public class RequestValidatorTest {
 		
 		//Arrange
 		String languageNamePathVariable = "english";
+		String languageName = StringFormatter.formatPathVariable(languageNamePathVariable);
+		Language language = new Language();
+		language.setName(languageName);
+		when(languageRepository.findByName(languageName)).thenReturn(Optional.of(language));
 		
 		String countryNamePathVariable = "ireland";
+		String countryName = StringFormatter.formatPathVariable(countryNamePathVariable);
+		Country country = new Country();
+		country.setName(countryName);
+		country.setLanguages(List.of(language));
+		when(countryRepository.findByName(countryName)).thenReturn(Optional.of(country));
 		
 		String cityNamePathVariable = "dublinn";
+		String cityName = StringFormatter.formatPathVariable(cityNamePathVariable);
+		when(cityRepository.findByName(cityName)).thenReturn(Optional.empty());
 		
 		String message = RequestUrlMessage.CITY_NOT_FOUND.getMessage();
 
@@ -148,10 +214,27 @@ public class RequestValidatorTest {
 		
 		//Arrange
 		String languageNamePathVariable = "english";
+		String languageName = StringFormatter.formatPathVariable(languageNamePathVariable);
+		Language language = new Language();
+		language.setName(languageName);
+		when(languageRepository.findByName(languageName)).thenReturn(Optional.of(language));
 		
 		String countryNamePathVariable = "canada";
+		String countryName = StringFormatter.formatPathVariable(countryNamePathVariable);
+		Country country = new Country();
+		country.setName(countryName);
+		country.setLanguages(List.of(language));
+		when(countryRepository.findByName(countryName)).thenReturn(Optional.of(country));
 		
 		String cityNamePathVariable = "dublin";
+		String cityName = StringFormatter.formatPathVariable(cityNamePathVariable);
+		City city = new City();
+		city.setName(cityName);
+		Country countryOfCity = new Country();
+		countryOfCity.setName("Ireland");
+		city.setCountry(countryOfCity);
+		city.setLanguages(List.of(language));
+		when(cityRepository.findByName(cityName)).thenReturn(Optional.of(city));
 		
 		String message = RequestUrlMessage.CITY_COUNTRY_DISCR.getMessage();
 
@@ -167,13 +250,30 @@ public class RequestValidatorTest {
 		
 		//Arrange
 		String languageNamePathVariable = "irish";
+		String languageName = StringFormatter.formatPathVariable(languageNamePathVariable);
+		Language language = new Language();
+		language.setName(languageName);
+		when(languageRepository.findByName(languageName)).thenReturn(Optional.of(language));
 		
 		String countryNamePathVariable = "ireland";
+		String countryName = StringFormatter.formatPathVariable(countryNamePathVariable);
+		Country country = new Country();
+		country.setName(countryName);
+		country.setLanguages(List.of(language));
+		when(countryRepository.findByName(countryName)).thenReturn(Optional.of(country));
 		
 		String cityNamePathVariable = "cork";
+		String cityName = StringFormatter.formatPathVariable(cityNamePathVariable);
+		City city = new City();
+		city.setName(cityName);
+		city.setCountry(country);
+		Language languageOfCity = new Language();
+		languageOfCity.setName("English");
+		city.setLanguages(List.of(languageOfCity));
+		when(cityRepository.findByName(cityName)).thenReturn(Optional.of(city));
 		
 		String message = RequestUrlMessage.CITY_LANGUAGE_DISCR.getMessage();
-
+		
 		//Assert
 		assertThrows(message,
 				RequestUrlException.class,
@@ -186,12 +286,33 @@ public class RequestValidatorTest {
 		
 		//Arrange
 		String languageNamePathVariable = "english";
+		String languageName = StringFormatter.formatPathVariable(languageNamePathVariable);
+		Language language = new Language();
+		language.setName(languageName);
+		when(languageRepository.findByName(languageName)).thenReturn(Optional.of(language));
 		
 		String countryNamePathVariable = "ireland";
+		String countryName = StringFormatter.formatPathVariable(countryNamePathVariable);
+		Country country = new Country();
+		country.setName(countryName);
+		country.setLanguages(List.of(language));
+		when(countryRepository.findByName(countryName)).thenReturn(Optional.of(country));
 		
 		String cityNamePathVariable = "dublin";
+		String cityName = StringFormatter.formatPathVariable(cityNamePathVariable);
+		City city = new City();
+		city.setName(cityName);
+		city.setCountry(country);
+		city.setLanguages(List.of(language));
+		when(cityRepository.findByName(cityName)).thenReturn(Optional.of(city));
 		
 		String centerNamePathVariable = "erin_school_of_english";
+		String centerName = StringFormatter.formatPathVariable(centerNamePathVariable);
+		EducationCenter center = new EducationCenter();
+		center.setName(centerName);
+		center.setCity(city);
+		center.setLanguages(List.of(language));
+		when(educationCenterRepository.findByName(centerName)).thenReturn(Optional.of(center));
 
 		//Assert
 		assertDoesNotThrow(
@@ -204,12 +325,29 @@ public class RequestValidatorTest {
 		
 		//Arrange
 		String languageNamePathVariable = "english";
+		String languageName = StringFormatter.formatPathVariable(languageNamePathVariable);
+		Language language = new Language();
+		language.setName(languageName);
+		when(languageRepository.findByName(languageName)).thenReturn(Optional.of(language));
 		
 		String countryNamePathVariable = "ireland";
+		String countryName = StringFormatter.formatPathVariable(countryNamePathVariable);
+		Country country = new Country();
+		country.setName(countryName);
+		country.setLanguages(List.of(language));
+		when(countryRepository.findByName(countryName)).thenReturn(Optional.of(country));
 		
 		String cityNamePathVariable = "dublin";
+		String cityName = StringFormatter.formatPathVariable(cityNamePathVariable);
+		City city = new City();
+		city.setName(cityName);
+		city.setCountry(country);
+		city.setLanguages(List.of(language));
+		when(cityRepository.findByName(cityName)).thenReturn(Optional.of(city));
 		
 		String centerNamePathVariable = "erin_school_of_englishh";
+		String centerName = StringFormatter.formatPathVariable(centerNamePathVariable);
+		when(educationCenterRepository.findByName(centerName)).thenReturn(Optional.empty());
 		
 		String message = RequestUrlMessage.EDUCATION_CENTER_NOT_FOUND.getMessage();
 
@@ -225,15 +363,38 @@ public class RequestValidatorTest {
 		
 		//Arrange
 		String languageNamePathVariable = "english";
+		String languageName = StringFormatter.formatPathVariable(languageNamePathVariable);
+		Language language = new Language();
+		language.setName(languageName);
+		when(languageRepository.findByName(languageName)).thenReturn(Optional.of(language));
 		
 		String countryNamePathVariable = "ireland";
+		String countryName = StringFormatter.formatPathVariable(countryNamePathVariable);
+		Country country = new Country();
+		country.setName(countryName);
+		country.setLanguages(List.of(language));
+		when(countryRepository.findByName(countryName)).thenReturn(Optional.of(country));
 		
 		String cityNamePathVariable = "dublin";
+		String cityName = StringFormatter.formatPathVariable(cityNamePathVariable);
+		City city = new City();
+		city.setName(cityName);
+		city.setCountry(country);
+		city.setLanguages(List.of(language));
+		when(cityRepository.findByName(cityName)).thenReturn(Optional.of(city));
 		
 		String centerNamePathVariable = "cork_english_college";
+		String centerName = StringFormatter.formatPathVariable(centerNamePathVariable);
+		EducationCenter center = new EducationCenter();
+		center.setName(centerName);
+		City cityOfCenter = new City();
+		cityOfCenter.setName("Cork");
+		center.setCity(cityOfCenter);
+		center.setLanguages(List.of(language));
+		when(educationCenterRepository.findByName(centerName)).thenReturn(Optional.of(center));
 		
 		String message = RequestUrlMessage.EDUCATION_CENTER_CITY_DISCR.getMessage();
-
+		
 		//Assert
 		assertThrows(message,
 				RequestUrlException.class,
@@ -246,12 +407,35 @@ public class RequestValidatorTest {
 		
 		//Arrange
 		String languageNamePathVariable = "irish";
+		String languageName = StringFormatter.formatPathVariable(languageNamePathVariable);
+		Language language = new Language();
+		language.setName(languageName);
+		when(languageRepository.findByName(languageName)).thenReturn(Optional.of(language));
 		
 		String countryNamePathVariable = "ireland";
+		String countryName = StringFormatter.formatPathVariable(countryNamePathVariable);
+		Country country = new Country();
+		country.setName(countryName);
+		country.setLanguages(List.of(language));
+		when(countryRepository.findByName(countryName)).thenReturn(Optional.of(country));
 		
 		String cityNamePathVariable = "dublin";
+		String cityName = StringFormatter.formatPathVariable(cityNamePathVariable);
+		City city = new City();
+		city.setName(cityName);
+		city.setCountry(country);
+		city.setLanguages(List.of(language));
+		when(cityRepository.findByName(cityName)).thenReturn(Optional.of(city));
 		
 		String centerNamePathVariable = "erin_school_of_english";
+		String centerName = StringFormatter.formatPathVariable(centerNamePathVariable);
+		EducationCenter center = new EducationCenter();
+		center.setName(centerName);
+		center.setCity(city);
+		Language languageOfCenter = new Language();
+		languageOfCenter.setName("English");
+		center.setLanguages(List.of(languageOfCenter));
+		when(educationCenterRepository.findByName(centerName)).thenReturn(Optional.of(center));
 		
 		String message = RequestUrlMessage.EDUCATION_CENTER_LANGUAGE_DISCR.getMessage();
 
