@@ -75,10 +75,10 @@ public class CityService {
 	@Transactional
 	public void addLanguageToCity(Integer cityId, Integer languageId) {
 		
-		Language language = languageService.findLanguage(languageId);
-		
 		City city = findCity(cityId);
 		
+		Language language = languageService.findLanguage(languageId);
+
 		city.addLanguage(language);
 	}
 	
@@ -95,18 +95,18 @@ public class CityService {
 	@Transactional
 	public void deleteCity(Integer cityId) {
 		
-		City city = findCity(cityId);
+		findCity(cityId);
 		
-		cityRepository.delete(city);
+		cityRepository.deleteById(cityId);
 	}
 	
 	@Transactional
 	public void removeLanguageFromCity(Integer cityId, Integer languageId) {
 		
-		Language language = languageService.findLanguage(languageId);
-		
 		City city = findCity(cityId);
 		
+		Language language = languageService.findLanguage(languageId);
+
 		city.removeLanguage(language);
 	}
 	

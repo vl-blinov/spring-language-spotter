@@ -65,8 +65,8 @@ public class CourseService {
 	@Transactional
 	public void deleteCourse(Integer courseId) {
 		
-		Course course = findCourse(courseId);
+		findCourse(courseId);
 		
-		courseRepository.delete(course);
+		courseRepository.deleteById(courseId);
 	}
 }

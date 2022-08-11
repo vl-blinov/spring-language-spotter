@@ -127,9 +127,9 @@ public class EducationCenterService {
 	@Transactional
 	public void deleteEducationCenter(Integer centerId) {
 		
-		EducationCenter center = findEducationCenter(centerId);
+		findEducationCenter(centerId);
 		
-		educationCenterRepository.delete(center);	
+		educationCenterRepository.deleteById(centerId);	
 	}
 
 	@Transactional

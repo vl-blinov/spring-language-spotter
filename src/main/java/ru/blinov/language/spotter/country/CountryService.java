@@ -73,9 +73,9 @@ public class CountryService {
 	@Transactional
 	public void addLanguageToCountry(Integer countryId, Integer languageId) {
 
-		Language language = languageService.findLanguage(languageId);
-		
 		Country country = findCountry(countryId);
+		
+		Language language = languageService.findLanguage(languageId);
 		
 		country.addLanguage(language);
 	}
@@ -93,17 +93,17 @@ public class CountryService {
 	@Transactional
 	public void deleteCountry(Integer countryId) {
 		
-		Country country = findCountry(countryId);
+		findCountry(countryId);
 		
-		countryRepository.delete(country);
+		countryRepository.deleteById(countryId);
 	}
 
 	@Transactional
 	public void removeLanguageFromCountry(Integer countryId, Integer languageId) {
 		
-		Language language = languageService.findLanguage(languageId);
-		
 		Country country = findCountry(countryId);
+		
+		Language language = languageService.findLanguage(languageId);
 		
 		country.removeLanguage(language);
 	}

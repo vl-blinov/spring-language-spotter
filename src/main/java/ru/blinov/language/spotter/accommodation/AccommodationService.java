@@ -63,8 +63,8 @@ public class AccommodationService {
 	@Transactional
 	public void deleteAccommodation(Integer accommodationId) {		
 		
-		Accommodation accommodation = findAccommodation(accommodationId);
+		findAccommodation(accommodationId);
 
-		accommodationRepository.delete(accommodation);
+		accommodationRepository.deleteById(accommodationId);
 	}
 }
