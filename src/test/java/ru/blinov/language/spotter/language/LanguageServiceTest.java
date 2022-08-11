@@ -37,7 +37,7 @@ public class LanguageServiceTest {
 		
 		when(languageRepository.findAll()).thenReturn(languages);
 		
-		int expectedNumberOfLanguages = 2;
+		int expectedNumberOfLanguages = languages.size();
 		
 		//Act
 		List<Language> result = sut.findAllLanguages();
