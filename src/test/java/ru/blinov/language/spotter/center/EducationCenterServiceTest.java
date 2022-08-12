@@ -48,7 +48,7 @@ public class EducationCenterServiceTest {
 	private RequestValidator requestValidator;
 	
 	@InjectMocks
-	EducationCenterService sut;
+	private EducationCenterService sut;
 	
 	@Test
 	public void Should_get_all_education_center_entities() {
@@ -162,6 +162,21 @@ public class EducationCenterServiceTest {
 		
 		//Assert
 		assertThat(result.getId()).isEqualTo(expectedCenterId);
+	}
+	
+	@Test
+	public void When_trying_to_get_an_education_center_entity_by_the_id_then_should_throw_requestUrlException_EDUCATION_CENTER_NOT_FOUND() {
+		
+		//Arrange
+		Integer centerId = 999;	
+		when(educationCenterRepository.findById(centerId)).thenReturn(Optional.empty());
+		
+		String message = RequestUrlMessage.EDUCATION_CENTER_NOT_FOUND.getMessage();
+		
+		//Assert
+		assertThrows(message,
+				RequestUrlException.class,
+				() -> sut.findEducationCenter(centerId));
 	}
 	
 	@Test

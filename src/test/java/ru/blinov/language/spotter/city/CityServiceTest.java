@@ -42,7 +42,7 @@ public class CityServiceTest {
 	private RequestValidator requestValidator;
 	
 	@InjectMocks
-	CityService sut;
+	private CityService sut;
 	
 	@Test
 	public void Should_get_all_city_entities() {
