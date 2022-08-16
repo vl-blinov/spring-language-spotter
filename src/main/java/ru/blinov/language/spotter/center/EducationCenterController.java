@@ -41,8 +41,9 @@ public class EducationCenterController {
 	}
 	
 	@GetMapping("/{languageName}/{countryName}/{cityName}/{centerName}")
-	public EducationCenter findEducationCenter(@PathVariable String centerName) {
-		return educationCenterService.findEducationCenter(centerName);
+	public EducationCenter findEducationCenter(@PathVariable String languageName, @PathVariable String countryName,
+			@PathVariable String cityName, @PathVariable String centerName) {
+		return educationCenterService.findEducationCenter(languageName, countryName, cityName, centerName);
 	}
 	
 	@GetMapping("/centers/{centerId}")
@@ -69,17 +70,17 @@ public class EducationCenterController {
 		educationCenterService.saveEducationCenter(center);
 	}
 	
-	@PutMapping("/centers/{centerId}/languages/{languageId}")
+	@PostMapping("/centers/{centerId}/languages/{languageId}")
 	public void addLanguageToEducationCenter(@PathVariable Integer centerId, @PathVariable Integer languageId) {
 		educationCenterService.addLanguageToEducationCenter(centerId, languageId);
 	}
 	
-	@PutMapping("/centers/{centerId}/courses/{courseId}")
+	@PostMapping("/centers/{centerId}/courses/{courseId}")
 	public void addCourseToEducationCenter(@PathVariable Integer centerId, @PathVariable Integer courseId) {
 		educationCenterService.addCourseToEducationCenter(centerId, courseId);
 	}
 	
-	@PutMapping("/centers/{centerId}/accommodations/{accommodationId}")
+	@PostMapping("/centers/{centerId}/accommodations/{accommodationId}")
 	public void addAccommodationToEducationCenter(@PathVariable Integer centerId, @PathVariable Integer accommodationId) {
 		educationCenterService.addAccommodationToEducationCenter(centerId, accommodationId);
 	}

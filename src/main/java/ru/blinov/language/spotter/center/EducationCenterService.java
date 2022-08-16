@@ -60,19 +60,14 @@ public class EducationCenterService {
 	}
 
 	@Transactional(readOnly = true)
-	public EducationCenter findEducationCenter(String centerNamePathVariable) {
+	public EducationCenter findEducationCenter(String languageNamePathVariable, String countryNamePathVariable, String cityNamePathVariable,
+			String centerNamePathVariable) {
+		
+		requestValidator.checkUrlPathVariables(languageNamePathVariable, countryNamePathVariable, cityNamePathVariable, centerNamePathVariable);
 		
 		String centerName = StringFormatter.formatPathVariable(centerNamePathVariable);
 		
-		Optional<EducationCenter> centerOptional = educationCenterRepository.findByName(centerName);
-		
-		if(centerOptional.isEmpty()) {
-			throw new RequestUrlException(RequestUrlMessage.EDUCATION_CENTER_NOT_FOUND.getMessage());
-		}
-		
-		EducationCenter center = centerOptional.get();
-		
-		return center;
+		return educationCenterRepository.findByName(centerName).get();
 	}
 	
 	@Transactional(readOnly = true)
