@@ -58,8 +58,7 @@ public class AccommodationServiceTest {
 	public void Should_get_all_accommodation_entities_by_language_name_and_country_name_and_city_name_and_education_center_name() {
 		
 		//Arrange
-		String languageNamePathVariable = "english";
-		String languageName = StringFormatter.formatPathVariable(languageNamePathVariable);		
+		String languageNamePathVariable = "english";	
 		String countryNamePathVariable = "ireland";
 		String countryName = StringFormatter.formatPathVariable(countryNamePathVariable);
 		String cityNamePathVariable = "dublin";
