@@ -10,6 +10,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -45,7 +46,7 @@ public class Accommodation {
 	@Column(name="age_restriction")
 	private String ageRestriction;
 	
-	@NotBlank(message="Price per week amount is mandatory")
+	@NotNull(message="Price per week amount is mandatory")
 	@Column(name="price_per_week_amount")
 	private Double pricePerWeekAmount;
 	

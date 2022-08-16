@@ -15,6 +15,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -60,7 +61,7 @@ public class EducationCenter {
 	@Column(name="address")
 	private String address;
 	
-	@NotBlank(message="Registration fee amount is mandatory")
+	@NotNull(message="Registration fee amount is mandatory")
 	@Column(name="registration_fee_amount")
 	private Double registrationFeeAmount;
 	

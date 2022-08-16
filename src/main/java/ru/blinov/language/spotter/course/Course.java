@@ -10,6 +10,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -39,7 +40,7 @@ public class Course {
 	@Column(name="course_type")
 	private String courseType;
 	
-	@NotBlank(message="Students per class is mandatory")
+	@NotNull(message="Students per class is mandatory")
 	@Column(name="students_per_class")
 	private Integer studentsPerClass;
 	
@@ -47,7 +48,7 @@ public class Course {
 	@Column(name="course_duration")
 	private String courseDuration;
 	
-	@NotBlank(message="Lessons per week	 is mandatory")
+	@NotNull(message="Lessons per week	 is mandatory")
 	@Column(name="lessons_per_week")
 	private Integer lessonsPerWeek;
 	
@@ -67,7 +68,7 @@ public class Course {
 	@Column(name="entry_level")
 	private String entryLevel;
 	
-	@NotBlank(message="Price per week amount is mandatory")
+	@NotNull(message="Price per week amount is mandatory")
 	@Column(name="price_per_week_amount")
 	private Double pricePerWeekAmount;
 	
