@@ -2,6 +2,7 @@ package ru.blinov.language.spotter.center;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertThrows;
+import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -113,9 +114,13 @@ public class EducationCenterServiceTest {
 	public void Should_get_an_education_center_entity_by_the_given_name() {
 		
 		//Arrange
+		String languageNamePathVariable = "english";
+		String countryNamePathVariable = "ireland";
+		String cityNamePathVariable = "dublin";
+		String centerNamePathVariable = "erin_school_of_english";
+		String centerName = StringFormatter.formatPathVariable(centerNamePathVariable);
+		
 		EducationCenter center = new EducationCenter();
-		String centerNamePathVariable = "english";
-		String centerName = StringFormatter.formatPathVariable(centerNamePathVariable);	
 		center.setName(centerName);
 		
 		when(educationCenterRepository.findByName(centerName)).thenReturn(Optional.of(center));
@@ -123,7 +128,8 @@ public class EducationCenterServiceTest {
 		String expectedCenterName = centerName;
 
 		//Act
-		EducationCenter result = sut.findEducationCenter(centerNamePathVariable);
+		EducationCenter result = sut.findEducationCenter(languageNamePathVariable, countryNamePathVariable, cityNamePathVariable,
+				centerNamePathVariable);
 		
 		//Assert
 		assertThat(result.getName()).isEqualTo(expectedCenterName);
@@ -133,16 +139,22 @@ public class EducationCenterServiceTest {
 	public void When_trying_to_get_an_education_center_entity_by_the_given_name_then_should_throw_requestUrlException_EDUCATION_CENTER_NOT_FOUND() {
 		
 		//Arrange
-		String centerNamePathVariable = "englishh";
-		String centerName = StringFormatter.formatPathVariable(centerNamePathVariable);	
-		when(educationCenterRepository.findByName(centerName)).thenReturn(Optional.empty());
+		String languageNamePathVariable = "english";
+		String countryNamePathVariable = "ireland";
+		String cityNamePathVariable = "dublin";
+		String centerNamePathVariable = "erin_school_of_englishh";
 		
 		String message = RequestUrlMessage.EDUCATION_CENTER_NOT_FOUND.getMessage();
 		
+		doAnswer(invocation -> {
+			throw new RequestUrlException(message);
+		}).when(requestValidator)
+		.checkUrlPathVariables(languageNamePathVariable, countryNamePathVariable, cityNamePathVariable, centerNamePathVariable);
+
 		//Assert
 		assertThrows(message,
 				RequestUrlException.class,
-				() -> sut.findEducationCenter(centerNamePathVariable));
+				() -> sut.findEducationCenter(languageNamePathVariable, countryNamePathVariable, cityNamePathVariable, centerNamePathVariable));
 	}
 	
 	@Test
