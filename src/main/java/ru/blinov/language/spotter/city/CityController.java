@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -58,12 +57,12 @@ public class CityController {
 		return ResponseEntity.status(HttpStatus.CREATED).header(HttpHeaders.LOCATION, location).build();
 	}
 	
-	@PutMapping("/cities/{cityId}/languages/{languageId}")
+	@PostMapping("/cities/{cityId}/languages/{languageId}")
 	public void addLanguageToCity(@PathVariable Integer cityId, @PathVariable Integer languageId) {
 		cityService.addLanguageToCity(cityId, languageId);
 	}
 	
-	@PutMapping("/cities/{cityId}/centers/{centerId}")
+	@PostMapping("/cities/{cityId}/centers/{centerId}")
 	public void addEducationCenterToCity(@PathVariable Integer cityId, @PathVariable Integer centerId) {
 		cityService.addEducationCenterToCity(cityId, centerId);
 	}

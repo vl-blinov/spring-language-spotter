@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -58,12 +57,12 @@ public class CountryController {
 		return ResponseEntity.status(HttpStatus.CREATED).header(HttpHeaders.LOCATION, location).build();
 	}
 	
-	@PutMapping("/countries/{countryId}/languages/{languageId}")
+	@PostMapping("/countries/{countryId}/languages/{languageId}")
 	public void addLanguageToCountry(@PathVariable Integer countryId, @PathVariable Integer languageId) {
 		countryService.addLanguageToCountry(countryId, languageId);
 	}
 	
-	@PutMapping("/countries/{countryId}/cities/{cityId}")
+	@PostMapping("/countries/{countryId}/cities/{cityId}")
 	public void addCityToCountry(@PathVariable Integer countryId, @PathVariable Integer cityId) {
 		countryService.addCityToCountry(countryId, cityId);
 	}
