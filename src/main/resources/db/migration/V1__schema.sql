@@ -29,7 +29,7 @@ CREATE TABLE IF NOT EXISTS education_center (
 	name VARCHAR,
 	city_id INTEGER REFERENCES city(id),
 	address VARCHAR,
-	registration_fee_amount NUMERIC(5, 2),
+	registration_fee_amount NUMERIC,
 	registration_fee_currency VARCHAR,
 	rating NUMERIC(2, 1)
 );
@@ -51,7 +51,7 @@ CREATE TABLE IF NOT EXISTS course (
 	lesson_duration VARCHAR,
 	age_restriction VARCHAR,
 	entry_level VARCHAR,
-	price_per_week_amount NUMERIC(6, 2),
+	price_per_week_amount NUMERIC,
 	price_per_week_currency VARCHAR
 );
 
@@ -62,6 +62,6 @@ CREATE TABLE IF NOT EXISTS accommodation (
 	room_type VARCHAR,
 	meal_included_type VARCHAR,
 	age_restriction VARCHAR,
-	price_per_week_amount NUMERIC(6, 2),
+	price_per_week_amount NUMERIC,
 	price_per_week_currency VARCHAR
 );
