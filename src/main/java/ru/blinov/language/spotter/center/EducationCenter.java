@@ -14,6 +14,8 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
@@ -70,6 +72,8 @@ public class EducationCenter {
 	private String registrationFeeCurrency;
 	
 	@Column(name="rating")
+	@Min(value=0, message="The value must be positive")
+	@Max(value=5, message="The value must be less or equal to 5")
 	private Double rating;
 
 	public EducationCenter() {
