@@ -1,7 +1,6 @@
 package ru.blinov.language.spotter.city;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -56,13 +55,8 @@ public class CityService {
 	@Transactional(readOnly = true)
 	public City findCity(Integer cityId) {
 		
-		Optional<City> cityOptional = cityRepository.findById(cityId);
-		
-		if(cityOptional.isEmpty()) {
-			throw new RequestUrlException(RequestUrlMessage.CITY_NOT_FOUND.getMessage());
-		}
-		
-		City city = cityOptional.get();
+		City city = cityRepository.findById(cityId)
+				.orElseThrow(() -> new RequestUrlException(RequestUrlMessage.CITY_NOT_FOUND.getMessage()));
 		
 		return city;
 	}

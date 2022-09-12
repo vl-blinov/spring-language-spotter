@@ -1,7 +1,6 @@
 package ru.blinov.language.spotter.accommodation;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -44,13 +43,8 @@ public class AccommodationService {
 	@Transactional(readOnly = true)
 	public Accommodation findAccommodation(Integer accommodationId) {
 		
-		Optional<Accommodation> accommodationOptional = accommodationRepository.findById(accommodationId);
-		
-		if(accommodationOptional.isEmpty()) {
-			throw new RequestUrlException(RequestUrlMessage.ACCOMMODATION_NOT_FOUND.getMessage());
-		}
-		
-		Accommodation accommodation = accommodationOptional.get();
+		Accommodation accommodation = accommodationRepository.findById(accommodationId)
+				.orElseThrow(() -> new RequestUrlException(RequestUrlMessage.ACCOMMODATION_NOT_FOUND.getMessage()));
 		
 		return accommodation;
 	}

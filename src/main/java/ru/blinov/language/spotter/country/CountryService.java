@@ -1,7 +1,6 @@
 package ru.blinov.language.spotter.country;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -54,13 +53,8 @@ public class CountryService {
 	@Transactional(readOnly = true)
 	public Country findCountry(Integer countryId) {
 		
-		Optional<Country> countryOptional = countryRepository.findById(countryId);
-		
-		if(countryOptional.isEmpty()) {
-			throw new RequestUrlException(RequestUrlMessage.COUNTRY_NOT_FOUND.getMessage());
-		}
-		
-		Country country = countryOptional.get();
+		Country country = countryRepository.findById(countryId)
+				.orElseThrow(() -> new RequestUrlException(RequestUrlMessage.COUNTRY_NOT_FOUND.getMessage()));
 		
 		return country;
 	}

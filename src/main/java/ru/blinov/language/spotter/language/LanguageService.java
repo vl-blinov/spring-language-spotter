@@ -1,7 +1,6 @@
 package ru.blinov.language.spotter.language;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,13 +28,8 @@ public class LanguageService {
 	@Transactional(readOnly = true)
 	public Language findLanguage(Integer languageId) {
 		
-		Optional<Language> languageOptional = languageRepository.findById(languageId);
-		
-		if(languageOptional.isEmpty()) {
-			throw new RequestUrlException(RequestUrlMessage.LANGUAGE_NOT_FOUND.getMessage());
-		}
-		
-		Language language = languageOptional.get();
+		Language language = languageRepository.findById(languageId)
+				.orElseThrow(() -> new RequestUrlException(RequestUrlMessage.LANGUAGE_NOT_FOUND.getMessage()));
 		
 		return language;
 	}

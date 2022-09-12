@@ -1,7 +1,6 @@
 package ru.blinov.language.spotter.course;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -46,13 +45,8 @@ public class CourseService {
 	@Transactional
 	public Course findCourse(Integer courseId) {
 		
-		Optional<Course> courseOptional = courseRepository.findById(courseId);
-		
-		if(courseOptional.isEmpty()) {
-			throw new RequestUrlException(RequestUrlMessage.COURSE_NOT_FOUND.getMessage());
-		}
-		
-		Course course = courseOptional.get();
+		Course course = courseRepository.findById(courseId)
+				.orElseThrow(() -> new RequestUrlException(RequestUrlMessage.COURSE_NOT_FOUND.getMessage()));
 		
 		return course;
 	}	

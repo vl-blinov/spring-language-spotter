@@ -1,7 +1,6 @@
 package ru.blinov.language.spotter.center;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -73,13 +72,8 @@ public class EducationCenterService {
 	@Transactional(readOnly = true)
 	public EducationCenter findEducationCenter(Integer centerId) {
 		
-		Optional<EducationCenter> centerOptional = educationCenterRepository.findById(centerId);
-		
-		if(centerOptional.isEmpty()) {
-			throw new RequestUrlException(RequestUrlMessage.EDUCATION_CENTER_NOT_FOUND.getMessage());
-		}
-		
-		EducationCenter center = centerOptional.get();
+		EducationCenter center = educationCenterRepository.findById(centerId)
+				.orElseThrow(() -> new RequestUrlException(RequestUrlMessage.EDUCATION_CENTER_NOT_FOUND.getMessage()));
 		
 		return center;
 	}
