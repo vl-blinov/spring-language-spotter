@@ -1,7 +1,5 @@
 package ru.blinov.language.spotter.validator;
 
-import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -13,7 +11,6 @@ import ru.blinov.language.spotter.country.Country;
 import ru.blinov.language.spotter.country.CountryRepository;
 import ru.blinov.language.spotter.enums.RequestUrlMessage;
 import ru.blinov.language.spotter.exception.RequestUrlException;
-import ru.blinov.language.spotter.language.Language;
 import ru.blinov.language.spotter.language.LanguageRepository;
 import ru.blinov.language.spotter.util.StringFormatter;
 
@@ -41,11 +38,9 @@ public class RequestValidator {
 		
 		String languageName = StringFormatter.formatPathVariable(languageNamePathVariable);
 		
-		Optional<Language> languageOptional = languageRepository.findByName(languageName);
-		
-		if(languageOptional.isEmpty()) {
-			throw new RequestUrlException(RequestUrlMessage.LANGUAGE_NOT_FOUND.getMessage());
-		}
+		languageRepository.findByName(languageName)
+				.orElseThrow(() -> new RequestUrlException(RequestUrlMessage.LANGUAGE_NOT_FOUND.getMessage()));
+
 	}
 
 	public void checkUrlPathVariables(String languageNamePathVariable, String countryNamePathVariable) {
@@ -56,13 +51,8 @@ public class RequestValidator {
 		
 		checkUrlPathVariables(languageNamePathVariable);
 		
-		Optional<Country> countryOptional = countryRepository.findByName(countryName);
-		
-		if(countryOptional.isEmpty()) {
-			throw new RequestUrlException(RequestUrlMessage.COUNTRY_NOT_FOUND.getMessage());
-		}
-		
-		Country country = countryOptional.get();
+		Country country = countryRepository.findByName(countryName)
+				.orElseThrow(() -> new RequestUrlException(RequestUrlMessage.COUNTRY_NOT_FOUND.getMessage()));
 		
 		if(!country.hasLanguage(languageName)) {
 			throw new RequestUrlException(RequestUrlMessage.COUNTRY_LANGUAGE_DISCR.getMessage());
@@ -79,13 +69,8 @@ public class RequestValidator {
 		
 		checkUrlPathVariables(languageNamePathVariable, countryNamePathVariable);
 		
-		Optional<City> cityOptional = cityRepository.findByName(cityName);
-		
-		if(cityOptional.isEmpty()) {
-			throw new RequestUrlException(RequestUrlMessage.CITY_NOT_FOUND.getMessage());
-		}
-		
-		City city = cityOptional.get();
+		City city = cityRepository.findByName(cityName)
+				.orElseThrow(() -> new RequestUrlException(RequestUrlMessage.CITY_NOT_FOUND.getMessage()));
 		
 		if(!city.getCountry().getName().equals(countryName)) {
 			throw new RequestUrlException(RequestUrlMessage.CITY_COUNTRY_DISCR.getMessage());
@@ -107,13 +92,8 @@ public class RequestValidator {
 		
 		checkUrlPathVariables(languageNamePathVariable, countryNamePathVariable, cityNamePathVariable);
 		
-		Optional<EducationCenter> centerOptional = educationCenterRepository.findByName(centerName);
-		
-		if(centerOptional.isEmpty()) {
-			throw new RequestUrlException(RequestUrlMessage.EDUCATION_CENTER_NOT_FOUND.getMessage());
-		}
-		
-		EducationCenter center = centerOptional.get();
+		EducationCenter center = educationCenterRepository.findByName(centerName)
+				.orElseThrow(() -> new RequestUrlException(RequestUrlMessage.EDUCATION_CENTER_NOT_FOUND.getMessage()));
 		
 		if(!center.getCity().getName().equals(cityName)) {
 			throw new RequestUrlException(RequestUrlMessage.EDUCATION_CENTER_CITY_DISCR.getMessage());
