@@ -1,6 +1,7 @@
 package ru.blinov.language.spotter.util;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
@@ -19,5 +20,20 @@ public class StringFormatterTest {
 		
 		//Assert
 		assertThat(result).isEqualTo(expected);
+	}
+	
+	@Test
+	public void Should_throw_IllegalArgumentException_when_argument_is_null() {
+		
+		//Arrange
+		String pathVariable = null;
+		
+		String message = "Path variable must not be null";
+		
+		
+		//Assert
+		assertThrows(message,
+				IllegalArgumentException.class,
+				() -> StringFormatter.formatPathVariable(pathVariable));
 	}
 }

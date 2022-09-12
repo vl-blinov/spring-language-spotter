@@ -5,6 +5,10 @@ import org.springframework.util.StringUtils;
 public class StringFormatter {
 	
 	public static String formatPathVariable(String pathVariable) {
+		
+		if(pathVariable == null) {
+			throw new IllegalArgumentException("Path variable must not be null");
+		}
 
 		if(!pathVariable.contains("_")) {
 			return StringUtils.capitalize(pathVariable);
